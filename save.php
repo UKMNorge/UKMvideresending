@@ -457,7 +457,7 @@ function UKMV_save() {
 			$m->update('pl_missing');
 			$m->update('pl_public');
 			
-			header("Location: http://".$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'].'?page='.$_GET['page'].'&steg='.returnto(get_option('site_type')=='fylke'?6:1));
+			header("Location: http://".$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'].'?page='.$_GET['page'].'&steg='.returnto(get_option('site_type')=='fylke'?6:10));
 			exit();
 
 		case 'steg10':
