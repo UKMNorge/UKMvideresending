@@ -41,10 +41,10 @@ function UKMVS_question_order() {
 }
 
 function UKMVideresending_scriptsandstyles() {
-	wp_register_style( 'UKMVideresending_css', WP_PLUGIN_URL .'/UKMvideresending/videresending.css');
+	wp_register_style( 'UKMVideresending_css', plugin_dir_url( __FILE__ ) .'videresending.css');
 	wp_register_style('zoombox_css','/wp-content/plugins/UKMvisitorpages/zoombox/zoombox.css');
 
-	wp_register_style('UKMVideresendingsskjema_css', WP_PLUGIN_URL .'/UKMvideresending/videresendingsskjema.css');
+	wp_register_style('UKMVideresendingsskjema_css', plugin_dir_url( __FILE__ ) .'videresendingsskjema.css');
 
 
 	wp_enqueue_script('jqueryGoogleUI', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js');
@@ -52,9 +52,9 @@ function UKMVideresending_scriptsandstyles() {
 #	wp_register_script('jquery-ui-effects-core', 'http://ukm.no/wp-includes/js/jquery/ui/jquery.effects.core.min.js');
 	wp_register_script('zoombox_js','/wp-content/plugins/UKMvisitorpages/zoombox/zoombox.js');
 #	wp_register_script('shake', 'http://ukm.no/wp-includes/js/jquery/ui/jquery.effects.shake.min.js');
-	wp_register_script('UKMVideresending_js', WP_PLUGIN_URL .'/UKMvideresending/videresending.js');
-	wp_register_script('UKMVideresendingsskjema_js', WP_PLUGIN_URL .'/UKMvideresending/videresendingsskjema.js');
-	wp_register_script('UKMNorge_JQprint', WP_PLUGIN_URL .'/UKMNorge/js/jquery.print.js');
+	wp_register_script('UKMVideresending_js', plugin_dir_url( __FILE__ ) .'videresending.js');
+	wp_register_script('UKMVideresendingsskjema_js', plugin_dir_url( __FILE__ ) .'videresendingsskjema.js');
+	wp_register_script('UKMNorge_JQprint', plugin_dir_url( __FILE__ ) .'/UKMNorge/js/jquery.print.js');
 }
 ## CREATE A MENU
 function UKMVideresending_menu() {
