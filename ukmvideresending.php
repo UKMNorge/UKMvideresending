@@ -16,6 +16,8 @@ if(is_admin()) {
 		add_action('admin_menu', 'UKMVideresending_menu');
 	add_action('admin_init', 'UKMVideresending_scriptsandstyles',1000);
 	add_action('admin_init', 'UKMV_save',2000);
+	require_once('UKM/phaseout_titleinfo.class.php');
+
 }
 
 add_action('wp_ajax_UKMV_rapport_fraktseddel', 'UKMV_rapport_fraktseddel_ajax');
