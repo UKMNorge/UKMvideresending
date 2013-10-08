@@ -1,5 +1,5 @@
 <?php
-require_once('UKM/phaseout.titleinfo.class.php');
+require_once('UKM/phaseout_titleinfo.class.php');
 function UKMV_steg1_inner($m) {
 	// Hva kan videresendes?
 	$innslagutentitler = array(4,5,8,9);
