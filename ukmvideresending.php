@@ -7,7 +7,6 @@ Author: UKM Norge / M Mandal
 Version: 1.0 
 Author URI: http://www.ukm-norge.no
 */
-/* UKM LOADER */ if(!defined('UKM_HOME')) define('UKM_HOME', '/home/ukmno/public_html/UKM/'); require_once(UKM_HOME.'loader.php');
 
 require_once('save.php');
 ## HOOK MENU AND SCRIPTS
@@ -113,7 +112,9 @@ function UKMVideresending_scriptsandstyles_print() {
 
 
 function UKMVideresending() {
-	UKM_loader('inc/ico|inc/sql|api/monstring.class');
+	require_once('UKM/inc/phaseout.ico.inc.php');
+	require_once('UKM/sql.class.php');
+	require_once('UKM/monstring.class.php');
 	require_once('videresending.php');
 	echo UKMVideresending_gui();
 }
