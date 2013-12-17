@@ -13,7 +13,7 @@ require_once('save.php');
 if(is_admin()) {
 	global $blog_id;
 	if($blog_id != 1)
-		add_action('admin_menu', 'UKMVideresending_menu');
+		add_action('UKM_admin_menu', 'UKMVideresending_menu');
 	add_action('admin_init', 'UKMVideresending_scriptsandstyles',1000);
 	add_action('admin_init', 'UKMV_save',2000);
 	require_once('UKM/phaseout_titleinfo.class.php');
@@ -60,12 +60,12 @@ function UKMVideresending_scriptsandstyles() {
 }
 ## CREATE A MENU
 function UKMVideresending_menu() {
-	$page = add_menu_page('Videresending', 'Videresending', 'editor', 'UKMVideresending', 'UKMVideresending', 'http://ico.ukm.no/paper-airplane-20.png',212);
-	add_action( 'admin_print_styles-' . $page, 'UKMVideresending_scriptsandstyles_print' );
+	UKM_add_menu_page('monstring','Videresending', 'Videresending', 'editor', 'UKMVideresending', 'UKMVideresending', 'http://ico.ukm.no/paper-airplane-20.png',20);
+	UKM_add_scripts_and_styles( 'UKMVideresending', 'UKMVideresending_scriptsandstyles_print' );
 
 	if(get_option('site_type')=='fylke') {
-		$page2 = add_menu_page('Lag skjema for videresending', 'Lag skjema for videresending', 'editor', 'UKMVideresendingsskjema', 'UKMVideresendingsskjema', 'http://ico.ukm.no/clipboard-20.png',200);
-		add_action( 'admin_print_styles-' . $page2, 'UKMVideresendingsskjema_scriptsandstyles_print' );
+		UKM_add_menu_page('monstring','Lag skjema for videresending', 'Lag skjema for videresending', 'editor', 'UKMVideresendingsskjema', 'UKMVideresendingsskjema', 'http://ico.ukm.no/clipboard-20.png',2);
+		UKM_add_scripts_and_styles( 'UKMVideresendingsskjema', 'UKMVideresendingsskjema_scriptsandstyles_print' );
 	}
 #	add_action( 'admin_print_styles-' . $subpage, 'UKMVideresending_scriptsandstyles_print' );
 }
