@@ -56,7 +56,7 @@ function question_admin() {
 	<div class="message">Spørreskjemaet du lager her må fylles ut av  dine lokalkontakter ved videresending til fylkesmønstringen</div>
 	Du kan legge til så mange spørsmål du vil, og endre rekkefølgen ved å dra og slippe etterpå.<br /><br />
 	
-	<strong>Lurer du på hvordan skjemaet fungerer?</strong> <a href="http://ukm.no/wp-content/plugins/UKMVideresending/videresendingsskjemaforklaring.png" target="_blank">Se et eksempelskjema her</a>
+	<strong>Lurer du på hvordan skjemaet fungerer?</strong> <a href="http://ukm.no/wp-content/plugins/UKMideresending/videresendingsskjemaforklaring.png" target="_blank">Se et eksempelskjema her</a>
 	
 	<h2 style="margin-top: 30px;">Legg til nytt spørsmål eller overskrift</h2>
 	<form id="new_question">
