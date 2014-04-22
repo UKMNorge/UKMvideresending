@@ -60,7 +60,9 @@ function UKMVideresending_scriptsandstyles() {
 }
 ## CREATE A MENU
 function UKMVideresending_menu() {
-	UKM_add_menu_page('monstring','Videresending', 'Videresending', 'editor', 'UKMVideresending', 'UKMVideresending', 'http://ico.ukm.no/paper-airplane-20.png',20);
+	if( get_option('site_type') == 'kommune' ) {
+		UKM_add_menu_page('monstring','Videresending', 'Videresending', 'editor', 'UKMVideresending', 'UKMVideresending', 'http://ico.ukm.no/paper-airplane-20.png',20);
+	}
 	UKM_add_scripts_and_styles( 'UKMVideresending', 'UKMVideresending_scriptsandstyles_print' );
 
 	if(get_option('site_type')=='fylke') {
