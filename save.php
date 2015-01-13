@@ -82,11 +82,11 @@ function UKMV_save() {
 							$behandlede_personer[] = $behandlet_person;
 							##### E.O LAGT TIL 31.01.2013 ######
 							#echo 'Videresend '.$info[0].' b:'.$info[1].'p:'. $info[2].' ('.$person->g('p_firstname').' '.$person->g('p_lastname').')<br />';
-							$person->videresend($pl_from, $videresendTil);
+							$person->videresend($pl_from, $videresendTil, $tittel);
 						}
 						else {
 							#echo 'Avmeld '.$info[0].' b:'.$info[1].'p:'. $info[2].' ('.$person->g('p_firstname').' '.$person->g('p_lastname').')<br />';
-							$person->avmeld($pl_from, $videresendTil);
+							$person->avmeld($pl_from, $videresendTil, $tittel);
 						}
 
 						if ($info[0] == 'deltaker')
