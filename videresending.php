@@ -55,11 +55,23 @@ function UKMVideresending_gui() {
 #	UKMV_save($m);
 	
 	_ret('<div class="wrap"><h2>Videresend til '.UKMV_til().'</h2></div>');
-	
-	_ret(UKMV_stegBar());
-	
-	$steg = 'UKMV_steg'.UKMV_steg();
-	$steg($m);
+
+	$PLvideresendTil = $m->videresendTil(true);
+	if ($PLvideresendTil->subscribable('pl_deadline2')) {
+		// Videresending ikke åpnet
+		_ret('<h3>Videresendingen har ikke åpnet enda</h3>');
+		$dag = date("d.m", $PLvideresendTil->get('pl_deadline2'));
+		$tid = date('H:i', $PLvideresendTil->get('pl_deadline2'));
+		_ret('<p>Fylkeskontakten har bestemt at videresendingen skal åpne den ' . $dag . ', kl. '. $tid. '.</p>');
+		_ret('<p>Mener du at dette blir feil, ta kontakt med fylkeskontakten.</p>');
+		// TODO: Returner skikkelig, ikke bare med en return
+	} 
+	else {
+		_ret(UKMV_stegBar());
+		
+		$steg = 'UKMV_steg'.UKMV_steg();
+		$steg($m);	
+	}
 	
 	global $return;
 	return $return;

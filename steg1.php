@@ -1,5 +1,6 @@
 <?php
 function UKMV_steg1_inner($m) {
+
 	// Hva kan videresendes?
 	$innslagutentitler = array(4,5,8,9);
 
