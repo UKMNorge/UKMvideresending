@@ -2,7 +2,7 @@
 require_once('videresendingsskjema.php');
 
 $fm = $m->videresendTil(true);
-var_dump($fm);
+
 if(sizeof(question_list($fm->g('fylke_id')))==0) {
 	_ret('<h3>Fylkesmønstringen har ikke et elektronisk infoskjema..</h3> .. og du trenger derfor ikke fylle ut noe her');
 }
