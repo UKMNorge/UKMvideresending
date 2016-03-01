@@ -85,9 +85,10 @@ function question_admin() {
 }
 
 function question_list($fid=false) {
-	if(!$fid)
-		$fid = get_option('fylke');
-	
+	if(!$fid) {
+		$m = new monstring( get_option('pl_id') );
+		$fid = $m->get('fylke_id');
+	}
 	$qs = array();
 	$qry = new SQL("SELECT `q_id` FROM `smartukm_videresending_fylke_sporsmal`
 					WHERE `f_id` = '#fid'
