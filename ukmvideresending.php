@@ -2,7 +2,7 @@
 /* 
 Plugin Name: UKM Videresending
 Plugin URI: http://www.ukm-norge.no
-Description: UKM Norge admin
+Description: UKM Norge admin. DEPRECATED - VI BRUKER UKMVIDERESENDING_FESTIVAL FOR ALLE.
 Author: UKM Norge / M Mandal 
 Version: 1.0 
 Author URI: http://www.ukm-norge.no
