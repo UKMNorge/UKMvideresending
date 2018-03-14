@@ -3,6 +3,10 @@
 </p>
 
 {% for bilde in bilder %}
-	<img src="{{ bilde.sizes.medium.path_internal ~ bilde.sizes.medium.file }}" class="clickable imageSelect" data-id="{{ bilde.id }}" data-blog="{{ bilde.blog_id }}" data-action="velgBilde{{ POST.kunstverk == 'true' ? 'Kunstverk' : 'Innslag' }}" height="150" />
+	{% if bilde.sizes.medium is defined and bilde.sizes.medium != null %}
+		<img src="{{ bilde.sizes.medium.path_internal ~ bilde.sizes.medium.file }}" class="clickable imageSelect" data-id="{{ bilde.id }}" data-blog="{{ bilde.blog_id }}" data-action="velgBilde{{ POST.kunstverk == 'true' ? 'Kunstverk' : 'Innslag' }}" height="150" />
+	{% else %}
+		<img src="{{ bilde.sizes.original.path_internal ~ bilde.sizes.original.file }}" class="clickable imageSelect" data-id="{{ bilde.id }}" data-blog="{{ bilde.blog_id }}" data-action="velgBilde{{ POST.kunstverk == 'true' ? 'Kunstverk' : 'Innslag' }}" height="150" />
+	{% endif %}
 {% endfor %}
 </div>
