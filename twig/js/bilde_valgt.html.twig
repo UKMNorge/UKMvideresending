@@ -1,1 +1,5 @@
-<img src="{{ bilde.sizes.medium.path_internal ~ bilde.sizes.medium.file }}" data-id="{{ bilde.id }}" data-blog="{{ bilde.blog_id }}" height="70" />
+{% if bilde.sizes.medium is defined and bilde.sizes.medium != null %}
+	<img src="{{ bilde.sizes.medium.path_internal ~ bilde.sizes.medium.file }}" data-id="{{ bilde.id }}" data-blog="{{ bilde.blog_id }}" height="70" />
+{% else %}
+	<img src="{{ bilde.sizes.original.path_internal ~ bilde.sizes.original.file }}" data-id="{{ bilde.id }}" data-blog="{{ bilde.blog_id }}" height="70" />
+{% endif %}
