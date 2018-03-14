@@ -207,10 +207,14 @@ class UKMVideresending extends UKMmodul {
 	 *
 	**/
 	public static function meny() {
+		if( !is_super_admin() ) {
+			return;
+		}
+		
 		UKM_add_menu_page(
 			'monstring', 
 			'Videresending', 
-			'Videresending',
+			'BETA videres',
 			'editor', 
 			'UKMVideresending',
 			['UKMVideresending','admin'],
@@ -222,6 +226,8 @@ class UKMVideresending extends UKMmodul {
 			['UKMVideresending', 'script']	# Script-funksjon
 		);
 
+// TODO
+		return;
 		if( self::getType() == 'fylke') {
 			// Legg videresendingsskjemaet som en submenu under Mønstring.
 			UKM_add_submenu_page(
