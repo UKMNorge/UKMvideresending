@@ -1,0 +1,17 @@
+<div class="form-group">
+	<label>Beskriv hvordan {{ person.getFornavn() }} samarbeider med andre</label>
+	<textarea name="samarbeid" class="form-control" required>{{ nominasjon.getSamarbeid() }}</textarea>
+</div>
+
+<div class="form-group">
+	<label>
+		Beskriv {{ person.getFornavn() }} sine erfaringer og kunnskap 
+		{% if nominasjon.harDeltakerskjema() %}
+			innenfor 
+			{{ nominasjon.getPri1() }},
+			{{ nominasjon.getPri2() }} og
+			{{ nominasjon.getPri3() }}
+		{% endif %}
+	</label>
+	<textarea name="erfaring" class="form-control" required>{{ nominasjon.getErfaring() }}</textarea>
+</div>

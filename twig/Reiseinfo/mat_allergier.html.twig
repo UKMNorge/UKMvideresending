@@ -1,0 +1,26 @@
+<fieldset>
+	<legend>Mat og allergier</legend>
+	<div class="">
+		<div class="form-group col-xs-4">
+			<label for="matogallergi_vegetarianere">Ant. vegetarianere</label>
+			<input type="number" name="matogallergi_vegetarianere" id="matogallergi_vegetarianere" class="form-control" value="{{matogallergi.vegetarianere}}">
+		</div>
+		
+		<div class="form-group col-xs-4">
+			<label for="matogallergi_soliaki">Ant. med søliaki</label>
+			<input type="number" name="matogallergi_soliaki" id="matogallergi_soliaki" class="form-control" value="{{matogallergi.soliaki}}">
+		</div>
+		
+		<div class="form-group col-xs-4">
+			<label for="matogallergi_svinekjott">Ant. som ikke spiser svinekjøtt</label>
+			<input type="number" name="matogallergi_svinekjott" id="matogallergi_svinekjott" class="form-control" value="{{matogallergi.svinekjott}}">
+		</div>
+	</div>
+	
+	<div class="form-group col-xs-12">
+			<div class="form-group">
+				<label for="matogallergi_annet">Andre spesielle forhold om måltider</label>
+				<textarea id="matogallergi_annet" name="matogallergi_annet" class="form-control">{{matogallergi.annet}}</textarea>
+			</div>
+	</div>
+</fieldset>

@@ -1,0 +1,66 @@
+{% if innslag.getType().harTitler() %}
+	{% for tittel in innslag.getTitler().getAll() %}
+		<li class="videresend_item list-group-item {{ tittel.erVideresendtTil( valgt_til ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
+			<div class="row header">
+				<div class="col-1 col-xs-1">
+					<input type="checkbox" class="videresend" value="true" {{ tittel.erVideresendtTil( valgt_til ) ? 'checked="checked"' : ''}} />
+				</div>
+				<div class="col-9 col-xs-9">
+					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - {{ tittel.getTittel() }}</span>
+					<span class="status"></span>
+				</div>
+				<div class="col-2 col-xs-2 text-muted muted small">
+					{{ innslag.getKommune().getNavn() }}
+				</div>
+			</div>
+			<div class="row data" style="display:none;">
+				<div class="col1 col-xs-1"></div>
+				<div class="col-11 col-xs-11 kontroll">
+				</div>
+			</div>
+		</li>
+	{# MANGLER TITLER OG KAN KUN AVMELDES #}
+	{% else %}
+		<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( valgt_til ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="0" id="tittel-0-{{ tittel.getId() }}">
+			<div class="row header">
+				<div class="col-1 col-xs-1">
+					{% if innslag.erVideresendtTil( valgt_til ) %}
+						<input type="checkbox" class="videresend" value="true" checked="checked" />
+					{% endif %}
+				</div>
+				<div class="col-9 col-xs-9">
+					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - HAR INGEN TITLER {{ valgt_til.getType() == 'land' ? 'PÅ DIN FESTIVAL' }} og kan derfor ikke videresendes</span>
+					<span class="status"></span>
+				</div>
+				<div class="col-2 col-xs-2 text-muted muted small">
+					{{ innslag.getKommune().getNavn() }}
+				</div>
+			</div>
+			<div class="row data" style="display:none;">
+				<div class="col1 col-xs-1"></div>
+				<div class="col-11 col-xs-11 kontroll">
+				</div>
+			</div>
+		</li>	
+	{% endfor %}
+{% else %}
+	<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( valgt_til ) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
+		<div class="row header">
+			<div class="col-1 col-xs-1">
+				<input type="checkbox" class="videresend" value="true" {{ innslag.erVideresendtTil( valgt_til ) ? 'checked="checked"' : ''}} />
+			</div>
+			<div class="col-9 col-xs-9">
+				<span class="navn"><strong>{{ innslag.getNavn() }}</strong></span>
+				<span class="status"></span>
+			</div>
+			<div class="col-2 col-xs-2 text-muted muted small">
+				{{ innslag.getKommune().getNavn() }}
+			</div>
+		</div>
+		<div class="row data" style="display:none;">
+			<div class="col1 col-xs-1"></div>
+			<div class="col-11 col-xs-11 kontroll">
+			</div>
+		</div>
+	</li>
+{% endif %}

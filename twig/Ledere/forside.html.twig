@@ -1,0 +1,76 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	<script>
+		var netter = [{% for natt in netter %}'{{ natt.dag~'_'~natt.mnd }}'{{ not loop.last ? ',' }}{% endfor %}];
+		var steder = [{% for key,sted in overnattingssteder %}{'{{ key }}': '{{ sted }}'}{{ not loop.last ? ',' }}{% endfor %}];
+		var deltakere = {{ unike_deltakere > 0 ? unike_deltakere : 0 }};
+		var pris_hotelldogn = {{ pris_hotelldogn }};
+	</script>
+
+	<div class="row">
+		<div class="col-xs-12 col-lg-10">
+			<h3>Registrer dine ledere, og hvor de overnatter de ulike nettene</h3>
+			
+			<ol class="list-group" id="alle_ledere">
+				{% for leder in ledere %}
+					{% include "js/ledere_leder.html.twig" %}
+				{% endfor %}
+			</ol>
+			
+			<div class="clearfix"></div>
+			<p>&nbsp;</p>
+			<button class="btn btn-primary btn-md" id="leder_create" type="button">Legg til leder</button>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12 col-md-10">
+			<h3 class="mt-5">
+				Du må ha minst 
+				<span class="ledere_per_natt">x ledere</span> i 
+				{{ overnattingssteder['deltakere']|lower }}
+				hver natt.
+			</h3>
+	
+			<p>
+				Systemet har beregnet at 
+				<span class="deltakere_i_landsbyen">x deltakere</span>
+				skal sove i {{ overnattingssteder['deltakere']|lower }}.
+				UKM-festivalen krever minst én leder per 10 deltakere i {{ overnattingssteder['deltakere']|lower }} hver natt.
+				
+				<span class="hotelldogn">
+				<br />
+					Du bestiller nå 
+					<span class="antall"></span> hotelldøgn á 
+					kr. <span class="pris"></span>,-
+					for totalt
+					kr. <span class="total"></span>,-
+				</span>
+			</p>
+		</div>
+		
+		<div class="col-xs-12 col-md-6">
+			{% include "Ledere/netter.html.twig" %}
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<div class="form-group" style="margin-top: 1em;">
+				<label>Eventuelle kommentarer ang. overnatting</label>
+				<textarea class="form-control" name="" id="kommentarer_overnatting">{{ overnatting_kommentar }}</textarea>
+				<p>
+					Hvis noen deltakere ikke skal sove i {{ overnattingssteder['deltakere']|lower }} kan du spesifisere dette her, etter avtale med arrangøren.
+				</p>
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-success btn-sm" id="lagre_kommentarer_overnatting">Lagre</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12 col-md-6">
+			{% include "Ledere/hovedleder.html.twig" %}
+		</div>
+	</div>
+
+{% endblock %}

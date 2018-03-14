@@ -1,0 +1,28 @@
+<div class="bilder {{ kunstverk is defined ? 'kunstverk-'~ tittel.getId() : 'innslag-'~innslag.getId() }} text-danger">
+	{% if innslag.getBilder().getAll()|length == 0 %}
+		<img src="https://ico.ukm.no/error_utrop-32.png" height="20" class="float-right pull-right" />
+		{% if text is defined %}
+			{{ text.none }}
+		{% else %}
+			Ingen bilder funnet.
+		{% endif %}
+		<br />
+		<button class="btn btn-xs btn-default action" data-action="showBildeOpplasting">Last opp bilde</button>
+	{% else %}
+		<span class="valgt_bilde">
+			{% if innslag.getBilder().harValgt( kunstverk is defined ? tittel.getId() : null ) %}
+				<img src="{{ innslag.getBilder().getValgt( kunstverk is defined ? tittel.getId() : null ).getSize('medium').getUrl() }}" height="70" />
+			{% else %}
+				<img src="https://ico.ukm.no/error_utrop-32.png" height="20" class="float-right pull-right" />
+				{% if text is defined %}
+					{{ text.choose }}
+				{% else %}
+					Velg bilde til programmet.
+				{% endif %}
+			{% endif %}
+		</span>
+		<br />
+		<button class="btn btn-xs btn-default showImages" data-action="showBilder" data-kunstverk="{{ kunstverk is defined ? 'true' : 'false' }}">Velg bilde</button>
+	{% endif %}
+	<div class="clearfix"></div>
+</div>

@@ -1,0 +1,14 @@
+<div class="film text-{{ innslag.getPlayback().har() ? 'success' : 'warning' }}">
+	{% if innslag.getPlayback().har() %}
+		<img src="https://ico.ukm.no/check-32.png" height="20" class="float-right pull-right" />
+		Originalfil levert.
+		<br />
+		<button class="btn btn-xs btn-default action" data-action="showPlaybackFiles">Mer info</button>
+	{% else %}
+		<img src="https://ico.ukm.no/alert-32.png" height="20" class="float-right pull-right action" />
+		Mangler originalfil.
+		<br />
+		<button class="btn btn-xs btn-default action" data-action="showFilminfo">Last opp film</button>
+	{% endif %}
+	<div class="clearfix"></div>
+</div>

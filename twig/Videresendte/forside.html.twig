@@ -1,0 +1,71 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	<h2>
+		Videresend deltakere til {{ valgt_til.getNavn() }}
+	</h2>
+
+	{% if not valgt_til.erRegistrert() %}
+		<p class="alert alert-error alert-danger">
+			Mønstringen er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
+		</p>
+	{% elseif date( valgt_til.getFrist2() ) > date() %}
+		<p class="alert alert-warning">
+			<strong>
+				Videresendingen har ikke åpnet. Du kan videresende fra
+				{{ valgt_til.getFrist2()|dato('j.M') ~' kl. '~ valgt_til.getFrist2()|dato('H:i') }} 
+				til
+				{{ valgt_til.getFrist1()|dato('j.M') ~' kl. '~ valgt_til.getFrist1()|dato('H:i') }}. 
+			</strong>
+	
+	{% elseif not valgt_til.erVideresendingApen() %}
+		<p class="alert alert-error alert-danger">
+			<strong>
+				Videresending er kun mulig fra
+				{{ valgt_til.getFrist2()|dato('j.M') ~' kl. '~ valgt_til.getFrist2()|dato('H:i') }} 
+				til
+				{{ valgt_til.getFrist1()|dato('j.M') ~' kl. '~ valgt_til.getFrist1()|dato('H:i') }}. 
+			</strong>
+			<br />
+			Du kan ikke endre hvem som skal videresendes, men fortsatt ajourføre 
+			<a href="?page=UKMVideresending&action=media">mediefiler</a>,
+			<a href="?page=UKMVideresending&action=media">playback</a>
+			eller
+			<a href="?page=UKMdeltakere">informasjon (fra deltakermenyen)</a>.
+		</p>
+	{% else %}
+		<p>
+			Listen viser kun innslag fra de kategoriene {{ valgt_til.getNavn() }} tar i mot.
+		</p>
+		<div class="row">
+			{% for type_innslag in valgt_til.getInnslagTyper() %}
+				<div class="innslagBlock col-xs-12">
+					<div class="innslagTypeHeader">
+						<img src="{{ type_innslag.getIcon() }}" height="45" />
+						<h3>{{ type_innslag }}</h3>
+						<div class="clearfix"></div>
+					</div>
+					
+					<ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
+						{# VIDERESENDING TIL FYLKE - GRUPPER PER FYLKE I TILFELLE LOKALMØNSTRING OVER FYLKESGRENSER #}
+						{% if fra.getType() == 'kommune' %}
+							{% for innslag in fra.getInnslag().filterByType( type_innslag, fra.getInnslag().getAllByFylke( valgt_til.getFylke() ) ) %}
+								{% embed "Videresendte/innslag.html.twig" %}{% endembed %}
+							{% else %}
+								<li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
+							{% endfor %}
+						{# VIDERESENDING TIL UKM-FESTIVALEN #}
+						{% else %}
+							{% for innslag in fra.getInnslag().getAllByType( type_innslag ) %}
+								{% embed "Videresendte/innslag.html.twig" %}{% endembed %}
+							{% else %}
+								<li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
+							{% endfor %}
+						{% endif %}
+					</ol>
+				</div>
+			{% endfor %}
+			<div class="clearfix"></div>
+		</div>
+	{% endif %}
+{% endblock %}

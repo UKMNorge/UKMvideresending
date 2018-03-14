@@ -1,0 +1,20 @@
+<table class="status_netter overnattingssted table table-condensed" style="width:99%; margin-top: 0.75em;">
+	<thead>
+		<tr>
+			<th>Sted</th>
+			{% for natt in netter %}
+				<th>{{ natt.dag }}.{{ natt.mnd }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for sted_key, sted in overnattingssteder %}
+			<tr>
+				<th>{{ sted }}</th>
+				{% for natt in netter %}
+					<td id="status-{{ sted_key }}-{{ natt.dag~'_'~natt.mnd }}" {{ sted_key == 'deltakere' ? 'class="alert-danger"'}}>0</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

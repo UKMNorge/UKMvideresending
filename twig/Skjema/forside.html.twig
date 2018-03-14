@@ -1,0 +1,6 @@
+{% extends 'Layout/base.html.twig' %}
+
+{% block content %}	
+	{# Embedder for å kunne vise preview av infoskjema. #}
+	{% embed 'Skjema/innhold.html.twig' %}{% endembed %}
+{% endblock %}

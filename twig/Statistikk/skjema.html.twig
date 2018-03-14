@@ -1,0 +1,19 @@
+<form class="videresendt_kontroll_tittel" method="post" action="?page=UKMVideresending">
+	<div class="form-group col-xs-12">
+		<label for="publikum">Publikum på mønstringen</label>
+		<input name="pl_public" id="publikum" type="number" class="form-control col-xs-2" value="{{ fra.getPublikum() }}">
+		<p>Hvor stort publikum hadde du innom mønstringen?</p>
+	</div>
+				
+	<div class="form-group col-xs-12">
+		<label for="missing">Uregistrerte deltakere på mønstringen</label>
+		<input name="pl_missing" id="missing" type="number" class="form-control col-xs-2" value="{{ fra.getUregistrerte() }}">
+
+		<p>
+			Hvor mange deltakere på mønstringen var ikke registrert i arrangørsystemet? 
+			Ideelt sett skal dette være null, men det er viktigere at alle er registrert inn for riktig statistikk.
+		</p>
+	</div>
+
+	<button type="submit" class="btn btn-default">Lagre</button>
+</form>

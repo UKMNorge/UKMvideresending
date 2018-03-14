@@ -1,0 +1,156 @@
+<form class="videresendt_kontroll">
+	<p>
+		<strong>
+			{{ innslag_navn }} er nå videresendt. Sjekk at riktig informasjon er oppgitt!
+		</strong>
+		{% if har_titler %}
+			<br />
+			Om du endrer beskrivelser, kontaktinfo, alder o.l. må du trykke på knappen "lagre endringer"
+		{% endif %}
+	</p>
+	
+	<div class="clearfix"></div>
+
+	{% if har_titler %}
+		<div class="row">		
+			<div class="col-xs-12 col-sm-{{ type_key == 'musikk' ? 3 : 4 }}">
+				<div class="form-group">
+					<label>Innslag</label>
+					<input name="innslag_navn" type="text" class="form-control" value="{{ innslag_navn}}" />
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-{{ type_key == 'musikk' ? 3 : ( har_varighet ? 5 : 4 ) }}">
+				<div class="form-group">
+					<label>Tittel</label>
+					<input name="tittel_tittel" type="text" class="form-control" value="{{ tittel_navn }}" />
+				</div>
+			</div>
+
+			{% if type_key == 'musikk' %}
+				<div class="col-xs-12 col-sm-3">
+					<div class="form-group">
+						<label>Sjanger</label>
+						<input name="innslag_sjanger" type="text" class="form-control" value="{{ innslag_sjanger }}" />
+					</div>
+				</div>
+			{% endif %}
+
+			{% if har_varighet %}
+				<div class="col-xs-12 col-sm-3">
+					<div class="form-group">
+						<label>Varighet</label>
+						<div class="clearfix"></div>
+						<select class="form-control" name="tittel_varighet_sek">
+							{% for s in range(0, 600, 5) %}
+								<option value="{{s}}" {% if s == varighet %}selected="selected"{% endif %}>
+									{% if s == 0 %}
+										0 sek
+									{% endif %}
+									{% if (s / 60)|floor(0) > 0 %}
+										{{ (s / 60)|floor(0) }} min
+									{% endif %}
+									{% if s % 60 > 0 %}
+										{{ s % 60 }} sek
+									{% endif %}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			{% else %}
+				<div class="form-group col-xs-4">
+					<label>Type og teknikk</label>
+					<input name="tittel_type" type="text" class="form-control" value="{{tittel_type}}">
+				</div>
+			{% endif %}
+		</div>
+		
+		{% if har_tekniske %}
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label>Tekniske behov</label>
+						<textarea name="tekniske_behov" class="form-control" rows="2">{{ tekniske_behov }}</textarea>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	{% endif %}
+	
+	{% if har_titler %}
+		{% if not alle_personer %}
+			<p>
+				<label>
+					Kryss av for hvem som skal være med til {{ til_navn }}!
+				</label>
+			</p>
+		{% endif %}
+
+		<table class="table">
+			<thead>
+				<tr>
+					{% if not alle_personer %}<th class="col-xs-1"></th>{% endif %}
+					<th class="col-xs-{{ alle_personer ? 4 : 3 }}">Navn</th>
+					<th class="col-xs-2">Mobil</th>
+					<th class="col-xs-2">Alder</th>
+					<th class="col-xs-3">Instrument/rolle</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for person in personer %}
+					<tr class="person person-{{ person.id }}-i-{{ innslag_id }} {{ person.videresendt and not alle_personer ? 'alert-success' : '' }}">
+						
+						{% if not alle_personer %}
+							<td>
+								<input type="checkbox" {{ person.videresendt ? 'checked="checked"' : '' }} {{ videresendtil.mottakelig == false ? 'disabled="disabled"' : '' }} class="videresendPerson" data-person="{{ person.id }}" />
+							</td>
+						{% endif %}
+
+						<td class="person_navn" data-navn="{{person.navn}}">
+							{{person.navn}}
+						</td>
+						<td>
+							<input name="person[{{person.id}}][mobil]" class="form-control" maxlength="8" type="tel" value="{{person.mobil}}" />
+						</td>
+						<td>
+							<select name="person[{{person.id}}][alder]" class="form-control">
+								{% for i in 10..24 %}
+									<option value="{{i}}" {% if i == person.alder %}selected="selected"{% endif %}>{{i}} år</option>
+								{% endfor %}
+								<option value="0" {% if person.alder == '25+' or person.alder < 10 or person.alder > 24 %}selected="selected"{% endif %}>Over 25</option>
+							</select>
+						</td>
+						<td>
+							<input name="person[{{person.id}}][instrument]" type="text" value="{{person.instrument}}" />
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="form-group">
+					<label>Mobil</label>
+					<input name="person[{{ person.id }}][mobil]" class="form-control" maxlength="8" type="tel" value="{{ person.mobil }}" />
+				</div>
+			</div>
+			
+			<div class="col-xs-6">
+				<div class="form-group">
+					<label>Alder</label>
+					<select name="person[{{ person.id }}][alder]" class="form-control">
+						{% for i in 10..25 %}
+							<option value="{{ i }}" {% if i == person.alder %}selected="selected"{% endif %}>{{ i }} år</option>
+						{% endfor %}
+						<option value="0" {% if person.alder < 10 or person.alder>25 %}selected="selected"{% endif %}>Over 25</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	<div class="float-right pull-right">
+		<button type="button" class="submitKontroll btn btn-default">Lagre endringer</button>
+	</div>
+</form>

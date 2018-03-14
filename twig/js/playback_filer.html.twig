@@ -1,0 +1,32 @@
+<p>
+	<strong>Playbackfiler tilknyttet innslaget.</strong>
+</p>
+
+<ol class="list-group">
+{% for fil in playback %}
+	<li class="list-group-item">
+		<div class="col-xs-6">
+			<strong>
+				{{fil.name}}
+			</strong>
+			<br />
+			<small>
+				<a href="//playback.ukm.no/{{fil.pl_id}}/{{fil.id}}/" target="_blank">{{fil.file}}</a>
+			</small>
+		</div>
+		<div class="col-xs-6">
+			{{fil.description}}
+		</div>
+		<div class="clearfix"></div>
+	</li>
+{% endfor %}
+
+<div class="clearfix"></div>
+<p>&nbsp;</p>
+
+<p>
+	<strong>Trenger du å laste opp eller endre en fil?</strong>
+</p>
+<p>
+	<a href="?page=UKMplayback" class="btn btn-default">Gå til playback</a>
+</p>

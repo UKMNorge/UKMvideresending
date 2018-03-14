@@ -1,0 +1,12 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	<h3>Statistikk</h3>
+	
+	<p class="lead">
+		For å komme i gang med videresending må du oppgi antall publikum på mønstringen din. 
+		<br />
+		Trenger du å endre dette senere, finner du det igjen nederst på fanen "oppsummering".
+	</p>
+	{% embed "Statistikk/skjema.html.twig" %}{% endembed %}
+{% endblock %}

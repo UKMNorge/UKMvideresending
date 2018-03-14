@@ -1,0 +1,58 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	<div class="col-12 col-xs-12 col-lg-10">
+		<h1>Informasjon om videresending</h1>
+	
+		{% if til|length > 1 %}
+			<p class="lead">
+				Du kan videresende til 
+				{% for monstring in til %}
+					{% if loop.last %}
+						og
+					{% endif %}
+					{{ monstring.getNavn() }}{{ not loop.last and monstring|length > 2 ? ', ': '' }}
+				{% endfor %}
+			</p>
+		{% endif %}
+		
+		<p>
+			For å fullføre videresendingen må du innom alle faner (videresendte, media osv) og fylle ut alle felt. 
+			<br />
+			Etter fristen kan du ajourføre media og detaljer på videresendingen, 
+			men det vil ikke være mulig å endre på hvilke innslag som er videresendt.
+		</p>
+		
+		{% if not fra.getPublikum() %}
+			<p class="bold strong">
+				For å komme i gang med videresendingen må du først oppgi antall publikum på fanen 
+				"<a href="?page={{ GET('page') }}&action=statistikk">statistikk</a>".
+			</p>
+		{% endif %}
+			
+		{% for monstring in til %}
+			<h2 class="mt-4">
+				Videresending til {{ monstring.getType() == 'fylke' ? monstring.getFylke().getNavn() : monstring.getNavn() }}
+			</h2>
+			<p class="lead">
+				Åpen fra 
+				{{ monstring.getFrist2()|dato('j.M') ~' kl. '~ monstring.getFrist2()|dato('H:i') }}
+				til
+				{{ monstring.getFrist1()|dato('j.M') ~' kl. '~ monstring.getFrist1()|dato('H:i') }}
+			</p>
+				{% if not monstring.erRegistrert() %}
+					<p class="alert alert-error alert-danger">
+						Mønstringen er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
+					</p>
+				{% else %}
+					{% if fra.getType() == 'kommune' and monstring.getAttr('infotekst') %}
+						{{ monstring.getAttr('infotekst')|raw|nl2br }}
+					{% endif %}
+				{% endif %}
+		{% endfor %}
+	
+		{% if fra.getType() == 'fylke' %}
+			{% include "Informasjon/nasjonalt.html.twig" %}
+		{% endif %}
+	</div>
+{% endblock %}

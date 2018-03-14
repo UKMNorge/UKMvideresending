@@ -1,0 +1,22 @@
+<table class="table table-striped">
+	<tr>
+		<th width="120">Prioritet 1</th>
+		<td>{{ nominasjon.getPri1() }}</td>
+	</tr>
+	<tr>
+		<th>Prioritet 2</th>
+		<td>{{ nominasjon.getPri2() }}</td>
+	</tr>
+	<tr>
+		<th>Prioritet 3</th>
+		<td>{{ nominasjon.getPri3() }}</td>
+	</tr>
+	<tr>
+		<th>Annet {{ person.getFornavn() }} ønsker å bidra med</th>
+		<td>{{ nominasjon.getAnnet() }}</td>
+	</tr>
+	<tr>
+		<th>{{ person.getFornavn() }} sin beskrivelse av egen erfaring</th>
+		<td>{{ nominasjon.getBeskrivelse() }}</td>
+	</tr>
+</table>

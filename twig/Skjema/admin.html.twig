@@ -1,0 +1,135 @@
+<h2>Videresendingsskjema</h2>
+
+<p class="lead">Spørreskjemaet du lager her må fylles ut av  dine lokalkontakter ved videresending til fylkesmønstringen. Du kan legge til så mange spørsmål du vil, og endre rekkefølgen ved å dra og slippe etterpå. Husk å trykke lagre når du er ferdig!</p>
+{# LEGG TIL SPØRSMÅL #}
+<div class="col-xs-12 col-sm-10 well">
+	<button class="btn btn-default" id="addBoxTrigger">Legg til nytt spørsmål</button>
+	<form class="form" id="addBox" method="POST" style="display: none">
+		<br><br>
+		<div class="col-xs-12 col-md-4">
+			<label for="">Tittel/spørsmål</label>
+			<input type="text" name="nyTittel" class="form-control">
+			<small class="help-block">Dette er overskriften på spørsmålet ditt.</small>
+		</div>
+		<div class="col-xs-12 col-md-3">
+			<label for="newType">Type</label>
+			<select id="newType" name="nyType" class="form-control">
+				<option disabled {{ sporsmal.type is defined ? '' : 'selected'}}>Ikke valgt</option>
+				{% for type, navn in sporsmalsTyper %}
+					<option value="{{ type }}" {{ type == sporsmal.type ? 'selected' : '' }}>{{ navn }}</option>
+				{% endfor %}
+			</select>
+			<small class="help-block">Hvilken type du velger påvirker hvordan skjemaet blir seende ut.</small>
+		</div>
+		<div class="col-xs-12 col-md-5">
+			<label for="">Hjelpetekst</label>
+			<input type="text" name="nyHjelpetekst" class="form-control">
+			<small class="help-block">Skriv en kort, forklarende tekst til spørsmålet ditt.</small>
+		</div>
+		<div class="clearfix"></div>
+		<div class="col-xs-6 col-sm-2">
+			<button class="btn btn-success">Legg til spørsmål</button>
+		</div>
+	</form>
+	<script>
+		jQuery("#addBoxTrigger").click(function () {
+			if(jQuery("#addBox").is(":visible")) {
+				jQuery("#addBoxTrigger").html("Legg til nytt spørsmål");
+				jQuery("#addBox").slideUp();
+			} else {
+				jQuery("#addBoxTrigger").html("Skjul boksen");
+				jQuery("#addBox").slideDown();
+			}
+		});
+	</script>
+</div>
+
+<div class="col-xs-12">
+	<form class="form" action="?page=UKMVideresendingsskjema" method="POST">
+		<input type="hidden" name="changes" value="">
+		<input type="hidden" name="q_order" id="q_order" value="{% for sporsmal in sporsmalsListe %}{{ sporsmal.id }}{{ loop.last ? '' : ',' }}{% endfor %}">
+		<ul class="list-group" id="sporsmalsListe">
+		{% for sporsmal in sporsmalsListe %}
+			<li class="list-group-item" id="{{ sporsmal.id }}" data-order="{{ sporsmal.order }}" {{ sporsmal.type == 'overskrift' ? 'style="background-color: #eee"' : '' }}>
+				<input type="hidden" name="{{ sporsmal.id }}-order" value="{{ sporsmal.order }}">
+				<div class="col-xs-12 col-md-3">
+					<label for="">Tittel/spørsmål</label>
+					<input type="text" name="{{ sporsmal.id }}-title" class="form-control" value="{{ sporsmal.title }}">
+					<small class="help-block">Dette er overskriften på spørsmålet ditt.</small>
+				</div>
+				<div class="col-xs-12 col-md-3">
+					<label>Type spørsmål</label>
+					<select name="{{ sporsmal.id }}-type" class="form-control">
+						<option disabled {{ sporsmal.type is defined ? '' : 'selected'}}>Ikke valgt</option>
+						{% for type, navn in sporsmalsTyper %}
+							<option value="{{ type }}" {{ type == sporsmal.type ? 'selected' : '' }}>{{ navn }}</option>
+						{% endfor %}
+					</select>
+					<small class="help-block">Hvilken type du velger påvirker hvordan skjemaet blir seende ut.</small>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<label>Hjelpetekst</label>
+					<input type="text" name="{{ sporsmal.id }}-help" class="form-control" value="{{ sporsmal.help }}">
+					<small class="help-block">Skriv en kort, forklarende tekst til spørsmålet ditt.</small>
+				</div>
+				<div class="col-sm-1 hidden-xs hidden-sm" align="center">
+					<img src="{{ draogslippikon }}">
+					<br />
+					<a href="?page=UKMVideresendingsskjema&delete={{ sporsmal.id }}" class="btn btn-danger" style="margin-top: 10px">Slett</a>
+				</div>
+				<div class="clearfix"></div>
+			</li>
+		{% endfor %}
+		</ul>
+		<div>
+			<div class="col-xs-6 col-sm-3">
+				<button type="submit" class="btn btn-success form-control">Lagre endringer</button>
+			</div>
+			{#
+			<div class="col-xs-6 col-sm-3">
+				<a href="#" id="preview" class="btn btn-default form-control" data-toggle="modal" data-target=".previewModal">Forhåndsvis skjema</a>
+			</div>
+			#}
+			<div class="clearfix"></div>
+		</div>
+	</form>
+</div>
+
+{# MODAL OVERLAY IN PREVIEW MODE 
+<!-- Large modal -->
+<div class="modal fade previewModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    	<div class="col-xs-12">
+    		<h3>Forhåndsvisning</h3>
+    		<p>Slik vil skjemaet se ut for lokalkontaktene dine.</p>
+    		<hr />
+    	</div>
+    	<div class="" id="previewContent">
+    	</div>
+    </div>
+  </div>
+</div>
+<script>
+jQuery(document).ready(function() {
+	jQuery("#preview").click(function () {
+		console.log('Rendering preview...');
+		var data = {
+			'action': 'UKMvideresendingsskjema_preview'
+		};
+		//console.log(data);
+		jQuery.post(ajaxurl, data, function(response) {
+			console.log('Got this from the server: ' + response);
+			jQuery("#previewContent").html(response);
+
+			// Prevent save-attempts in preview.
+			jQuery("#infoskjema_submit").click(function(e) {
+				e.preventDefault();
+				alert("Kan ikke lagre forhåndsvisningen.");
+				return false;
+			});
+		});
+	});
+});
+</script>
+#}

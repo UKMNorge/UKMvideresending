@@ -1,0 +1,22 @@
+<div class="form-group">
+	<label>Beskriv {{ person.getFornavn() }} sine positive egenskaper i samarbeid med andre</label>
+	<textarea name="voksen-samarbeid" class="form-control" required>{{ nominasjon.getVoksenSamarbeid() }}</textarea>
+</div>
+
+<div class="form-group">
+	<label>
+		Beskriv {{ person.getFornavn() }} sine erfaringer og kunnskap 
+		{% if nominasjon.harDeltakerskjema() %}
+			innenfor 
+			{{ nominasjon.getLydtekniker() ? 'lysteknikk, ' }}
+			{{ nominasjon.getLystekniker() ? 'lydteknikk, ' }}
+			{{ nominasjon.getVertskap() ? 'vertskap' }}
+		{% endif %}
+	</label>
+	<textarea name="voksen-erfaring" class="form-control" required>{{ nominasjon.getVoksenErfaring() }}</textarea>
+</div>
+
+<div class="form-group">
+	<label>Har du andre kommentarer, eller er det noe annet du tror er viktig å få frem om {{ person.getFornavn() }}?</label>
+	<textarea name="voksen-annet" class="form-control" required>{{ nominasjon.getVoksenAnnet() }}</textarea>
+</div>

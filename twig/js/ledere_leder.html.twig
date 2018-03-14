@@ -1,0 +1,82 @@
+<li class="leder selected list-group-item" id="leder_{{ leder.ID}}" data-id="{{ leder.ID}}" data-type="{{ leder.l_type }}">
+	<div class="header row">
+		<div class="col-xs-12">
+			<span class="type strong"></span>
+			<span class="navn"></span>
+			<span class="status float-right pull-right small"></span>
+		</div>
+	</div>
+	
+	<div class="data row">
+		<div class="col-xs-12 col-md-6">
+			<form class="leder_edit_form condensed">
+				<div class="form-group">
+					{% if leder.l_type == 'hoved' %}
+						<p class="strong">Hovedleder</p>
+						<input type="hidden" name="leder_type" class="leder_type" value="hoved" />
+					{% elseif leder.l_type == 'utstilling' %}
+						<p class="strong">Utstillingsleder</p>
+						<input type="hidden" name="leder_type"class="leder_type" value="utstilling" />
+					{% else %}
+						<select class="leder_type form-control" name="leder_type">
+							<option value="reise" {{ leder.l_type=='reise' ? 'selected="selected"' : '' }}>Reiseleder</option>
+							<option value="ledsager" {{ leder.l_type=='ledsager' ? 'selected="selected"' : '' }}>Ledsager</option>
+							<option value="turist" {{ leder.l_type=='turist' ? 'selected="selected"' : '' }}>Turist</option>
+						</select>
+					<div class="clearfix"></div>
+					{% endif %}
+				</div>
+				
+				<div class="form-group">
+					<input name="leder_navn" class="leder_navn form-control input-lg" type="text" placeholder="Skriv navn på leder" value="{{ leder.l_navn }}" />
+				</div>
+				
+				<div class="form-group">
+					<input name="leder_mobil" class="leder_mobil form-control input-sm" type="tel" placeholder="Mobilnummer" value="{{ leder.l_mobilnummer is empty or leder.l_mobilnummer == 0 ? '' : leder.l_mobilnummer }}" />
+				</div>
+				
+				<div class="form-group">
+					<input name="leder_epost" class="leder_epost form-control input-sm" type="email" placeholder="E-postadresse" value="{{ leder.l_epost is empty ? '' : leder.l_epost }}" />
+				</div>
+				
+				<div class="clearfix"></div>
+				
+				<div class="form-group">
+					<button name="leder_save" type="button" class="leder_save btn btn-sm btn-success">Lagre</button>
+					{% if leder.l_type != 'hoved' and leder.l_type != 'utstilling' %}
+						<button name="leder_delete" type="button" class="leder_delete btn btn-sm btn-danger">Slett</button>
+					{% endif %}
+				</div>
+			</form>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<table class="overnattingssted table-condensed table-striped" style="width:99%">
+				<thead>
+					<tr>
+						<th width="*%">Overnattingssted</th>
+						{% for dato in netter %}
+							<th width="40">
+								{{ dato.timestamp|dato('D') }}
+								<small>{{ dato.dag }}.{{ dato.mnd }}</small>
+							</th>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+				{% for sted_key, sted in overnattingssteder %}
+					<tr>
+						<th>{{ sted }}</th>
+						{% for dato in netter %}
+							{% set dato_nice = dato.dag~'_'~dato.mnd %}
+							<td width="40">
+								<input type="radio" class="natt" data-dag="{{ dato.dag }}" data-mnd="{{ dato.mnd }}" name="l{{ leder.ID }}_d{{ dato_nice }}" value="{{ sted_key }}"{% if leder.natt[ dato_nice ] is defined and leder.natt[ dato_nice ].sted is defined and leder.natt[ dato_nice ].sted == sted_key %}checked="checked"{% endif %} />
+							</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</li>

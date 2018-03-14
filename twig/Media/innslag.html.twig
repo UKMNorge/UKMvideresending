@@ -1,0 +1,94 @@
+{# SCENE-INNSLAG #}
+{% if innslag.getType().getId() == 1 %}
+	<li class="videresendingMedie_item list-group-item" data-innslag="{{innslag.getId()}}"  data-tittel="false" id="{{ innslag.getId() }}-false">
+		<div class="row header">
+			<div class="title col-12 col-xs-12 col-sm-3 col-md-6">
+				<strong>{{ innslag.getNavn() }}</strong>
+			</div>
+			
+			<div class="actions col-4 col-xs-4 col-sm-3 col-md-2">
+				{% include "Media/bilder.html.twig" %}
+			</div>
+
+			<div class="actions col-4 col-xs-4 col-sm-3 col-md-2">
+				{% include "Media/filmer.html.twig" %}
+			</div>
+			
+			<div class="actions col-4 col-xs-4 col-sm-3 col-md-2">
+				{% include "Media/playback.html.twig" %}
+			</div>
+		</div>
+		<div class="row data">
+			<div class="col-12 col-xs-12 kontroll" style="display:none;">
+				
+			</div>
+		</div>
+	</li>
+{# FILM-INNSLAG #}
+{% elseif innslag.getType().getKey() == 'video' %}
+	{% for tittel in innslag.getTitler().getAll() %}
+		<li class="videresendingMedie_item list-group-item" data-innslag="{{innslag.getId()}}" data-tittel="{{ tittel.getId() }}" id="{{ innslag.getId() }}-{{ tittel.getId() }}">
+			<div class="row header">
+				<div class="title col-12 col-xs-12 col-sm-6 col-md-8">
+					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - {{ tittel.getTittel() }}</span>
+				</div>
+				
+				<div class="actions col-6 col-xs-6 col-sm-3 col-md-2">
+					{% include "Media/bilder.html.twig" with { 'innslag': innslag, 'text': {'none': 'Bilde av filmskapere mangler.', 'choose': 'Velg bilde av filmskapere.'} } %}
+				</div>
+				
+				<div class="actions col-6 col-xs-6 col-sm-3 col-md-2">
+					{% include "Media/film.html.twig" %}
+				</div>
+			</div>
+			<div class="row data">
+				<div class="col-12 col-xs-12 kontroll" style="display:none;">
+					
+				</div>
+			</div>
+		</li>
+	{% endfor %}
+
+{# USTILLING-INNSLAG #}
+{% elseif innslag.getType().getKey() == 'utstilling' %}
+	{% for tittel in innslag.getTitler().getAll() %}
+		<li class="videresendingMedie_item list-group-item" data-innslag="{{innslag.getId()}}" data-tittel="{{ tittel.getId() }}" id="{{ innslag.getId() }}-{{ tittel.getId() }}">
+			<div class="row header">
+				<div class="title col-12 col-xs-12 col-sm-6 col-md-8">
+					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - {{ tittel.getTittel() }}</span>
+				</div>
+				
+				<div class="actions kunstverk col-6 col-xs-6 col-sm-3 col-md-2">
+					{% include "Media/bilder.html.twig" with {'innslag': innslag, 'kunstverk': true, 'text': {'none': 'Bilde av kunstverk mangler', 'choose': 'Velg bilde av kunstverk.' } } %}
+				</div>
+				
+				<div class="actions col-6 col-xs-6 col-sm-3 col-md-2">
+					{% include "Media/bilder.html.twig" with { 'innslag': innslag, 'text': {'none': 'Bilde av kunstneren mangler.', 'choose': 'Velg bilde av kunstneren.'} } %}
+				</div>
+			</div>
+			<div class="row data">
+				<div class="col-12 col-xs-12 kontroll" style="display:none;">
+					
+				</div>
+			</div>
+		</li>
+	{% endfor %}
+{# TITTELLØSE #}
+{% else %}
+	<li class="videresendingMedie_item list-group-item" data-innslag="{{innslag.getId()}}" data-tittel="false" id="{{ innslag.getId() }}-false">
+		<div class="row header">
+			<div class="title col-12 col-xs-12 col-sm-9 col-md-10">
+				<span class="navn"><strong>{{ innslag.getNavn() }}</strong></span>
+			</div>
+			
+			<div class="actions col-12 col-xs-12 col-sm-3 col-md-2">
+				{% include "Media/bilder.html.twig" with { 'innslag': innslag, 'text': {'none': 'Bilde av deltakeren mangler.', 'choose': 'Velg bilde av deltakeren.'} } %}
+			</div>
+		</div>
+		<div class="row data">
+			<div class="col-12 col-xs-12 kontroll" style="display:none;">
+				
+			</div>
+		</div>
+	</li>
+{% endif %}

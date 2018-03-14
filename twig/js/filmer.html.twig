@@ -1,0 +1,14 @@
+<p>
+	<strong>Alle filmer av innslaget i UKM-TV</strong>
+</p>
+
+{% for film in filmer %}
+	<iframe src="{{ film.embed_url }}" frameborder="0" width="500" height="282"></iframe>
+{% endfor %}
+
+<p>
+	<strong>Trenger du å laste opp en annen film?</strong>
+</p>
+<p>
+	<a href="?page=UKMvideo_innslag" class="btn btn-default">Gå til film-opplasting</a>
+</p>

@@ -1,0 +1,172 @@
+<table class="table table-striped">
+	<tr>
+		<th width="120">Ønsker å jobbe med</th>
+		<td>
+			{{ nominasjon.getLydtekniker() ? 'lydteknikk, ' }}
+			{{ nominasjon.getLystekniker() ? 'lysteknikk, ' }}
+			{{ nominasjon.getVertskap() ? 'vertskap' }}
+		</td>
+	</tr>
+	<tr>
+		<th>Samarbeid med andre</th>
+		<td>{{ nominasjon.getSamarbeid() }}</td>
+	</tr>
+	<tr>
+		<th>Om egen erfaring</th>
+		<td>{{ nominasjon.getErfaring() }}</td>
+	</tr>
+	<tr>
+		<th>Suksesskriterie for UA</th>
+		<td>{{ nominasjon.getSuksesskriterie() }}</td>
+	</tr>
+	<tr>
+		<th>Eventuelle kommentarer</th>
+		<td>{{ nominasjon.getAnnet() }}</td>
+	</tr>
+</table>
+
+{% if nominasjon.getLydtekniker() %}
+	<div class="egenvurdering">
+		<h4>{{ person.getFornavn() }} om sin erfaring som lydtekniker</h4>
+		<button type="button" class="btn btn-xs btn-primary tekniker-vis">Vis hva {{ person.getFornavn() }} har svart</button>
+		<button type="button" class="btn btn-xs btn-primary tekniker-skjul" style="display: none;">Skjul svarene</button>
+	
+		<div class="tekniker-svar" style="display:none;">
+			<table class="table table-striped">
+				<tr>
+					<th width="120">
+						Tidligere erfaring? Brukt hvilke mikser(e)? (kjenner du den godt, eller mindre godt?)
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLydErfaring1() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Jobbet med lydteknikk utenom UKM? Hvilke? Rolle?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLydErfaring2() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Hvordan fungerer stagerack? Hvordan koble det sammen med digitalmikser?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLydErfaring3() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Forskjell på dynamisk og kondesator-mikrofon? Når bruke hvilken?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLydErfaring4() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Ville du, på kort tid, klart å gjøre en full lydsjekk til et band hvor du skrur monitor lyd til bandet, i tillegg til å skru PA, for å kort tid etter ha en konsert for mange mennesker?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLydErfaring5() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Eventuelle referanser
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLydErfaring6() }}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+{% endif %}
+
+{% if nominasjon.getLystekniker() %}
+	<div class="egenvurdering">
+		<h4>{{ person.getFornavn() }} om sin erfaring som lystekniker</h4>
+		<button type="button" class="btn btn-xs btn-primary tekniker-vis">Vis hva {{ person.getFornavn() }} har svart</button>
+		<button type="button" class="btn btn-xs btn-primary tekniker-skjul" style="display: none;">Skjul svarene</button>
+	
+		<div class="tekniker-svar" style="display:none;">
+			<table class="table table-striped">
+				<tr>
+					<th width="120">
+						Tidligere erfaring? Brukt hvilke mikser(e)? (kjenner du den godt, eller mindre godt?)
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLysErfaring1() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Jobbet med Lysteknikk utenom UKM? Hvilke? Rolle?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLysErfaring2() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Kan du patche opp til to universer med dmx-adresser på en mikser, på lampene og om nødvendig feilsøke lampe/fixture?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLysErfaring3() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Forskjell på beam, wash og profil? Når bruke hvilken?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLysErfaring4() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Takler du stress bra? Klarer du å programmere et bra lysshow på kort tid som du så kan gjennomføre live for mange mennesker?
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLysErfaring5() }}
+					</td>
+				</tr>
+				<tr>
+					<th width="120">
+						Eventuelle referanser
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{{ nominasjon.getLysErfaring6() }}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+{% endif %}

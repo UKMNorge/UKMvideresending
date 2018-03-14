@@ -1,0 +1,31 @@
+<h3 class="mt-5">
+	Ansvarlig leder i {{ overnattingssteder['deltakere']|lower }}.
+</h3>
+
+<p>
+	Velg én ansvarlig leder per natt i {{ overnattingssteder['deltakere']|lower }} som vil være kontaktperson for UKM Norge, vakter osv.
+</p>
+
+<form id="hovedledere">
+	<table class="table table-striped">
+		{% for natt in netter %}
+			{% set dato = natt.dag ~'.'~ natt.mnd %}
+			<tr>
+				<td>{{ natt.timestamp|dato('l') }} {{ natt.dag }}.{{ natt.mnd }}</td>
+				<td>
+					<select class="hovedleder" name="hovedleder-{{ dato }}">
+						{% for leder in ledere %}
+							<option value="{{ leder.l_id }}" class="hovedleder-{{ leder.l_id }}" {{ nattledere[ dato ] == leder.l_id ? 'selected="selected"' : ''}}>
+								{{ leder.l_navn }} ({{ leder.type_nice }})
+							</option>
+						{% endfor %}
+					</select>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+</form>
+
+<div class="form-group">
+	<button type="button" class="btn btn-success btn-sm" id="hovedleder_save">Lagre ansvarlig leder</button>
+</div>

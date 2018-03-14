@@ -1,0 +1,29 @@
+<div class="form-group">
+	<label>Hvorfor nominerer du {{ person.getFornavn() }} som konferansier?</label>
+	<textarea name="hvorfor" class="form-control" required>{{ nominasjon.getHvorfor() }}</textarea>
+</div>
+
+<div class="form-group">
+	<label>Beskriv {{ person.getFornavn() }} sin erfaring og spesielle egenskaper som konferansier</label>
+	<textarea name="beskrivelse" class="form-control" required>{{ nominasjon.getBeskrivelse() }}</textarea>
+</div>
+
+<div class="form-group">
+	<div class="radio">
+		<label>
+			<input type="radio" required name="filopplasting" class="filopplasting-ja" {{ nominasjon.getFilPlassering() == 'playback' ? 'checked' }} value="playback" />
+			Jeg har lastet opp / laster opp film(er) av {{ person.getFornavn() }} i playback-modulen
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			<input type="radio" required name="filopplasting" class="filopplasting-nei" {{ nominasjon.getFilPlassering() == 'url' ? 'checked' }} value="url" />
+			Film av {{ person.getFornavn() }} kan finnes på lenken nedenfor
+		</label>
+	</div>
+</div>
+
+<div class="form-group">
+	<label>Eventuell lenke til film-fil</label>
+	<input type="url" name="url" class="filopplasting-url form-control" value="{{ nominasjon.getFilUrl() }}" />
+</div>
