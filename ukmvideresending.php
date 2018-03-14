@@ -185,6 +185,10 @@ class UKMVideresending extends UKMmodul {
 		wp_enqueue_script('TwigJS');
 		wp_enqueue_style( 'UKMVideresending_style', plugin_dir_url( __FILE__ ) .'ukmvideresending.css');
 		wp_enqueue_script( 'UKMVideresending_script_emitter', plugin_dir_url( __FILE__ ) .'javascript/emitter.js');
+
+		// POLYFILL MAP
+		wp_enqueue_script( 'polyfill_map_js', plugin_dir_url( __FILE__ ) .'javascript/poyfill.map.js');
+
 		// JS-app for videresending
 		wp_enqueue_script( 'UKMVideresending_script_videresend_app', plugin_dir_url( __FILE__ ) .'javascript/videresendApp.js');
 		wp_enqueue_script( 'UKMVideresending_script_videresend_item', plugin_dir_url( __FILE__ ) .'javascript/videresendItem.js');
