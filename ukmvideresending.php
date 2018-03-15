@@ -206,10 +206,6 @@ class UKMVideresending extends UKMmodul {
 	 *
 	**/
 	public static function meny() {
-		if( !is_super_admin() ) {
-			return;
-		}
-		
 		UKM_add_menu_page(
 			'monstring', 
 			'Videresending', 
