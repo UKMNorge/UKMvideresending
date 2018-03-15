@@ -213,7 +213,7 @@ class UKMVideresending extends UKMmodul {
 		UKM_add_menu_page(
 			'monstring', 
 			'Videresending', 
-			'BETA videres',
+			'Videresending',
 			'editor', 
 			'UKMVideresending',
 			['UKMVideresending','admin'],
