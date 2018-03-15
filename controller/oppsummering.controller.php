@@ -46,8 +46,6 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 			continue;
 		}
 		
-		echo $innslag->getNavn() .' '. $innslag->getId() .'<br />';
-		
 		// SET SORT-KEY FOR DETTE INNSLAGET (ALTSÅ HVOR LAGRES SUMMEN?)
 		$sort_key = $innslag->getType()->getKey() == 'scene' ? 'annet' : $innslag->getType()->getKey();
 		
