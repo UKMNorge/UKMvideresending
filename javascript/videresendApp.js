@@ -70,7 +70,7 @@ var UKMVideresending = function( $ ) {
 					$(this).attr('data-innslag'),
 					$(this).attr('data-id')
 				);
-				if( item.erVideresendt() ) {
+				if( item != false && item.erVideresendt() ) {
 					item.setVideresendt();
 				}
 			});
