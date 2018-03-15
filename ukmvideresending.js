@@ -4,7 +4,6 @@ jQuery(document).ready(function(){
 	UKMVideresending.on('toggle', 
 			function( type, innslag, id, state ) {
 				var item = UKMVideresending.find( type, innslag, id );
-				console.warn('TOGGLE ITEM', item );
 				
 				if( item ) {
 					if( state ) {
