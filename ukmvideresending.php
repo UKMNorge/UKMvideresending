@@ -423,6 +423,27 @@ class UKMVideresending extends UKMmodul {
 		);
 		return $sql->run('field','field');
 	}
+	
+	
+	public static function checkDocuments( $MESSAGES ) {
+		$month = date('n');
+		$season = ($month > 7) ? date('Y')+1 : date('Y');
+	
+		$info1 = get_site_option('UKMFvideresending_info1_'.$season);
+	
+		if ($month < 6) {
+			if( !$info1 || empty($info1) ) {
+				$MESSAGES[] = array(	'level' => 'alert-warning', 
+										'module' => 'UKMVideresending', 
+										'header' => 'Info 1-dokumentet er ikke oppdatert fra i fjor!', 
+										'body' => 'Rett dette ved å legge inn rett dokument i Mønstringsmodulen.',
+										'link' => '//ukm.no/festivalen/wp-admin/admin.php?page=UKMMonstring' 
+									);
+				return $MESSAGES;
+			}	
+		}
+		return $MESSAGES;
+	}
 }
 
 
@@ -436,10 +457,7 @@ if(is_admin()) {
 		if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
 			add_action('UKM_admin_menu', ['UKMVideresending', 'meny'], 101);
 			add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
-
 		}
 	}
-
-#TODO	add_filter( 'UKMWPNETWDASH_messages', 'UKMVideresending_check_documents');
-#TODO	define('PLUGIN_DIR_PATH', dirname(__FILE__).'/');
+	add_filter( 'UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments'] );
 }
