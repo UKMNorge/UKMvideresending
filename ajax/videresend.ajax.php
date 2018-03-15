@@ -11,6 +11,8 @@ $videresend_til = UKMVideresending::loadValgtTil();
 // Videresend innslaget
 try {
 	$videresend_til->getInnslag()->leggTil( $innslag );
+	
+	$innslag = $videresend_til->getInnslag()->get( $innslag->getId() );
 	write_innslag::leggTil( $innslag );
 } catch( Exception $e ) {
 	/**
