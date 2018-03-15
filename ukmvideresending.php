@@ -423,8 +423,7 @@ class UKMVideresending extends UKMmodul {
 		);
 		return $sql->run('field','field');
 	}
-	
-	
+
 	public static function checkDocuments( $MESSAGES ) {
 		$month = date('n');
 		$season = ($month > 7) ? date('Y')+1 : date('Y');
