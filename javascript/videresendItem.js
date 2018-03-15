@@ -63,7 +63,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		videresend: function() {
 			self.setStatus('alert-warning', 'Vennligst vent, videresender...');
 			self.ajax('videresend');
-			console.warn('ajax:videresend:'+ self.getId());
+			//console.warn('ajax:videresend:'+ self.getId());
 		},
 
 		/**
@@ -72,7 +72,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		avmeld: function() {
 			self.setStatus('alert-warning', 'Vennligst vent, melder av...');
 			self.ajax( 'avmeld' );
-			console.warn('ajax:avmeld:'+ self.getId());
+			//console.warn('ajax:avmeld:'+ self.getId());
 		},
 
 		/**
@@ -93,7 +93,6 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 			$( self.getGUIId() ).removeClass('selected');
 			$( self.getGUIId() + ' .header').removeClass('alert-success');
 
-			console.log('setAvmeldt');
 			$( self.getGUIId() + ' .row.data' ).slideUp();
 		},
 
@@ -115,7 +114,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		videresendPerson: function( person ) {
 			self.setStatus('alert-warning', 'Vennligst vent, videresender person...');
 			self.ajax('videresendPerson', {'person': person} );
-			console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
+			//console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
 		},
 
 		/**
@@ -124,7 +123,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		avmeldPerson: function( person ) {
 			self.setStatus('alert-warning', 'Vennligst vent, melder av person...');
 			self.ajax('avmeldPerson', {'person': person} );
-			console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
+			//console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
 		},
 		
 		/**
@@ -142,8 +141,6 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		 * ResponsHandler ajax: personen er videresendt
 		**/		
 		setVideresendtPerson: function( person ) {
-			console.log('setVideresendtPerson( '+ person +' )');
-			console.log(self.getPersonGUIId( person ) + ' input.videresendPerson');
 			$( self.getPersonGUIId( person ) + ' input.videresendPerson' ).prop('checked', true);
 			$( self.getPersonGUIId( person ) ).each( function(){
 				$(this).addClass('alert-success');
@@ -155,9 +152,6 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		 * ResponsHandler ajax: personen er avmeldt
 		**/		
 		setAvmeldtPerson: function( person ) {
-			console.log('setAvmeldtPerson( '+ person +' )');
-			console.log(self.getPersonGUIId( person ) + ' input.videresendPerson');
-
 			$( self.getPersonGUIId( person ) + ' input.videresendPerson' ).removeProp('checked');
 			$( self.getPersonGUIId( person ) ).each( function(){
 				$(this).removeClass('alert-success');
@@ -192,10 +186,8 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		saveKontroll: function() {
 			$( self.getKontrollGUIId() ).html('Lagrer...').addClass('btn-primary');
 			self.setStatus('alert-warning', 'Vennligst vent, lagrer detaljer...');
-			console.log( self.getGUIId() + ':saveKontroll()');
 			var form = $( self.getGUIId() + ' .row.data .kontroll form');
 			var data = form.serializeArray();
-			console.log( data );
 			self.ajax('kontrollSave', data );
 		},
 		
@@ -281,7 +273,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 	 * FAKTISK AJAX-HANDLER
 	**/	
 	self.on('ajax', function( action, response ) {
-		console.log('AJAX RESPONSE FOR '+ action, response);
+		//console.log('AJAX RESPONSE FOR '+ action, response);
 		/* DECODE JSON DATA OR SET RESPONSE FAIL */
 		if( response !== null && response !== undefined ) {
 			try {
@@ -345,7 +337,6 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 				break;
 			}
 		}
-		console.log( self.getId() + ':AJAX', response );
 	});
 	
 	return self;

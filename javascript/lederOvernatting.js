@@ -31,7 +31,7 @@ var UKMVideresendOvernattingSted = function( key, navn ) {
 		},
 		
 		add: function( dato, leder ) {
-			console.log('STED: book '+ leder +' @ '+ self.getNavn() +' '+ dato );
+			//console.log('STED: book '+ leder +' @ '+ self.getNavn() +' '+ dato );
 			self.createNatt( dato );
 			
 			netter.get( dato ).set( leder, true );
@@ -39,7 +39,7 @@ var UKMVideresendOvernattingSted = function( key, navn ) {
 		},
 		
 		remove: function( dato, leder ) {
-			console.log('REMOVE:', leder, dato, netter);
+			//console.log('REMOVE:', leder, dato, netter);
 			if( netter.has( dato ) ) {
 				if( netter.get( dato ).has( leder ) ) {
 					netter.get( dato ).delete( leder );
@@ -83,7 +83,6 @@ var UKMVideresendOvernatting = function( _netter, _steder ) {
 	
 	let self = {
 		addOvernatting: function( _dato, _sted, _leder_id ) {
-			console.log('OVERNATTING: add', _dato, _sted, _leder_id );
 			// Loop alle steder, og 
 			// fjern lederens overnatting for valgt dato
 			self.getSteder().forEach( function( sted, sted_key ) {
@@ -94,9 +93,7 @@ var UKMVideresendOvernatting = function( _netter, _steder ) {
 		},
 		
 		removeLeder: function( leder ) {
-			console.log('removeLeder');
 			self.getSteder().forEach( function( sted ) {
-				console.log( sted.getNavn() );
 				sted.removeLeder( leder );
 			});
 		},

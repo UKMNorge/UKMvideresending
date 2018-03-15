@@ -10,7 +10,7 @@ var UKMVideresending = function( $ ) {
 		bindGUI: function() {
 			/** ENDRING AV CHECKBOX INNSLAG/TITTEL **/
 			$(document).on('change', '.videresend_item input.videresend', function(){
-				console.info('CHANGE: videresendPerson('+ $(this).parents('li.videresend_item').attr('data-id') +')');
+				//console.info('CHANGE: videresendPerson('+ $(this).parents('li.videresend_item').attr('data-id') +')');
 				var item = $(this).parents('li.videresend_item');
 				_events.emit(
 					'toggle',
@@ -25,7 +25,7 @@ var UKMVideresending = function( $ ) {
 
 			/** ENDRING AV CHECKBOX PERSON **/
 			$(document).on('change', '.videresend_item input.videresendPerson', function(){
-				console.info('CHANGE: videresendPerson('+ $(this).attr('data-person') +')');
+				//console.info('CHANGE: videresendPerson('+ $(this).attr('data-person') +')');
 				var item = $(this).parents('li.videresend_item');
 				self.find(
 					item.attr('data-type'),		// type
@@ -39,7 +39,7 @@ var UKMVideresending = function( $ ) {
 
 			/** ENDRING AV KONTROLL-DATA **/
 			$(document).on('click', '.submitKontroll', function(){
-				console.info('SAVE: kontrolldata');
+				//console.info('SAVE: kontrolldata');
 				var item = $(this).parents('li.videresend_item');
 				self.find(
 					item.attr('data-type'),		// type
@@ -70,12 +70,10 @@ var UKMVideresending = function( $ ) {
 					$(this).attr('data-innslag'),
 					$(this).attr('data-id')
 				);
-				console.log( item );
-				if( item != false && item.erVideresendt() ) {
+				if( item.erVideresendt() ) {
 					item.setVideresendt();
 				}
 			});
-			console.info('ReadyCalled!');
 			return self;
 		},
 		

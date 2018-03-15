@@ -244,7 +244,7 @@ var UKMVideresendLeder = function( $, overnattingssteder, antall_deltakere, pris
 		},
 		
 		removeHovedleder: function( leder ) {
-			console.warn('Fjern alle', 'option.hovedleder-'+ leder.getId());
+			//console.warn('Fjern alle', 'option.hovedleder-'+ leder.getId());
 			$( 'option.hovedleder-'+ leder.getId() ).each(function(){
 				$(this).remove();
 			});

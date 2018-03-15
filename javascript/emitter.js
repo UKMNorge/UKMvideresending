@@ -7,7 +7,7 @@ var emitter = function( _navn ) {
 		/* EVENT HANDLERS */
 		emit: function( event, data ) {
 			
-			console.info( navn + '::emit('+event+')', data);
+			//console.info( navn + '::emit('+event+')', data);
 			if( _events[event] != null ) {
 				_events[event].forEach( function( _event ) {
 					_event.apply(null, data );
