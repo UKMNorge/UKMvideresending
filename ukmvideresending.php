@@ -221,8 +221,6 @@ class UKMVideresending extends UKMmodul {
 			['UKMVideresending', 'script']	# Script-funksjon
 		);
 
-// TODO
-		return;
 		if( self::getType() == 'fylke') {
 			// Legg videresendingsskjemaet som en submenu under Mønstring.
 			UKM_add_submenu_page(
