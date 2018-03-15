@@ -70,6 +70,7 @@ var UKMVideresending = function( $ ) {
 					$(this).attr('data-innslag'),
 					$(this).attr('data-id')
 				);
+				console.log( item );
 				if( item != false && item.erVideresendt() ) {
 					item.setVideresendt();
 				}
