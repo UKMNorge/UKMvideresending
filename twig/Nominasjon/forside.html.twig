@@ -17,7 +17,7 @@
 						{% set nominasjon = innslag.getNominasjon(festivalen) %}
 						{% set person = innslag.getPersoner().getSingle() %}
 						
-						<li class="card nominert-header {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-header-{{ innslag.getId() }}" data-type="{{ type }}" data-id="{{ innslag.getId() }}">
+						<li class="card nominert-header {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-header-{{ innslag.getId() }}" data-type="{{ type }}" data-id="{{ innslag.getId() }}" style="max-width:95%">
 							<div class="header">
 								<div class="ikon">
 									<input type="checkbox" class="nominasjonstatus" {{ nominasjon.erNominert() ? 'checked' }} />
