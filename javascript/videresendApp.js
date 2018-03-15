@@ -30,7 +30,7 @@ var UKMVideresending = function( $ ) {
 				self.find(
 					item.attr('data-type'),		// type
 					item.attr('data-innslag'),	// innslag-id
-					item.attr('data-id'),		// tittel-id | false
+					item.attr('data-id')		// tittel-id | false
 				).togglePerson(
 					$(this).attr('data-person'),// Person-id
 					$(this).is(':checked')		// state

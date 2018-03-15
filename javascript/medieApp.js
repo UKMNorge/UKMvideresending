@@ -57,7 +57,7 @@ var UKMVideresendMedie = function( $ ) {
 					new UKMMedieItem(
 						$,							// inject jQuery
 						item.attr('data-innslag'),	// innslag-id
-						item.attr('data-tittel'),	// tittel-id | false
+						item.attr('data-tittel')	// tittel-id | false
 					)
 				);
 			});
