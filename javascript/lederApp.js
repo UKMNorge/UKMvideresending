@@ -3,9 +3,9 @@
  * Binder sammen GUI og VideresendingItems
 **/
 var UKMVideresendLeder = function( $, overnattingssteder, antall_deltakere, pris_hotelldogn ) {
-	let _leder = new Map();
+	var _leder = new Map();
 	
-	let self = {
+	var self = {
 		bindGUI: function() {
 			$(document).on('keyup', '.leder_navn', function(){
 				self.findParent( $(this) ).setNavn( $(this).val() );
@@ -88,7 +88,7 @@ var UKMVideresendLeder = function( $, overnattingssteder, antall_deltakere, pris
 		},
 		
 		remove: function( jQueryItem ){
-			let leder = self.findParent( jQueryItem );
+			var leder = self.findParent( jQueryItem );
 			self.ajax( 
 				'lederDelete', 
 				{
@@ -98,7 +98,7 @@ var UKMVideresendLeder = function( $, overnattingssteder, antall_deltakere, pris
 		},
 		
 		handleLederDelete: function( response ) {
-			let leder = self.find( response.POST.leder );
+			var leder = self.find( response.POST.leder );
 			// Fjern leder fra alle overnattingssteder
 			// Oppdaterer automatisk summering
 			overnattingssteder.removeLeder( leder );
@@ -150,7 +150,7 @@ var UKMVideresendLeder = function( $, overnattingssteder, antall_deltakere, pris
 		},
 		
 		showHotelldognStatus: function() {
-			let antall_netter = overnattingssteder.getSted('hotell').getAntallTotalt();
+			var antall_netter = overnattingssteder.getSted('hotell').getAntallTotalt();
 			$('.hotelldogn .pris').html( pris_hotelldogn );
 			$('.hotelldogn .antall').html( antall_netter );
 			$('.hotelldogn .total').html( pris_hotelldogn * antall_netter );
@@ -188,7 +188,7 @@ var UKMVideresendLeder = function( $, overnattingssteder, antall_deltakere, pris
 			$('#alle_ledere').append( twigJSledereleder.render( response ) );
 			$( 'button#leder_create' ).html('Legg til leder.').addClass('btn-success').removeClass('btn-warning');
 
-			let leder = self.registerLeder( $('#leder_'+ response.leder.ID ) );
+			var leder = self.registerLeder( $('#leder_'+ response.leder.ID ) );
 			self.addHovedLeder( leder );
 		},
 		

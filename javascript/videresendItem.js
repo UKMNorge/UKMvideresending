@@ -3,11 +3,11 @@
  * Håndterer alt for et gitt videresendingsitem (tittel, innslag uten titler)
 **/
 var UKMVideresendItem = function( $, type, innslag, id ) {
-	let events = emitter();
+	var events = emitter();
 
-	let _status = [];
+	var _status = [];
 
-	let self = {
+	var self = {
 
 		/****************************************/
 		/** ID OG GUI-ID TIL AKTUELT OBJEKT		*/
@@ -256,7 +256,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		},
 		
 		/**
-		 * Fjern alle statuser på et innslag (fullført/feilet ajax-kall)
+		 * Fjern alle statuser på et innslag (fullført/feivar ajax-kall)
 		**/
 		resetStatus: function() {
 			_status.forEach( function( css ) {
@@ -320,7 +320,7 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 				}, 
 				2100
 			);
-			/* HVIS EKSTRA-HANDLINGER KREVES SOM FØLGE AV FEILET HANDLING */
+			/* HVIS EKSTRA-HANDLINGER KREVES SOM FØLGE AV FEIvar HANDLING */
 			switch( action ) {
 				case 'videresend':
 					self.setCheckboxState( false );

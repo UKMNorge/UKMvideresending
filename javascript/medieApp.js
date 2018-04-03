@@ -37,7 +37,7 @@ var UKMVideresendMedie = function( $ ) {
 		},
 		
 		bind: function( clicked, data ) {
-			item = clicked.parents('li.videresendingMedie_item');
+			var item = clicked.parents('li.videresendingMedie_item');
 			object = self.find(
 				item.attr('data-innslag'),	// innslag-id
 				item.attr('data-tittel')
@@ -51,7 +51,7 @@ var UKMVideresendMedie = function( $ ) {
 		
 		ready: function(){
 			$('.videresendingMedie_item').each(function(){
-				item = $(this);
+				var item = $(this);
 				_innslag.set(
 					item.attr('data-innslag') +'-'+ item.attr('data-tittel'),
 					new UKMMedieItem(

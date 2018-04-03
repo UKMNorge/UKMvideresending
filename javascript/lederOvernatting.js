@@ -1,8 +1,8 @@
 var UKMVideresendOvernattingSted = function( key, navn ) {
-	let events = emitter('OvernattingSted');
-	let netter = new Map();
+	var events = emitter('OvernattingSted');
+	var netter = new Map();
 	
-	let self = {
+	var self = {
 		getAntall: function( dato ) {
 			if( !netter.has( dato ) ) {
 				return 0;
@@ -12,7 +12,7 @@ var UKMVideresendOvernattingSted = function( key, navn ) {
 		},
 		
 		getAntallTotalt: function() {
-			let total_count = 0;
+			var total_count = 0;
 			netter.forEach(function(value, key){
 				total_count += value.size;
 			});
@@ -78,10 +78,10 @@ var UKMVideresendOvernattingSted = function( key, navn ) {
 };
 
 var UKMVideresendOvernatting = function( _netter, _steder ) {
-	let events = emitter('Overnatting');
-	let steder = new Map();
+	var events = emitter('Overnatting');
+	var steder = new Map();
 	
-	let self = {
+	var self = {
 		addOvernatting: function( _dato, _sted, _leder_id ) {
 			// Loop alle steder, og 
 			// fjern lederens overnatting for valgt dato
@@ -110,7 +110,7 @@ var UKMVideresendOvernatting = function( _netter, _steder ) {
 			for (var key in _steder) {
 				var obj = _steder[key];
 				for (var prop in obj) {
-					let sted = new UKMVideresendOvernattingSted( prop, obj[prop] );
+					var sted = new UKMVideresendOvernattingSted( prop, obj[prop] );
 					sted.on('changeCount', self.changeCount);
 					steder.set( prop, sted );
 				}

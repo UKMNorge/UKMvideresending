@@ -3,10 +3,10 @@
  * Binder sammen GUI og VideresendingItems
 **/
 var UKMVideresending = function( $ ) {
-	let _events = emitter();
-	let _innslag = new Map();
+	var _events = emitter();
+	var _innslag = new Map();
 	
-	let self = {
+	var self = {
 		bindGUI: function() {
 			/** ENDRING AV CHECKBOX INNSLAG/TITTEL **/
 			$(document).on('change', '.videresend_item input.videresend', function(){
@@ -65,7 +65,7 @@ var UKMVideresending = function( $ ) {
 		**/
 		ready: function() {
 			$('.videresend_item').each( function() {
-				item = self.add(
+				var item = self.add(
 					$(this).attr('data-type'),
 					$(this).attr('data-innslag'),
 					$(this).attr('data-id')

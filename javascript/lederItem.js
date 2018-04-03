@@ -3,10 +3,10 @@
  * Håndterer alt for et gitt videresendingsitem (tittel, innslag uten titler)
 **/
 var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
-	let events = emitter('leder');
-	let overnatting = new Map();
+	var events = emitter('leder');
+	var overnatting = new Map();
 	
-	let self = {
+	var self = {
 		/****************************************/
 		/** ID OG GUI-ID TIL AKTUELT OBJEKT		*/
 		/****************************************/
@@ -143,7 +143,7 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 		
 		showStatus: function() {
 			
-			let mangler = [];
+			var mangler = [];
 
 			if( navn == null || navn == undefined || navn == '' ) {
 				mangler.push('navn');
@@ -159,12 +159,12 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 
 			// netter peker til den globale netter-variabelen
 			// som er et array med datoer
-			let status_natt = netter.length - overnatting.size;
+			var status_natt = netter.length - overnatting.size;
 			if( status_natt > 0 ) {
 				mangler.push( (netter.length - overnatting.size) +' overnatting' + (status_natt != 1 ? 'er' : '' ) );
 			}
 			
-			let setning = 'Mangler ';
+			var setning = 'Mangler ';
 			for( i=0; i<mangler.length; i++) {
 				setning += mangler[ i ];
 				if ( i == mangler.length-1 ) {

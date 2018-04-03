@@ -25,7 +25,7 @@ jQuery(document).on('click', '.nominasjon-sms-purring', function(e) {
 
 
 jQuery(document).on('change', 'input.nominasjonstatus', function(){
-	data = {
+	var data = {
 		action: 'UKMVideresending_ajax',
 		subaction: 'nominasjon',
 		innslag: jQuery(this).parents('li.nominert-header').attr('data-id'),
