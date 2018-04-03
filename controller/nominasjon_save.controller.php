@@ -22,31 +22,31 @@ $nominasjon = write_nominasjon::create(
 
 switch( $nominert->getType()->getKey() ) {
 	case 'media':
-		$nominasjon->setSamarbeid( utf8_encode( $_POST['samarbeid'] ) );
-		$nominasjon->setErfaring( utf8_encode( $_POST['erfaring'] ) );
+		$nominasjon->setSamarbeid( $_POST['samarbeid'] );
+		$nominasjon->setErfaring( $_POST['erfaring'] );
 		write_nominasjon::saveMedia( $nominasjon );
 		break;
 		
 	case 'konferansier':
-		$nominasjon->setHvorfor( utf8_encode( $_POST['hvorfor'] ) );
-		$nominasjon->setBeskrivelse( utf8_encode( $_POST['beskrivelse'] ) );
+		$nominasjon->setHvorfor( $_POST['hvorfor'] );
+		$nominasjon->setBeskrivelse( $_POST['beskrivelse'] );
 		$nominasjon->setFilPlassering( $_POST['filopplasting'] );
 		$nominasjon->setFilUrl( $_POST['url'] );
 		write_nominasjon::saveKonferansier( $nominasjon );
 		break;
 		
 	case 'arrangor':
-		$nominasjon->setVoksenErfaring( utf8_encode( $_POST['voksen-erfaring'] ) );
-		$nominasjon->setVoksenSamarbeid( utf8_encode( $_POST['voksen-samarbeid'] ) );
-		$nominasjon->setVoksenAnnet( utf8_encode( $_POST['voksen-annet'] ) );
+		$nominasjon->setVoksenErfaring( $_POST['voksen-erfaring'] );
+		$nominasjon->setVoksenSamarbeid( $_POST['voksen-samarbeid'] );
+		$nominasjon->setVoksenAnnet( $_POST['voksen-annet'] );
 		write_nominasjon::saveArrangor( $nominasjon );
 		break;
 }
 
 $voksen = write_nominasjon::createVoksen( $nominasjon->getId() );
-$voksen->setNavn( utf8_encode( $_POST['voksen-navn'] ) );
+$voksen->setNavn( $_POST['voksen-navn'] );
 $voksen->setMobil( $_POST['voksen-mobil'] );
-$voksen->setRolle( utf8_encode( $_POST['voksen-rolle'] ) );
+$voksen->setRolle( $_POST['voksen-rolle'] );
 write_nominasjon::saveVoksen( $voksen );
 
 write_nominasjon::saveNominertState( $nominasjon, true );
