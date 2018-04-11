@@ -21,6 +21,7 @@ $nominasjon = write_nominasjon::create(
 );
 
 switch( $nominert->getType()->getKey() ) {
+	case 'nettredaksjon':
 	case 'media':
 		$nominasjon->setSamarbeid( $_POST['samarbeid'] );
 		$nominasjon->setErfaring( $_POST['erfaring'] );
