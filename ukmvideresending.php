@@ -240,7 +240,7 @@ class UKMVideresending extends UKMmodul {
 				'UKMVideresending',
 				'Nominasjon',
 				'Nominasjoner',
-				'editor',
+				'ukm_nominasjon',
 				'UKMnominasjon',
 				['UKMVideresending', 'nominasjon']
 			);
