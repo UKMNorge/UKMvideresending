@@ -1,61 +1,236 @@
-			<h3>Videresending til {{ monstring.getNavn() }}</h3>
-			<table class="table">
-				<thead>
+<div class="col-xs-12 col-md-8">
+	<h3>Videresending til {{ monstring.getNavn() }}</h3>
+	<table class="table table-striped">
+		<tbody>
+			{# TALL #}
+			<tr>
+				<th colspan="4"><h3>Antall personer</h3></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Kvote</th>
+				<th>Du har videresendt</th>
+				<th>Status</th>
+			</tr>
+			<tr class="text-{{ videresendte.personer|length > 30 ? 'error' : 'success' }}">
+				<td></td>
+				<td>30 deltakere</td>
+				<td>{{ videresendte.personer|length }} personer</td>
+				<td>{{ videresendte.personer|length > 30 ? 'Over kvote!' : 'OK' }}</td>
+			</tr>
+			{% set lederkrav = (videresendte.personer|length / 10)|round(0,'ceil') %}
+			<tr class="text-{{ lederkrav > ledere|length ? 'error' : 'success' }}">
+				<td></td>
+				<td>Minst {{ lederkrav }} leder{{ lederkrav != 1 ? 'e' }}</td>
+				<td>{{ ledere|length }} leder{{ ledere|length != 1 ? 'e' }}</td>
+				<td>{{ lederkrav > ledere|length ? 'Mangler ledere!' : ((ledere|length >= (lederkrav*2)) ? 'Supert!' : 'OK') }}</td>
+			</tr>
+
+			{# SCENE #}
+			<tr>
+				<th colspan="4"><h3>Scene</h3></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Kvote</th>
+				<th>Du har videresendt</th>
+				<th>Status</th>
+			</tr>
+			{% if (videresendte.scene.innslag > 5 or videresendte.scene.titler > 5 ) and videresendte.litteratur.innslag > 0 %}
+				<tr class="text-{{ videresendte.scene.innslag > 6 ? 'error':'success' }}">
+					<td></td>
+					<td>6 innslag</td>
+					<td>{{ videresendte.scene.innslag }} innslag</td>
+					<td>{{ videresendte.scene.innslag > 6 ? 'Over kvote!':'OK *' }}</td>
+				</tr>
+				<tr class="text-{{ videresendte.scene.titler > 6 ? 'error':'success'}}">
+					<td></td>
+					<td>6 titler</td>
+					<td>{{ videresendte.scene.titler }} titler</td>
+					<td>{{ videresendte.scene.titler > 6 ? 'Over kvote!': 'OK *' }}</td>
+				</tr>
+				<tr class="text-{{ videresendte.scene.varighet > (6*5*60) ? 'error':'success'}}">
+					<td></td>
+					<td>30 minutter</td>
+					<td>{{ videresendte.scene.varighet|varighet }}</td>
+					<td>{{ videresendte.scene.innslag > 5 ? 'OK *':'Over kvote!' }}</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="small alert alert-danger">
+						<p>
+							*) Systemet antar at du har fått innvilget utvidet scene-kvote fordi minst ett av innslagene er litteratur. 
+							<br />
+							Hvis du ikke allerede har fått skriftlig godkjenning fra UKM-festivalen må du gjøre dette!
+						</p>
+						
+					</td>
+				</tr>
+
+			{% else %}
+				<tr class="text-{{ videresendte.scene.innslag > 5 ? 'error':'success'}}">
+					<td></td>
+					<td>5 innslag</td>
+					<td>{{ videresendte.scene.innslag }} innslag</td>
+					<td>{{ videresendte.scene.innslag > 5 ? 'Over kvote!':'OK' }}</td>
+				</tr>
+				<tr class="text-{{ videresendte.scene.titler > 5 ? 'error':'success'}}">
+					<td></td>
+					<td>5 titler</td>
+					<td>{{ videresendte.scene.titler }} titler</td>
+					<td>{{ videresendte.scene.titler > 5 ? 'Over kvote!':'OK' }}</td>
+				</tr>
+				<tr class="text-{{ videresendte.scene.varighet > (5*5*60) ? 'error':'success'}}">
+					<td></td>
+					<td>30 minutter</td>
+					<td>{{ videresendte.scene.varighet|varighet }}</td>
+					<td>{{ videresendte.scene.varighet > (5*5*60) ? 'Over kvote!':'OK' }}</td>
+				</tr>
+			{% endif %}
+	
+			{# LITTERATUR #}
+			<tr>
+				<th colspan="4"><h3>Litteratur</h3></th>
+			</tr>
+
+			<tr>
+				<td colspan="4">
+					<b>Inngår i scenekvote, men det kan søkes om ett ekstra.</b>
+					{% if (videresendte.scene.innslag > 5 or videresendte.scene.titler > 5 ) and videresendte.litteratur.innslag > 0 %}
+						<br />
+						Fordi du har {{ videresendte.litteratur.innslag }} litteratur- og totalt {{ videresendte.scene.innslag }} innslag, 
+						har systemet antatt at du allerede har søkt og fått innvilget utvidet kvote. 
+						<br />
+						Scene-oversikten viser derfor den utvidede kvoten (6 innslag, ikke den vanlige kvoten på 5 innslag).
+					{% endif %}
+				</td>
+			</tr>
+			
+			{# UTSTILLING #}
+			<tr>
+				<th colspan="4"><h3>Utstilling</h3></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Kvote</th>
+				<th>Du har videresendt</th>
+				<th>Status</th>
+			</tr>
+			{% include "Oppsummering/fylke/utstilling.html.twig" with {videresendt: videresendte.utstilling} %}
+	
+			{# FILM #}
+			<tr>
+				<th colspan="4"><h3>Film</h3></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Kvote</th>
+				<th>Du har videresendt</th>
+				<th>Status</th>
+			</tr>
+
+			{% include "Oppsummering/fylke/film.html.twig" with {videresendt: videresendte.video} %}
+			
+		</tbody>
+	</table>
+	
+	<h2>Videresending av nominerte</h2>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Kvote</th>
+				<th>Du har videresendt</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-{{ videresendte.arrangor.innslag > 4 ? 'error':'success'}}">
+				<td>Arrangører</td>
+				<td>Avtales etter nominasjon</td>
+				<td>{{ videresendte.arrangor.innslag }} arrangører</td>
+			</tr>
+	
+			<tr class="text-{{ videresendte.nettredaksjon.innslag > 4 ? 'error':'success'}}">
+				<td>UKM Media</td>
+				<td>Avtales etter nominasjon</td>
+				<td>{{ videresendte.nettredaksjon.innslag }} person{{ videresendte.nettredaksjon.innslag != 1 ? 'er' }}</td>
+			</tr>
+	
+			<tr class="text-{{ videresendte.konferansier.innslag > 4 ? 'error':'success'}}">
+				<td>Konferansierer</td>
+				<td>Avtales etter nominasjon</td>
+				<td>{{ videresendte.konferansier.innslag }} konferansier{{ videresendte.konferansier.innslag != 1 ? 'er' }}</td>
+			</tr>
+	
+		</tbody>
+	</table>
+</div>
+
+{#
+<div class="col-xs-12 col-md-4">
+	<h3>Kostnader</h3>
+	<table class="table table-striped">
+		<tbody>
+			{% if (videresendte.personer|length + ledere|length) > kvote.total %}
+				<tr>
+					<td>
+						{{ kvote.deltakere }} x subsidiert delt.avgift
+						<small>({{pris.subsidiert|kroner}},-)</small>
+					</td>
+					<td>{{ (kvote.deltakere * pris.subsidiert)|kroner }}</td>
+				</tr>
+				<tr>
+					<td>
+						{{ kvote.deltakere }} x egenandel reise
+						<small>({{pris.reise|kroner}},-)</small>
+					</td>
+					<td>{{ (kvote.deltakere * pris.reise)|kroner }}</td>
+				</tr>
+				<tr>
+					<td>
+						{{ kvote.ledere }} x subsidiert lederavgift
+						<small>({{pris.subsidiert|kroner}},-)</small>
+					</td>
+					<td>{{ (kvote.ledere * pris.subsidiert)|kroner }}</td>
+				</tr>
+				<tr>
+					<td>
+						{{ kvote.ledere }} x egenandel leder-reise
+						<small>({{pris.reise|kroner}},-)</small>
+					</td>
+					<td>{{ (kvote.ledere * pris.reise)|kroner }}</td>
+				</tr>
+
+
+				<tr>
+					<td>
+						{{ (videresendte.personer|length - kvote.deltakere) }} x ordinær delt.avgift
+						<small>({{pris.ordinar|kroner}},-)</small>
+					</td>
+					<td>{{ ((videresendte.personer|length - kvote.deltakere) * pris.ordinar)|kroner }}</td>
+				</tr>
+				{% if ledere|length > kvote.ledere %}
 					<tr>
-						<th></th>
-						<th>Du har videresendt</th>
-						{% if site_type == 'fylke' %}
-							<th>Kvoten er</th>
-						{% endif %}
+						<td>
+							{{ (ledere|length - kvote.ledere) }} x ordinær lederavgift
+							<small>({{pris.ledere|kroner}},-)</small>
+						</td>
+						<td>{{ ((ledere|length - kvote.ledere) * pris.ordinar)|kroner }}</td>
 					</tr>
-				</thead>
-				<tbody>
-					{% for kvote in kvoter %}
-						{% if kvote.id == 'scene_varighet' %}
-							<tr class="{% if site_type == fylke and videresendt[ geo_id ].scene_varighet > kvote.verdi*60 %}alert alert-danger{% endif %}">
-								<th>{{kvote.tittel}}</th>
-								<td>{{videresendt[ geo_id ].scene_tid|varighet}}</td>
-								{% if site_type == 'fylke' %}
-									<td>
-										{{kvote.verdi}} {{kvote.enhet}}{{ kvote.verdi != 1 ? kvote.flertall : ''}}
-										{% if kvote.kommentar is defined and kvote.kommentar is not empty %}
-											<br /><small><em>{{ kvote.kommentar }}</em></small>
-										{% endif %}
-									</td>
-								{% endif %}
-							</tr>
-						{% elseif kvote.id == 'film_varighet' %}
-							<tr class="{% if site_type == fylke and videresendt[ geo_id ].film_varighet > kvote.verdi*60 %}alert alert-danger{% endif %}">
-								<th>{{kvote.tittel}}</th>
-								<td>{{videresendt[ geo_id ].film_tid|varighet}}</td>
-								{% if site_type == 'fylke' %}
-									<td>
-											{{kvote.verdi}} {{kvote.enhet}}{{ kvote.verdi != 1 ? kvote.flertall : ''}}
-										{% if kvote.kommentar is defined and kvote.kommentar is not empty %}
-											<br /><small><em>{{ kvote.kommentar }}</em></small>
-										{% endif %}
-									</td>
-								{% endif %}
-							</tr>
-						{% else %}
-							<tr class="{% if site_type == fylke and videresendt[ geo_id ][kvote.id] > kvote.verdi and kvote.verdi != 'nomineres' %}alert alert-danger{% endif %}">
-								<th>{{kvote.tittel}}</th>
-								<td>{{videresendt[ geo_id ][kvote.id]}} {{kvote.enhet}}{{ kvote.verdi != 1 ? kvote.flertall : ''}}</td>
-								{% if site_type == 'fylke' %}
-									<td>
-									{% if kvote.verdi == 'nomineres' %}
-										<strong>Nomineres</strong>
-									{% else %}
-										{{kvote.verdi}} {{kvote.enhet}}{{ kvote.verdi != 1 ? kvote.flertall : ''}}
-									{% endif %}
-									
-									{% if kvote.kommentar is defined and kvote.kommentar is not empty %}
-										<br /><small><em>{{ kvote.kommentar }}</em></small>
-									{% endif %}
-									</td>
-								{% endif %}
-							</tr>
-						{% endif %}
-					{% endfor %}
-				</tbody>
-			</table>
+				{% endif %}
+
+			{% else %}
+				<tr>
+					<td>{{ videresendte.personer|length }} x subsidiert delt.avgift</td>
+					<td>{{ (videresendte.personer|length * 1300)|kroner }}</td>
+				</tr>
+				<tr>
+					<td>{{ videresendte.personer|length }} x egenandel reise</td>
+					<td>{{ (videresendte.personer|length * 1300)|kroner }}</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+</div>
+#}
+
+<div class="clearfix"></div>

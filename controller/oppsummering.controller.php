@@ -114,4 +114,24 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 	$summering[ $monstring->getId() ] = $sum_monstring;
 }
 
+if( $monstring->getType() == 'land' ) {
+	UKMVideresending::addviewData('videresendte', $sum_monstring);
+}
 UKMVideresending::addViewData('summering', $summering);
+
+#var_dump( $sum_monstring );
+
+$kvote = new stdClass();
+$kvote->deltakere = 5;
+$kvote->ledere = 3;
+$kvote->total = $kvote->deltakere + $kvote->ledere;
+
+$pris = new stdClass();
+$pris->subsidiert = 1300;
+$pris->ordinar = 1800;
+$pris->reise = 1500;
+
+UKMVideresending::addViewData('kvote', $kvote);
+UKMVideresending::addViewData('pris', $pris);
+
+require_once('ledere.controller.php');
