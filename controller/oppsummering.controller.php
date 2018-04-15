@@ -122,7 +122,7 @@ UKMVideresending::addViewData('summering', $summering);
 #var_dump( $sum_monstring );
 
 $kvote = new stdClass();
-$kvote->deltakere = 5;
+$kvote->deltakere = 30;
 $kvote->ledere = 3;
 $kvote->total = $kvote->deltakere + $kvote->ledere;
 

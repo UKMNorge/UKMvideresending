@@ -165,72 +165,64 @@
 	</table>
 </div>
 
-{#
+{% set ant_personer = videresendte.personer|length + ledere|length %}
+
 <div class="col-xs-12 col-md-4">
 	<h3>Kostnader</h3>
 	<table class="table table-striped">
 		<tbody>
-			{% if (videresendte.personer|length + ledere|length) > kvote.total %}
+			{% if ant_personer > kvote.total %}
 				<tr>
 					<td>
-						{{ kvote.deltakere }} x subsidiert delt.avgift
+						{{ kvote.total }} x subsidiert avgift
 						<small>({{pris.subsidiert|kroner}},-)</small>
 					</td>
-					<td>{{ (kvote.deltakere * pris.subsidiert)|kroner }}</td>
+					<td style="text-align:right !important">{{ (kvote.total * pris.subsidiert)|kroner }},-</td>
 				</tr>
 				<tr>
 					<td>
-						{{ kvote.deltakere }} x egenandel reise
+						{{ kvote.total }} x egenandel reise
 						<small>({{pris.reise|kroner}},-)</small>
 					</td>
-					<td>{{ (kvote.deltakere * pris.reise)|kroner }}</td>
+					<td style="text-align:right !important">{{ (kvote.total * pris.reise)|kroner }},-</td>
 				</tr>
-				<tr>
-					<td>
-						{{ kvote.ledere }} x subsidiert lederavgift
-						<small>({{pris.subsidiert|kroner}},-)</small>
-					</td>
-					<td>{{ (kvote.ledere * pris.subsidiert)|kroner }}</td>
-				</tr>
-				<tr>
-					<td>
-						{{ kvote.ledere }} x egenandel leder-reise
-						<small>({{pris.reise|kroner}},-)</small>
-					</td>
-					<td>{{ (kvote.ledere * pris.reise)|kroner }}</td>
-				</tr>
-
 
 				<tr>
 					<td>
-						{{ (videresendte.personer|length - kvote.deltakere) }} x ordinær delt.avgift
+						{{ (ant_personer - kvote.total) }} x ordinær delt.avgift
 						<small>({{pris.ordinar|kroner}},-)</small>
 					</td>
-					<td>{{ ((videresendte.personer|length - kvote.deltakere) * pris.ordinar)|kroner }}</td>
+					<td style="text-align:right !important">{{ ((ant_personer - kvote.total) * pris.ordinar)|kroner }},-</td>
 				</tr>
-				{% if ledere|length > kvote.ledere %}
-					<tr>
-						<td>
-							{{ (ledere|length - kvote.ledere) }} x ordinær lederavgift
-							<small>({{pris.ledere|kroner}},-)</small>
-						</td>
-						<td>{{ ((ledere|length - kvote.ledere) * pris.ordinar)|kroner }}</td>
-					</tr>
-				{% endif %}
+				
+				{% set sum = (kvote.total * pris.subsidiert) + (kvote.total * pris.reise) + ((ant_personer - kvote.total) * pris.ordinar) %}
 
 			{% else %}
 				<tr>
-					<td>{{ videresendte.personer|length }} x subsidiert delt.avgift</td>
-					<td>{{ (videresendte.personer|length * 1300)|kroner }}</td>
+					<td>
+						{{ ant_personer }} x subsidiert avgift
+						<small>({{pris.subsidiert|kroner}},-)</small>
+					</td>
+					<td style="text-align:right !important">{{ (ant_personer* pris.subsidiert)|kroner }},-</td>
 				</tr>
 				<tr>
-					<td>{{ videresendte.personer|length }} x egenandel reise</td>
-					<td>{{ (videresendte.personer|length * 1300)|kroner }}</td>
+					<td>
+						{{ ant_personer }} x egenandel reise
+						<small>({{pris.reise|kroner}},-)</small>
+					</td>
+					<td style="text-align:right !important">{{ (ant_personer * pris.reise)|kroner }},-</td>
 				</tr>
+				
+				{% set sum = (ant_personer * (pris.subsidiert + pris.reise) ) %}
 			{% endif %}
 		</tbody>
+		<tfoot>
+			<tr>
+				<th>Sum</th>
+				<th style="text-align:right !important">{{ sum|kroner }},-</th>
+			</tr>
+		</tfoot>
 	</table>
 </div>
-#}
 
 <div class="clearfix"></div>
