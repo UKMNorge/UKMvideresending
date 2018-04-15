@@ -1,0 +1,57 @@
+{# HVIS VARIGHET ER UNDER 6 MIN FÅR DU TO FILMER #}
+{% if videresendt.varighet < 360 and videresendt.titler == 2 %}
+	<tr class="text-{{ videresendt.innslag > 2 ? 'error':'success'}}">
+		<td></td>
+		<td>2 innslag</td>
+		<td>{{ videresendt.innslag }} innslag</td>
+		<td>{{ videresendt.innslag > 2 ? 'Over kvote!':'OK' }}</td>
+	</tr>
+
+	<tr class="text-{{ videresendt.titler > 2 ? 'error':'success'}}">
+		<td></td>
+		<td>2 titler</td>
+		<td>{{ videresendt.titler }} titler</td>
+		<td>{{ videresendt.titler > 2 ? 'Over kvote!':'OK' }}</td>
+	</tr>
+	<tr class="text-{{ videresendt.varighet > 360 ? 'error':'success'}}">
+		<td></td>
+		<td>6 minutter</td>
+		<td>{{ videresendt.varighet|varighet }}</td>
+		<td>{{ videresendt.varighet > 360 ? 'Over kvote!':'OK' }}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="3" class="small">
+			Du har fått utvidet kvote til 2 filmer fordi total varighet er under 6 minutter
+		</td>
+	</tr>
+
+{# HVIS VARIGHET ER UNDER 6 MIN FÅR DU TO FILMER #}
+{% else %}
+	<tr class="text-{{ videresendt.innslag > 1 ? 'error':'success'}}">
+		<td></td>
+		<td>1 innslag</td>
+		<td>{{ videresendt.innslag }} innslag</td>
+		<td>{{ videresendt.innslag > 1 ? 'Over kvote!':'OK' }}</td>
+	</tr>
+
+	<tr class="text-{{ videresendt.titler > 1 ? 'error':'success'}}">
+		<td></td>
+		<td>1 tittel</td>
+		<td>{{ videresendt.titler }} titler</td>
+		<td>{{ videresendt.titler > 2 ? 'Over kvote!':'OK' }}</td>
+	</tr>
+
+	<tr class="text-{{ videresendt.varighet > 300 ? 'error':'success'}}">
+		<td></td>
+		<td>5 minutter</td>
+		<td>{{ videresendt.varighet|varighet }}</td>
+		<td>{{ videresendt.varighet > 300 ? 'Over kvote!':'OK' }}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="3" class="small">
+			Det er mulig å få utvidet kvote til 2 filmer hvis total varighet er under 6 minutter
+		</td>
+	</tr>
+{% endif %}
