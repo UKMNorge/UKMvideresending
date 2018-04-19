@@ -18,6 +18,7 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 				'personer'	=> 0,
 				'titler'	=> 0,
 				'varighet'	=> 0,
+				'mangler_personer' => false,
 			],
 			'total' => [
 				'innslag' 	=> 0,
@@ -45,6 +46,9 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 		if( UKMVideresending::getFra()->getType() == 'kommune' && !in_array( $innslag->getKommune()->getId(), $kommuner ) ) {
 			continue;
 		}
+		elseif( UKMVideresending::getFra()->getType() == 'fylke' && $innslag->getFylke()->getId() != UKMVideresending::getFra()->getFylke()->getId() ) {
+			continue;
+		}
 		
 		// SET SORT-KEY FOR DETTE INNSLAGET (ALTSÅ HVOR LAGRES SUMMEN?)
 		$sort_key = $innslag->getType()->getKey() == 'scene' ? 'annet' : $innslag->getType()->getKey();
@@ -56,6 +60,7 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 				'personer'	=> 0,
 				'titler'	=> 0,
 				'varighet'	=> 0,
+				'mangler_personer' => false,
 			];
 		}
 		
@@ -63,9 +68,14 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 		$sum_monstring[ $sort_key ]['innslag'] += 1;
 		
 		// PERSONER
+		$antall_personer = 0;
 		foreach( $innslag->getPersoner()->getAllVideresendt( $monstring ) as $person ) {
+			$antall_personer++;
 			$sum_monstring[ $sort_key ]['personer'] ++;
 			$sum_monstring['personer'][] = $person->getId();
+		}
+		if( $antall_personer == 0 ) {
+			$sum_monstring[ $sort_key ]['mangler_personer'] = true;
 		}
 		
 		// VARIGHET
@@ -116,22 +126,22 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 
 if( $monstring->getType() == 'land' ) {
 	UKMVideresending::addviewData('videresendte', $sum_monstring);
+
+	$kvote = new stdClass();
+	$kvote->deltakere = get_site_option('UKMFvideresending_kvote_deltakere'.'_'.$monstring->getSesong());
+	$kvote->ledere = get_site_option('UKMFvideresending_kvote_ledere'.'_'.$monstring->getSesong());
+	$kvote->total = $kvote->deltakere + $kvote->ledere;
+	
+	$pris = new stdClass();
+	$pris->subsidiert = 1300;
+	$pris->ordinar = 1800;
+	$pris->reise = 1500;
+	
+	UKMVideresending::addViewData('kvote', $kvote);
+	UKMVideresending::addViewData('pris', $pris);
+
 }
 UKMVideresending::addViewData('summering', $summering);
 
 #var_dump( $sum_monstring );
-
-$kvote = new stdClass();
-$kvote->deltakere = 30;
-$kvote->ledere = 3;
-$kvote->total = $kvote->deltakere + $kvote->ledere;
-
-$pris = new stdClass();
-$pris->subsidiert = 1300;
-$pris->ordinar = 1800;
-$pris->reise = 1500;
-
-UKMVideresending::addViewData('kvote', $kvote);
-UKMVideresending::addViewData('pris', $pris);
-
 require_once('ledere.controller.php');

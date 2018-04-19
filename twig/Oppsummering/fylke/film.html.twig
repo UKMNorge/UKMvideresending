@@ -19,6 +19,22 @@
 		<td>{{ videresendt.varighet|varighet }}</td>
 		<td>{{ videresendt.varighet > 360 ? 'Over kvote!':'OK' }}</td>
 	</tr>
+	<tr class="text-{{ videresendt.personer > (videresendt.innslag * 2) ? 'error':'success'}}">
+		<td></td>
+		<td>{{ videresendt.innslag * 2 }} person{{ (videresendt.innslag * 2) != 1 ? 'er' }}</td>
+		<td>{{ videresendt.personer }} person{{ videresendt.personer != 1 ? 'er' }}</td>
+		<td>{{ videresendt.personer > (videresendt.innslag * 2) ? 'Over kvote!':'OK' }}</td>
+	</tr>
+	{% if videresendt.mangler_personer %}
+		<tr class="text-danger">
+			<td></td>
+			<td colspan="3">
+				OBS: Minst ett av film-innslagene er sendt videre uten at det følger med noen personer.
+				<br />
+				Dette er ikke mulig, og vil føre til at filmen blir meldt av UKM-festivalen.
+			</td>
+		</tr>
+	{% endif %}
 	<tr>
 		<td></td>
 		<td colspan="3" class="small">
@@ -48,6 +64,22 @@
 		<td>{{ videresendt.varighet|varighet }}</td>
 		<td>{{ videresendt.varighet > 300 ? 'Over kvote!':'OK' }}</td>
 	</tr>
+	<tr class="text-{{ videresendt.personer > (videresendt.innslag * 2) ? 'error':'success'}}">
+		<td></td>
+		<td>{{ videresendt.innslag * 2 }} person{{ (videresendt.innslag * 2) != 1 ? 'er' }}</td>
+		<td>{{ videresendt.personer }} person{{ videresendt.personer != 1 ? 'er' }}</td>
+		<td>{{ videresendt.personer > (videresendt.innslag * 2) ? 'Over kvote!':'OK' }}</td>
+	</tr>
+	{% if videresendt.mangler_personer %}
+		<tr class="text-danger">
+			<td></td>
+			<td colspan="3">
+				OBS: Minst ett av film-innslagene er sendt videre uten at det følger med noen personer.
+				<br />
+				Dette er ikke mulig, og vil føre til at filmen blir meldt av UKM-festivalen.
+			</td>
+		</tr>
+	{% endif %}
 	<tr>
 		<td></td>
 		<td colspan="3" class="small">
