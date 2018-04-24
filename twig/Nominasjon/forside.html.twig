@@ -42,6 +42,7 @@
 							<div class="nominert-data {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-data-{{ innslag.getId() }}" {{ not nominasjon.erNominert() ? 'style="display:none;"' }}>
 								<div class="row">
 									<div class="col-xs-12 col-lg-5">
+									{#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
 										<h4>Den voksnes vurdering av {{ person.getNavn() }}</h4>
 										<form action="?page=UKMnominasjon&save={{ type }}&id={{ innslag.getId() }}" method="POST">
 											{% embed "Nominasjon/skjema_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}

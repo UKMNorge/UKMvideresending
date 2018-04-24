@@ -139,9 +139,7 @@ if( $monstring->getType() == 'land' ) {
 	
 	UKMVideresending::addViewData('kvote', $kvote);
 	UKMVideresending::addViewData('pris', $pris);
-
+	require_once('ledere.controller.php');
 }
 UKMVideresending::addViewData('summering', $summering);
 
-#var_dump( $sum_monstring );
-require_once('ledere.controller.php');
