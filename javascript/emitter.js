@@ -1,9 +1,9 @@
 var emitter = function( _navn ) {
-	let _events = [];
+	var _events = [];
 	
-	let navn = (_navn !== undefined && _navn !== null) ? _navn.toUpperCase() : 'UKJENT';
+	var navn = (_navn !== undefined && _navn !== null) ? _navn.toUpperCase() : 'UKJENT';
 	
-	let self = {
+	var self = {
 		/* EVENT HANDLERS */
 		emit: function( event, data ) {
 			
