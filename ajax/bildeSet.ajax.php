@@ -44,7 +44,7 @@ if( $innslag->getType()->getKey() == 'utstilling' && $tittel == 0 ) {
 
 
 $data = [
-	'pl_id'		=> $monstring->getId(),
+//	'pl_id'		=> $monstring->getId(),
 	'b_id'		=> $innslag->getId(),
 	't_id'		=> $tittel,
 ];
@@ -57,7 +57,7 @@ $old_rel = new SQLdel(
 $old_rel->run();
 
 // Legg til ny data
-$data['rel_id']	= $_POST['bilde'];
+$data['rel_id']	= $valgt_bilde->getRelId();//$_POST['bilde'];
 $data['m_type']	= $type;
 
 
