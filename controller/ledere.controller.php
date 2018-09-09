@@ -63,7 +63,7 @@ $andre_ledere = new SQL("
 );
 $res = $andre_ledere->run();
 
-while( $r = mysql_fetch_assoc( $res ) ) {
+while( $r = SQL::fetch( $res ) ) {
 	$ledere[] = new leder( $r['l_id'] );
 }
 
@@ -88,7 +88,7 @@ $sql = new SQL("
 );
 $res = $sql->run();
 if( $res ) {
-	while( $r = mysql_fetch_assoc( $res ) ) {
+	while( $r = SQL::fetch( $res ) ) {
 		$nattledere[ $r['dato'] ] = $r['l_id'];
 	}
 }
