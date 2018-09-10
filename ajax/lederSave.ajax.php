@@ -10,7 +10,7 @@ foreach( $_POST as $data ) {
 	
 $leder = new leder( $_POST['leder'] );
 $leder->set('l_type', $_FORM['leder_type']);
-$leder->set('l_navn', utf8_encode( $_FORM['leder_navn'] ) );
+$leder->set('l_navn', $_FORM['leder_navn'] );
 $leder->set('l_mobilnummer', str_replace(' ','', $_FORM['leder_mobil'] ) );
 $leder->set('l_epost', $_FORM['leder_epost']);
 

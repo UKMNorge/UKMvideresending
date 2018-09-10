@@ -18,7 +18,7 @@ class UKMVideresending extends UKMmodul {
 	 * Initier Videresending-objektet
 	 *
 	**/
-	public static function init( $pl_id ) {
+	public static function init( $pl_id=null ) {
 		self::$view_data = [];
 		self::$monstring = new monstring_v2( $pl_id );
 		self::$action = 'informasjon';
@@ -384,7 +384,7 @@ class UKMVideresending extends UKMmodul {
 		/**
 		 * Finnes ikke i databasen? insert
 		**/
-		if( mysql_num_rows( $res ) == 0 ) {
+		if( SQL::numRows( $res ) == 0 ) {
 			$SQLins = new SQLins('smartukm_videresending_infoskjema');
 			$SQLins->add('pl_id', $festivalen->getId());
 			$SQLins->add('pl_id_from', $monstring->getId());
@@ -397,7 +397,7 @@ class UKMVideresending extends UKMmodul {
 				]
 			);
 		}
-		$SQLins->add($field, utf8_encode($value));
+		$SQLins->add($field, $value);
 		$res = $SQLins->run();
 		return $res != -1;
 	}
