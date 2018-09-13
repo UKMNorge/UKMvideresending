@@ -133,9 +133,9 @@ if( $monstring->getType() == 'land' ) {
 	$kvote->total = $kvote->deltakere + $kvote->ledere;
 	
 	$pris = new stdClass();
-	$pris->subsidiert = 1300;
-	$pris->ordinar = 1800;
-	$pris->reise = 1500;
+	$pris->subsidiert = get_site_option('UKMFvideresending_avgift_subsidiert'.'_'.$monstring->getSesong());
+	$pris->ordinar = get_site_option('UKMFvideresending_avgift_ordinar'.'_'.$monstring->getSesong());;
+	$pris->reise = get_site_option('UKMFvideresending_avgift_reise'.'_'.$monstring->getSesong());;
 	
 	UKMVideresending::addViewData('kvote', $kvote);
 	UKMVideresending::addViewData('pris', $pris);
