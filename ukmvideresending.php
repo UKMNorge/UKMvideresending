@@ -200,6 +200,15 @@ class UKMVideresending extends UKMmodul {
 
 		wp_enqueue_script( 'UKMVideresending_script_videresending', plugin_dir_url( __FILE__ ) .'ukmvideresending.js');
 	}
+	
+	/**
+	 * Registrer conditions for menyen
+	**/
+	public static function menu_conditions( $_CONDITIONS ) {
+		return array_merge( $_CONDITIONS, 
+			['UKMVideresending' => 'monstring_er_startet']
+		);
+	}
 
 	/**
 	 * Registrer menyer
@@ -476,6 +485,7 @@ if(is_admin()) {
 		UKMVideresending::init( get_option('pl_id') );
 		if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
 			add_action('UKM_admin_menu', ['UKMVideresending', 'meny'], 101);
+			add_filter('UKM_admin_menu_conditions', ['UKMvideresending','menu_conditions']);
 			add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
 		}
 	}
