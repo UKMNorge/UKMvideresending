@@ -44,3 +44,35 @@ $tilrettelegging->annet = $db['tilrettelegging_annet'];
 UKMVideresending::addViewData('reise', $reise);
 UKMVideresending::addViewData('matogallergi', $matogallergi);
 UKMVideresending::addViewData('tilrettelegging', $tilrettelegging);
+
+
+
+
+// SETUP SENSITIVT-REQUESTER
+require_once('UKM/Sensitivt/Sensitivt.php');
+require_once('UKM/Sensitivt/Requester.php');
+$requester = new UKMNorge\Sensitivt\Requester(
+    'wordpress', 
+    wp_get_current_user()->ID,
+    get_option('pl_id')
+);
+UKMNorge\Sensitivt\Sensitivt::setRequester( $requester );
+
+$data_intoleranse = new stdClass();
+$data_intoleranse->med = [];
+$data_intoleranse->uten = [];
+
+// LIST ALLE ALLERGIER
+foreach( $monstring->getInnslag()->getAll() as $innslag ) {
+    foreach( $innslag->getPersoner()->getAll() as $person ) {
+        $allergi = $person->getSensitivt( $requester )->getIntoleranse();
+
+        if( $allergi->har() ) {
+            $data_intoleranse->med[] = $person;
+        } else {
+            $data_intoleranse->uten[] = $person;
+        }
+    }
+}
+
+UKMVideresending::addViewData('intoleranser', $data_intoleranse);

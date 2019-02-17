@@ -1,0 +1,52 @@
+<fieldset>
+	<legend>Intoleranser <span class="badge badge-info">BETA</span></legend>
+    <p class="lead">Vi tester ut et system for å angi intoleranser på person-nivå</p>
+
+
+    <table class="table table-striped" id="tilrettelegg_personer">
+        <thead>
+            <tr>
+                <th>Person</th>
+                <th>Intoleranse</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for person in intoleranser.med %}
+                <tr>
+                    <td>{{ person.getNavn() }}</td>
+                    <td>
+                        <textarea class="form-control" rows="3" name="intoleranse[{{ person.getId() }}]">{{ person.getSensitivt().getIntoleranse().getTekst() }}</textarea>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">
+                        Det er ikke registrert intoleranser på noen av dine deltakere
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <label>Registrer intoleranser for en deltaker</label>
+                    <select name="person" id="tilrettelegg_person" class="form-control">
+                        <option value="false" selected disabled>Velg en person</option>
+                        {% for person in intoleranser.uten %}
+                            <option value="{{ person.getId() }}" id="tilrettelegg_person_option_{{ person.getId() }}" data-navn="{{ person.getNavn() }}">{{ person.getNavn() }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <textarea class="form-control" rows="3" id="tilrettelegg_person_intoleranse">{{ person.getSensitivt().getIntoleranse().getTekst() }}</textarea>
+                    <br />
+                    <button id="tilrettelegg_person_submit" type="button" class="btn btn-success">Lagre</button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</fieldset>
+
+
+
