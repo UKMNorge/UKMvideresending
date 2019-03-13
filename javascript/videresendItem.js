@@ -122,7 +122,13 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		**/
 		videresendPerson: function( person ) {
 			self.setStatus('alert-warning', 'Vennligst vent, videresender person...');
-			self.ajax('videresendPerson', {'person': person} );
+
+			var options = {
+				fylke: self.getFylkeParam(),
+				person: person
+			};
+
+			self.ajax('videresendPerson', options );
 			//console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
 		},
 
@@ -131,7 +137,13 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		**/
 		avmeldPerson: function( person ) {
 			self.setStatus('alert-warning', 'Vennligst vent, melder av person...');
-			self.ajax('avmeldPerson', {'person': person} );
+			
+			var options = {
+				fylke: self.getFylkeParam(),
+				person: person
+			};
+
+			self.ajax('avmeldPerson', options );
 			//console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
 		},
 		
