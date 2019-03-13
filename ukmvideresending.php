@@ -187,7 +187,7 @@ class UKMVideresending extends UKMmodul {
 		wp_enqueue_script( 'UKMVideresending_script_emitter', plugin_dir_url( __FILE__ ) .'javascript/emitter.js');
 		// JS-app for videresending
 		wp_enqueue_script( 'UKMVideresending_script_videresend_app', plugin_dir_url( __FILE__ ) .'javascript/videresendApp.js');
-		wp_enqueue_script( 'UKMVideresending_script_videresend_item', plugin_dir_url( __FILE__ ) .'javascript/videresendItem.js');
+		wp_enqueue_script( 'UKMVideresending_script_videresend_item', plugin_dir_url( __FILE__ ) .'javascript/videresendItem.js?v=2019-03-13');
 		// JS-app for medie-håndtering
 		wp_enqueue_script( 'UKMVideresending_script_medie_app', plugin_dir_url( __FILE__ ) .'javascript/medieApp.js');
 		wp_enqueue_script( 'UKMVideresending_script_medie_item', plugin_dir_url( __FILE__ ) .'javascript/medieItem.js');
@@ -489,5 +489,7 @@ if(is_admin()) {
 			add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
 		}
 	}
+
+	# Network dash kjører uten mønstringside
 	add_filter( 'UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments'] );
 }

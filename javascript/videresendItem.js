@@ -27,6 +27,10 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 			return '#' + self.getId();
 		},
 
+		getFylkeParam: function(){
+			var url = new URL( window.location.href );
+			return url.searchParams.get("fylke");
+		},
 
 		/****************************************/
 		/** VIDERESENDING OG AVMELDING: INNSLAG	*/
@@ -62,7 +66,10 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		**/
 		videresend: function() {
 			self.setStatus('alert-warning', 'Vennligst vent, videresender...');
-			self.ajax('videresend');
+			
+			var options = self.getFylkeParam() != null ? {'fylke': self.getFylkeParam()} : null;
+			self.ajax('videresend', options );
+			
 			//console.warn('ajax:videresend:'+ self.getId());
 		},
 
@@ -71,7 +78,9 @@ var UKMVideresendItem = function( $, type, innslag, id ) {
 		**/
 		avmeld: function() {
 			self.setStatus('alert-warning', 'Vennligst vent, melder av...');
-			self.ajax( 'avmeld' );
+			
+			var options = self.getFylkeParam() != null ? {'fylke': self.getFylkeParam()} : null;
+			self.ajax( 'avmeld', options );
 			//console.warn('ajax:avmeld:'+ self.getId());
 		},
 
