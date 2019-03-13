@@ -32,7 +32,7 @@ $(document).on('click', '#tilrettelegg_person_submit', function(e){
             
             /* HANDLING GJENNOMFØRT. HÅNDTER RESPONS */
             if( response !== null && response.success ) {
-                self['handle'+ action.charAt(0).toUpperCase() + action.slice(1) ].call( null, response );
+                handleTilrettelegg( response );
             } else {
                 alert('Beklager, kunne ikke hente informasjon fra server');
             }
@@ -41,11 +41,13 @@ $(document).on('click', '#tilrettelegg_person_submit', function(e){
 });
 
 function handleTilrettelegg( response ) {
+    console.log('Handle tilrettelegg');
+    console.log( response );
     $('#tilrettelegg_personer tbody').append( 
-        twigJStilrettelegg.render( response.data )
+        twigJStilrettelegg.render( response.POST )
     );
 
-    $('#tilrettelegg_person_option_'+ response.data.id ).remove();
+    $('#tilrettelegg_person_option_'+ response.POST.id ).remove();
     $('#tilrettelegg_person').find('option:first').prop('selected', true);
     $('#tilrettelegg_person_intoleranse').val('');
 }
