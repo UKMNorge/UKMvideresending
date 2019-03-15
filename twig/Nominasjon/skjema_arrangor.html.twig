@@ -10,7 +10,8 @@
 			innenfor 
 			{{ nominasjon.getLydtekniker() ? 'lysteknikk, ' }}
 			{{ nominasjon.getLystekniker() ? 'lydteknikk, ' }}
-			{{ nominasjon.getVertskap() ? 'vertskap' }}
+			{{ nominasjon.getVertskap() ? 'vertskap, ' }}
+			{{ nominasjon.getProdusent() ? 'produsent ' }}
 		{% endif %}
 	</label>
 	<textarea name="voksen-erfaring" class="form-control" required>{{ nominasjon.getVoksenErfaring() }}</textarea>
