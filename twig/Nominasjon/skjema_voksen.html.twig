@@ -5,5 +5,5 @@
 
 <div class="form-group">
 	<label>Den voksnes mobilnummer</label>
-	<input type="tel" name="voksen-mobil" value="{{ nominasjon.getVoksen().getMobil() }}" class="form-control" required />
+	<input type="tel" name="voksen-mobil" maxlength="8" value="{{ nominasjon.getVoksen().getMobil() }}" class="form-control" required />
 </div>
