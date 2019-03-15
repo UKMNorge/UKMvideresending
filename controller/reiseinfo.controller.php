@@ -68,11 +68,27 @@ foreach( $monstring->getInnslag()->getAll() as $innslag ) {
         $allergi = $person->getSensitivt( $requester )->getIntoleranse();
 
         if( $allergi->har() ) {
-            $data_intoleranse->med[] = $person;
+			$data_intoleranse->med[] = person_data( $person, $allergi );
         } else {
-            $data_intoleranse->uten[] = $person;
+            $data_intoleranse->uten[] = person_data( $person, false );
         }
     }
 }
 
-UKMVideresending::addViewData('intoleranser', $data_intoleranse);
+UKMVideresending::addViewData('personer', $data_intoleranse);
+
+require_once('UKM/allergener.class.php');
+UKMVideresending::addViewData('allergener', Allergener::getAll());
+
+function person_data( $person, $allergi ) {
+	$data = new stdClass();
+	$data->ID = $person->getId();
+	$data->navn = $person->getNavn();
+	if( $allergi ) {
+		$data->intoleranse_liste = $allergi->getListe();
+		$data->intoleranse_human = $allergi->getListeHuman();
+		$data->intoleranse_tekst = $allergi->getTekst();
+	}
+
+	return $data;
+}

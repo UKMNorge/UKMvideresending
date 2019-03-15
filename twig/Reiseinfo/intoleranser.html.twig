@@ -1,7 +1,38 @@
-<fieldset>
-	<legend>Intoleranser <span class="badge badge-info">BETA</span></legend>
-    <p class="lead">Vi tester ut et system for å angi intoleranser på person-nivå</p>
+<script>
+	$(document).on('click','li.person .header', function(){
+		var person = $(this).parents('li.person');
+		var state = person.attr('data-state');
+		if( state == 'hidden' ) {			
+			person.addClass('selected').attr('data-state', 'visible');
+			person.find('.data.row').slideDown();
+		} else {
+			person.find('.data.row').slideUp(
+				function() {
+					$(this).parents('li.person').removeClass('selected');
+				}
+			);
+			person.attr('data-state', 'hidden');
+		}
+	});
+</script>
 
+<fieldset>
+	<legend>Deltakernes matallergi/-intoleranse <span class="badge badge-info">BETA</span></legend>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<h3></h3>
+			
+			<ol class="list-group" id="intoleranser">
+				{% for person in personer.med %}
+					{% include "js/intoleranse_deltaker.html.twig" %}
+				{% endfor %}
+			</ol>
+		</div>
+
+	</div>
+
+	{#
 
     <table class="table table-striped" id="tilrettelegg_personer">
         <thead>
@@ -41,11 +72,12 @@
                 <td>
                     <textarea class="form-control" rows="3" id="tilrettelegg_person_intoleranse">{{ person.getSensitivt().getIntoleranse().getTekst() }}</textarea>
                     <br />
-                    <button id="tilrettelegg_person_submit" type="button" class="btn btn-success">Lagre</button>
+                    <button id="tilrettelegg_person_submit" type="button" class="btn btn-primary">Legg til</button>
                 </td>
             </tr>
         </tfoot>
     </table>
+	#}
 </fieldset>
 
 

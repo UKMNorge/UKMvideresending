@@ -1,3 +1,52 @@
+$(document).on('click', '.intoleranse_update', function(e){
+	e.preventDefault();
+	
+	var person = $(this).parents('li.person');
+	
+	var allergener = [];
+	person.find('input[type="checkbox"]:checked').each( function(){
+		allergener.push( $(this).val() );
+	});
+
+
+	var data = {
+        action: 'UKMVideresending_ajax',
+        subaction: 'tilrettelegging',
+        id: person.attr('data-id'),
+		tekst: person.find('.intoleranse_tekst').val(),
+		liste: allergener
+    };
+
+	$.post(
+        ajaxurl, 
+        data, 
+        function(response) {
+            if( response !== null && response !== undefined ) {
+                try {
+                    response = JSON.parse( response );
+                } catch( error ) {
+                    response = null;
+                }
+            }
+            
+            /* HANDLING GJENNOMFØRT. HÅNDTER RESPONS */
+            if( response !== null && response.success ) {
+                handleTilretteleggUpdate( response );
+            } else {
+                alert('Beklager, kunne ikke hente informasjon fra server');
+            }
+        }
+    );
+});
+
+
+function handleTilretteleggUpdate( response ) {
+	console.log( response );
+}
+
+
+
+/* OLD */
 $(document).on('click', '#tilrettelegg_person_submit', function(e){
     e.preventDefault();
     
@@ -51,3 +100,6 @@ function handleTilrettelegg( response ) {
     $('#tilrettelegg_person').find('option:first').prop('selected', true);
     $('#tilrettelegg_person_intoleranse').val('');
 }
+
+
+
