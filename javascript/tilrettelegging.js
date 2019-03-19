@@ -1,3 +1,19 @@
+$(document).on('click','li.person .header', function(){
+	var person = $(this).parents('li.person');
+	var state = person.attr('data-state');
+	if( state == 'hidden' ) {			
+		person.addClass('selected').attr('data-state', 'visible');
+		person.find('.data.row').slideDown();
+	} else {
+		person.find('.data.row').slideUp(
+			function() {
+				$(this).parents('li.person').removeClass('selected');
+			}
+		);
+		person.attr('data-state', 'hidden');
+	}
+});
+
 $(document).on('click', '.intoleranse_update', function(e){
 	e.preventDefault();
 	$(this).html('Lagrer...').addClass('btn-primary').removeClass('btn-success');
@@ -64,61 +80,23 @@ function handleTilretteleggUpdate( response ) {
 }
 
 
-
-/* OLD */
-$(document).on('click', '#tilrettelegg_person_submit', function(e){
-    e.preventDefault();
-    
-    var action = 'tilrettelegging';
-    
-    var id = $('#tilrettelegg_person').val();
-
-    if( null == id || id == 'false' ) {
-        alert('Du må velge en deltaker først');
-        return false;
-    }
-
-    var data = {
-        action: 'UKMVideresending_ajax',
-        subaction: action,
-        id: id,
-        navn: $('#tilrettelegg_person_option_'+ id).attr('data-navn'),
-        intoleranse: $('#tilrettelegg_person_intoleranse').val()
-    };
-
-    $.post(
-        ajaxurl, 
-        data, 
-        function(response) {
-            if( response !== null && response !== undefined ) {
-                try {
-                    response = JSON.parse( response );
-                } catch( error ) {
-                    response = null;
-                }
-            }
-            
-            /* HANDLING GJENNOMFØRT. HÅNDTER RESPONS */
-            if( response !== null && response.success ) {
-                handleTilrettelegg( response );
-            } else {
-                alert('Beklager, kunne ikke hente informasjon fra server');
-            }
-        }
-    );
+$(document).on('click', '#intoleranse_add', function(e) {
+	e.preventDefault();
+	var data = {
+		person: {
+			ID: $('#intoleranse_ny').val(),
+			navn: $('#intoleranse_ny option:selected').html(),
+			intoleranse_liste: [],
+			intoleranse_tekst: ''
+		},
+		allergener_kulturelle: JSON.parse(allergener_kulturelle),
+		allergener_standard: JSON.parse(allergener_standard),
+	};
+	$('#intoleranser').prepend(
+		twigJSintoleransedeltaker.render( data )
+	);
+	$('#intoleranse_ny option[value="'+ data.person.ID +'"]').remove();
+	$('li.person#'+ data.person.ID +' .header').click();
+	
 });
-
-function handleTilrettelegg( response ) {
-    console.log('Handle tilrettelegg');
-    console.log( response );
-    $('#tilrettelegg_personer tbody').append( 
-        twigJStilrettelegg.render( response.POST )
-    );
-
-    $('#tilrettelegg_person_option_'+ response.POST.id ).remove();
-    $('#tilrettelegg_person').find('option:first').prop('selected', true);
-    $('#tilrettelegg_person_intoleranse').val('');
-}
-
-
 

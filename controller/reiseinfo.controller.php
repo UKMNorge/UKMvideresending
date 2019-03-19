@@ -63,10 +63,16 @@ $data_intoleranse->med = [];
 $data_intoleranse->uten = [];
 
 // LIST ALLE ALLERGIER
+$personer = [];
 foreach( $monstring->getInnslag()->getAll() as $innslag ) {
     foreach( $innslag->getPersoner()->getAll() as $person ) {
-        $allergi = $person->getSensitivt( $requester )->getIntoleranse();
+		
+		if( in_array( $person->getId(), $personer ) ) {
+			continue;
+		}
+		$personer[] = $person->getId();
 
+        $allergi = $person->getSensitivt( $requester )->getIntoleranse();
         if( $allergi->har() ) {
 			$data_intoleranse->med[] = person_data( $person, $allergi );
         } else {
