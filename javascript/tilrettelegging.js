@@ -1,6 +1,6 @@
 $(document).on('click', '.intoleranse_update', function(e){
 	e.preventDefault();
-	
+	$(this).html('Lagrer...').addClass('btn-primary').removeClass('btn-success');
 	var person = $(this).parents('li.person');
 	
 	var allergener = [];
@@ -41,7 +41,26 @@ $(document).on('click', '.intoleranse_update', function(e){
 
 
 function handleTilretteleggUpdate( response ) {
-	console.log( response );
+	var person = $('li.person#'+ response.data.id );
+	
+	if( response.data.intoleranse_human.length == 0 ) {
+		person.slideUp(
+			function(){
+				$(this).remove();
+			}
+		);
+	} else {
+		person.find('.header .status').html( response.data.intoleranse_human );
+	}
+
+	var knapp = person.find('.intoleranse_update');
+	knapp.html('Lagret!').addClass('btn-success').removeClass('btn-primary');
+	setTimeout(
+		()=>{
+			knapp.html('Lagre');
+		},
+		2200
+	);
 }
 
 

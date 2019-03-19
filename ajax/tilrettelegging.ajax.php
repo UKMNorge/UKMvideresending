@@ -11,29 +11,32 @@ UKMNorge\Sensitivt\Sensitivt::setRequester(
     )
 );
 
+
 // SET DATA
 require_once('UKM/Sensitivt/Write/Intoleranse.php');
 $intoleranse = new UKMNorge\Sensitivt\Write\Intoleranse( $_POST['id'] );
-$res = $intoleranse->saveTekst( $_POST['tekst'] );
 
-if( $res ) {
-	$res = $intoleranse->saveListe( $_POST['liste'] );
+if( !is_array( $_POST['liste'] ) ) {
+	$_POST['liste'] = [];
 }
+
+$res1 = $intoleranse->saveTekst( $_POST['tekst'] );
+$res2 = $intoleranse->saveListe( $_POST['liste'] );
 
 $infos = [
     'id' => $_POST['id'],
     'navn' => $_POST['navn'],
-    'intoleranse' => $_POST['tekst']
+	'intoleranse_liste' => $intoleranse->getListe(),
+	'intoleranse_human' => $intoleranse->getListeHuman(),
+	'intoleranse_tekst' => $intoleranse->getTekst()
 ];
 
 
-UKMVideresending::addResponseData('success', $res);
+UKMVideresending::addResponseData('success', ($res1 && $res2));
 UKMVideresending::addResponseData('data', $infos);
 
 
 /*
 TODO:
-håndter oppdatering til samme verdi (affected_rows == 0)
 håndter tilbakemelding i view
-vurder om saveTekst og saveListe er riktig format
 */
