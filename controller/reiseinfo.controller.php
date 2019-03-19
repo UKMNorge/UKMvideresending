@@ -78,7 +78,8 @@ foreach( $monstring->getInnslag()->getAll() as $innslag ) {
 UKMVideresending::addViewData('personer', $data_intoleranse);
 
 require_once('UKM/allergener.class.php');
-UKMVideresending::addViewData('allergener', Allergener::getAll());
+UKMVideresending::addViewData('allergener_standard', Allergener::getStandard());
+UKMVideresending::addViewData('allergener_kulturelle', Allergener::getKulturelle());
 
 function person_data( $person, $allergi ) {
 	$data = new stdClass();

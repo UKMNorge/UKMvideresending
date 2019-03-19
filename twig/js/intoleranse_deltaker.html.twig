@@ -8,10 +8,10 @@
 	</div>
 	<div class="data row" style="display: none;">
 		<form class="leder_edit_form condensed">
-			<div class="col-xs-12 col-md-6">
+			<div class="col-xs-12 col-md-4">
 				<div class="form-group">
 					<table class="intoleranser table-condensed table-striped" style="width:99%">
-						{% for allergen in allergener %}
+						{% for allergen in allergener_kulturelle %}
 							<tr>
 								<td>
 									<label>
@@ -24,8 +24,24 @@
 					</table>
 				</div>
 			</div>
-			<div class="col-xs-12 col-md-6">
-				<label>Beskrivelse / tilleggsinformasjon</label>
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<table class="intoleranser table-condensed table-striped" style="width:99%">
+						{% for allergen in allergener_standard %}
+							<tr>
+								<td>
+									<label>
+										<input type="checkbox" name="allergen" value="{{ allergen.id }}" {% if allergen.id in person.intoleranse_liste %}checked{% endif %} />
+										{{ allergen.navn }}
+									</label>
+								</td>
+							</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<label>Tilleggsinformasjon</label>
 				<textarea class="form-control intoleranse_tekst" rows="3">{{ person.intoleranse_tekst }}</textarea>
 			</div>
 			<div class="col-xs-12">
