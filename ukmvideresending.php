@@ -134,7 +134,8 @@ class UKMVideresending extends UKMmodul {
 				'lederCreate',
 				'lederSaveNatt',
 				'kommentarOvernatting',
-				'lederSaveHoved',
+                'lederSaveHoved',
+                'tilrettelegging',
 			];
 			
 			if( in_array( $_POST['subaction'], $supported_actions ) ) {
@@ -197,7 +198,10 @@ class UKMVideresending extends UKMmodul {
 			wp_enqueue_script( 'UKMVideresending_script_leder_item', plugin_dir_url( __FILE__ ) .'javascript/lederItem.js');
 			wp_enqueue_script( 'UKMVideresending_script_leder_overnatting', plugin_dir_url( __FILE__ ) .'javascript/lederOvernatting.js');
 		}
-
+		// JS-app for leder-håndtering
+		if( isset($_GET['action']) && $_GET['action'] == 'reiseinfo' ) {
+			wp_enqueue_script( 'UKMVideresending_script_tilrettelegging', plugin_dir_url( __FILE__ ) .'javascript/tilrettelegging.js');
+        }
 		wp_enqueue_script( 'UKMVideresending_script_videresending', plugin_dir_url( __FILE__ ) .'ukmvideresending.js');
 	}
 	

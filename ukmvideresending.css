@@ -63,12 +63,14 @@ p.explain {
 
 
 .leder.selected,
+li.person.selected,
 .videresendingMedie_item.selected,
 .videresend_item.selected {
 	background-color: #f3f3f3;
 }
 
 .videresendingMedie_item.selected .header,
+li.person.selected .header,
 .leder.selected .header,
 .videresend_item.selected .header {
 	margin-top: -0.7em;
@@ -78,6 +80,7 @@ p.explain {
 	transition: box-shadow 0.3s ease-in-out;
 }
 .leder.selected .header,
+li.person.selected .header,
 .videresendingMedie_item.selected .header {
 	box-shadow: 2px 3px 6px 1px #b7b6b6;
 
@@ -95,7 +98,8 @@ p.explain {
 	padding: 0.8em;
 }
 
-.leder.selected .row.data {
+.leder.selected .row.data,
+li.person.selected .row.data {
 	padding: 0.8em;
 	padding-bottom: 0px;
 }
