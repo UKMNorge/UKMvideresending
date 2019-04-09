@@ -9,13 +9,12 @@
 <form id="hovedledere">
 	<table class="table table-striped">
 		{% for natt in netter %}
-			{% set dato = natt.dag ~'.'~ natt.mnd %}
 			<tr>
-				<td>{{ natt.timestamp|dato('l') }} {{ natt.dag }}.{{ natt.mnd }}</td>
+				<td>{{ natt|dato('l d.m') }}</td>
 				<td>
-					<select class="hovedleder" name="hovedleder-{{ dato }}">
+					<select class="hovedleder" name="hovedleder-{{ natt|dato('d_m') }}">
 						{% for leder in ledere %}
-							<option value="{{ leder.l_id }}" class="hovedleder-{{ leder.l_id }}" {{ nattledere[ dato ] == leder.l_id ? 'selected="selected"' : ''}}>
+							<option value="{{ leder.l_id }}" class="hovedleder-{{ leder.l_id }}" {{ nattledere[ natt|dato('d_m') ] == leder.l_id ? 'selected="selected"' : ''}}>
 								{{ leder.l_navn }} ({{ leder.type_nice }})
 							</option>
 						{% endfor %}

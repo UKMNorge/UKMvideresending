@@ -75,7 +75,7 @@ while( $r = SQL::fetch( $res ) ) {
 // Hovedledere natt
 $nattledere = [];
 foreach( $festivalen->getNetter() as $natt ) {
-	$nattledere[ $natt->dag .'_'. $natt->mnd ] = null;
+	$nattledere[ $natt->format('d_m') ] = null;
 }
 
 $sql = new SQL("

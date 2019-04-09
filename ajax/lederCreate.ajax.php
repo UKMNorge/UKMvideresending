@@ -11,7 +11,11 @@ $leder->create(
 	$festivalen->getSesong()
 );
 
+$netter = [];
+foreach( $festivalen->getNetter() as $natt ) {
+	$netter[] = $natt->getTimestamp();
+}
 UKMVideresending::addResponseData('success', true);
-UKMVideresending::addResponseData('netter', $festivalen->getNetter());
+UKMVideresending::addResponseData('netter', $netter);
 UKMVideresending::addResponseData('overnattingssteder', UKMVideresending::overnattingssteder());
 UKMVideresending::addResponseData('leder', $leder);

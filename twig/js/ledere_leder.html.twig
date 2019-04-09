@@ -56,8 +56,8 @@
 						<th width="*%">Overnattingssted</th>
 						{% for dato in netter %}
 							<th width="40">
-								{{ dato.timestamp|dato('D') }}
-								<small>{{ dato.dag }}.{{ dato.mnd }}</small>
+								{{ dato|dato('D') }}
+								<small>{{ dato|dato('d.m') }}</small>
 							</th>
 						{% endfor %}
 					</tr>
@@ -67,9 +67,8 @@
 					<tr>
 						<th>{{ sted }}</th>
 						{% for dato in netter %}
-							{% set dato_nice = dato.dag~'_'~dato.mnd %}
 							<td width="40">
-								<input type="radio" class="natt" data-dag="{{ dato.dag }}" data-mnd="{{ dato.mnd }}" name="l{{ leder.ID }}_d{{ dato_nice }}" value="{{ sted_key }}"{% if leder.natt[ dato_nice ] is defined and leder.natt[ dato_nice ].sted is defined and leder.natt[ dato_nice ].sted == sted_key %}checked="checked"{% endif %} />
+								<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ dato|date('d_m') }}" value="{{ sted_key }}"{% if leder.natt[ dato|date('d_m') ] is defined and leder.natt[ dato|date('d_m') ].sted is defined and leder.natt[ dato|date('d_m') ].sted == sted_key %}checked="checked"{% endif %} />
 							</td>
 						{% endfor %}
 					</tr>
