@@ -1,0 +1,55 @@
+<li class="person clickable list-group-item" id="{{ person.ID }}" data-id="{{ person.ID }}" data-state="hidden">
+	<div class="header row">
+		<div class="col-xs-12">
+			<span class="type strong"></span>
+			<span class="navn">{{ person.navn }}</span>
+			<span class="status float-right pull-right small">{{ person.intoleranse_human }}</span>
+		</div>
+	</div>
+	<div class="data row" style="display: none;">
+		<form class="leder_edit_form condensed">
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<table class="intoleranser table-condensed table-striped" style="width:99%">
+						{% for allergen in allergener_kulturelle %}
+							<tr>
+								<td>
+									<label>
+										<input type="checkbox" name="allergen" value="{{ allergen.id }}" {% if allergen.id in person.intoleranse_liste %}checked{% endif %} />
+										{{ allergen.navn }}
+									</label>
+								</td>
+							</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<table class="intoleranser table-condensed table-striped" style="width:99%">
+						{% for allergen in allergener_standard %}
+							<tr>
+								<td>
+									<label>
+										<input type="checkbox" name="allergen" value="{{ allergen.id }}" {% if allergen.id in person.intoleranse_liste %}checked{% endif %} />
+										{{ allergen.navn }}
+									</label>
+								</td>
+							</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<label>Tilleggsinformasjon</label>
+				<textarea class="form-control intoleranse_tekst" rows="3">{{ person.intoleranse_tekst }}</textarea>
+			</div>
+			<div class="col-xs-12">
+                <div class="float-right pull-right">
+					<button type="button" class="intoleranse_update btn btn-sm btn-success">Lagre</button>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</form>
+	</div>
+</li>

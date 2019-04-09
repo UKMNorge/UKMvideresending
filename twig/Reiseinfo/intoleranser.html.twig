@@ -1,0 +1,36 @@
+<script type="text/javascript">
+	var allergener_kulturelle = '{{ allergener_kulturelle|json_encode|raw}}';
+	var allergener_standard = '{{ allergener_standard|json_encode|raw }}';
+</script>
+
+<fieldset>
+	<legend>Deltakernes matallergi/-intoleranse <span class="badge badge-info">BETA</span></legend>
+
+	<div class="row mt-3">
+		<div class="col-xs-6">
+			<div class="input-group">
+				<select id="intoleranse_ny" class="form-control">
+					{% for person in personer.uten %}
+						<option value="{{ person.ID }}">{{ person.navn }}</option>
+					{% endfor %}
+				</select>
+				<span class="input-group-btn" style="padding-left: 1em;">
+					<button class="btn btn-primary btn-sm" id="intoleranse_add" type="button">Legg til allergi/intoleranse</button>
+				</span>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-2">
+		<div class="col-xs-12">
+			<h3></h3>
+			
+			<ol class="list-group" id="intoleranser">
+				{% for person in personer.med %}
+					{% include "js/intoleranse_deltaker.html.twig" %}
+				{% endfor %}
+			</ol>
+		</div>
+	</div>
+</fieldset>
