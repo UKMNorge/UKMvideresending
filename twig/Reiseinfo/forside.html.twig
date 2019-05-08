@@ -1,41 +1,38 @@
 {% extends "Layout/base.html.twig" %}
 
 {% block content %}
-<script>
-jQuery(document).ready(function(){
-	jQuery( ".datepicker" ).datepicker( 
-		{
-			minDate: new Date(
-				{{ til[0].getStart().format('Y') }}, 
-				{{ til[0].getStart().format('m')-1 }}, 
-				{{ til[0].getStart().format('d')-1 }}),
-			maxDate: new Date(
-				{{ til[0].getStop().format('Y') }}, 
-				{{ til[0].getStop().format('m')-1 }}, 
-				{{ til[0].getStop().format('d')+1 }}),
-			dateFormat: 'dd.mm.yy'
-		}
-	);
-});
-</script>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery(".datepicker").datepicker({
+                minDate: new Date({{ til[0].getStart().format('Y') }}, {{ til[0].getStart().format('m')-1 }}, {{ til[0].getStart().format('d')-1 }}),
+                maxDate: new Date({{ til[0].getStop().format('Y') }}, {{ til[0].getStop().format('m')-1 }}, {{ til[0].getStop().format('d')+1 }}),
+                dateFormat: 'dd.mm.yy'
+            });
+        });
+    </script>
 
-<div class="col-xs-12 col-lg-10">
-	<form method="post" action="?page={{ GET('page') }}&action={{ GET('action') }}">
-		{% include "Reiseinfo/ankomst_avreise.html.twig" %}
-		<p>&nbsp;</p>
-	
-		{# include "Reiseinfo/mat_allergier.html.twig" #}
-		<p>&nbsp;</p>
-	
-		{% include "Reiseinfo/tilrettelegging.html.twig" %}
-		<p>&nbsp;</p>
+    <div class="col-xs-12 col-lg-10">
+        <form action="?page={{ GET('page') }}&action={{ GET('action') }}" method="post">
+            {% include "Reiseinfo/ankomst_avreise.html.twig" %}
+            <p>&nbsp;</p>
 
-		{% include "Reiseinfo/intoleranser.html.twig" %}
-		<p>&nbsp;</p>
-			
-		<div class="clearfix"></div>
-		<button type="submit" class="btn btn-success">Lagre</button>
-	</form>
-</div>
-	
+            {# include "Reiseinfo/mat_allergier.html.twig" #}
+            <p>&nbsp;</p>
+
+            {% include "Reiseinfo/tilrettelegging.html.twig" %}
+            <p>&nbsp;</p>
+
+            <div class="clearfix"></div>
+            <button class="btn btn-success" type="submit">Lagre</button>
+        </form>
+
+        <div class="clearfix"></div>
+        <p>&nbsp;</p>
+
+        {% include "Reiseinfo/intoleranser.html.twig" %}
+        <p>&nbsp;</p>
+
+        <div class="clearfix"></div>
+    </div>
+
 {% endblock %}
