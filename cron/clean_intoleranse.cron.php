@@ -47,7 +47,7 @@ if( date('n') > 6 && date('n') < 8 ) {
 		DELETE 
 		FROM `ukm_sensitivt_intoleranse`"
 	);
-	#$res = $sql->run();
+	$res = $sql->run();
 	if( $res ) {
 		die('Slettet intoleranser');
 	}
