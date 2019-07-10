@@ -4,7 +4,7 @@ require_once('UKM/sql.class.php');
 require_once('UKM/mail.class.php');
 require_once('UKM/allergener.class.php');
 
-if( date('j') > 6 && date('j') < 8 ) {
+if( date('n') > 6 && date('n') < 8 ) {
 	$report = new SQL(
 		"SELECT `liste` 
 		FROM `ukm_sensitivt_intoleranse`"
@@ -15,7 +15,7 @@ if( date('j') > 6 && date('j') < 8 ) {
 	}
 	$allergier = [];
 	while( $r = SQL::fetch( $res ) ) {
-		$mine_allergier = explode('|', $row['liste']);
+		$mine_allergier = explode('|', $r['liste']);
 		
 		if( is_array( $mine_allergier ) ) {
 			foreach( $mine_allergier as $allergi ) {
