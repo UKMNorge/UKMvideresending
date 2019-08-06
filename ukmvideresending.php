@@ -204,36 +204,26 @@ class UKMVideresending extends UKMmodul {
         }
 		wp_enqueue_script( 'UKMVideresending_script_videresending', plugin_dir_url( __FILE__ ) .'ukmvideresending.js');
 	}
-	
-	/**
-	 * Registrer conditions for menyen
-	**/
-	public static function menu_conditions( $_CONDITIONS ) {
-		return array_merge( $_CONDITIONS, 
-			['UKMVideresending' => 'monstring_er_startet']
-		);
-	}
 
 	/**
 	 * Registrer menyer
 	 *
 	**/
 	public static function meny() {
-		UKM_add_menu_page(
-			'monstring', 
+		$page = add_menu_page(
 			'Videresending', 
 			'Videresending',
 			'editor', 
 			'UKMVideresending',
 			['UKMVideresending','admin'],
 			'//ico.ukm.no/paper-airplane-20.png',
-			20
+			90
 		);
-		UKM_add_scripts_and_styles(
-			'UKMVideresending_admin',	# Page-hook
-			['UKMVideresending', 'script']	# Script-funksjon
+		add_action(
+			'admin_print_styles-' . $page,
+			['UKMVideresending', 'script']
 		);
-
+		
 		if( self::getType() == 'fylke') {
 			// Legg videresendingsskjemaet som en submenu under Mønstring.
 			UKM_add_submenu_page(
@@ -488,8 +478,7 @@ if(is_admin()) {
 	if( is_numeric( get_option('pl_id') )	 ) {
 		UKMVideresending::init( get_option('pl_id') );
 		if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
-			add_action('UKM_admin_menu', ['UKMVideresending', 'meny'], 101);
-			add_filter('UKM_admin_menu_conditions', ['UKMvideresending','menu_conditions']);
+			add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
 			add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
 		}
 	}
