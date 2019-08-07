@@ -216,7 +216,7 @@ class UKMVideresending extends UKMmodul {
 			'editor', 
 			'UKMVideresending',
 			['UKMVideresending','admin'],
-			'//ico.ukm.no/paper-airplane-20.png',
+			'dashicons-external',#'//ico.ukm.no/paper-airplane-20.png',
 			90
 		);
 		add_action(
