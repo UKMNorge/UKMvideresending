@@ -226,7 +226,7 @@ class UKMVideresending extends UKMmodul {
 		
 		if( self::getType() == 'fylke') {
 			// Legg videresendingsskjemaet som en submenu under Mønstring.
-			UKM_add_submenu_page(
+			add_submenu_page(
 				'UKMMonstring', 
 				'Videresendingsskjema', 
 				'Skjema for videresending', 
@@ -234,12 +234,12 @@ class UKMVideresending extends UKMmodul {
 				'UKMVideresendingsskjema', 
 				['UKMVideresending','skjema']
 			);
-			UKM_add_scripts_and_styles(
-				'UKMVideresending_skjema',
-				['UKMVideresending', 'skjema_script']
-			);
+			#UKM_add_scripts_and_styles(
+			#	'UKMVideresending_skjema',
+			#	['UKMVideresending', 'skjema_script']
+			#);
 			// Legg nominasjon som en submenu under Mønstring.
-			UKM_add_submenu_page(
+			add_submenu_page(
 				'UKMVideresending',
 				'Nominasjon',
 				'Nominasjoner',
@@ -247,15 +247,15 @@ class UKMVideresending extends UKMmodul {
 				'UKMnominasjon',
 				['UKMVideresending', 'nominasjon']
 			);
-			UKM_add_scripts_and_styles(
-				'UKMVideresending_nominasjon',
-				['UKMVideresending', 'nominasjon_script']
-			);
+			#UKM_add_scripts_and_styles(
+			#	'UKMVideresending_nominasjon',
+			#	['UKMVideresending', 'nominasjon_script']
+			#);
 
 			// Hookes inn under fylkets mønstring-meny
 			// da dette er det mest logiske stedet å vise det, selv
 			// om informasjonen brukes kun til videresendingen for lokalkontakter
-			UKM_add_submenu_page(	'UKMMonstring', 
+			add_submenu_page(	'UKMMonstring', 
 									'Infotekst om videresending', 
 									'Infotekst om videresending', 
 									'editor', 
