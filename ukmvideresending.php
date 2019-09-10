@@ -251,17 +251,6 @@ class UKMVideresending extends UKMmodul {
 			#	'UKMVideresending_nominasjon',
 			#	['UKMVideresending', 'nominasjon_script']
 			#);
-
-			// Hookes inn under fylkets mønstring-meny
-			// da dette er det mest logiske stedet å vise det, selv
-			// om informasjonen brukes kun til videresendingen for lokalkontakter
-			add_submenu_page(	'UKMMonstring', 
-									'Infotekst om videresending', 
-									'Infotekst om videresending', 
-									'editor', 
-									'UKMmonstring_videresending_info',
-									['UKMVideresending','info_fra_fylket']
-								);
 		}
 	}
 	
@@ -300,18 +289,6 @@ class UKMVideresending extends UKMmodul {
 		wp_enqueue_style( 'UKMVideresending_style', plugin_dir_url( __FILE__ ) .'ukmvideresending.css');
 		wp_enqueue_script( 'UKMVideresending_script_nominasjon', plugin_dir_url( __FILE__ ) .'javascript/nominasjon.js');
 	}
-
-	public static function info_fra_fylket() {
-		$option_name = 'videresending_info_pl'.get_option('pl_id');
-		if( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-			$TWIG['saved'] = update_site_option($option_name, $_POST['videresending_editor'] );
-		}
-		$TWIGdata = array('UKM_HOSTNAME' => UKM_HOSTNAME);
-		echo TWIG('Informasjon/editor_pre.html.twig', $TWIGdata, dirname(__FILE__) );
-		wp_editor( stripslashes(get_site_option($option_name)), 'videresending_editor', $settings = array() );
-		echo TWIG('Informasjon/editor_post.html.twig', $TWIGdata, dirname(__FILE__) );
-	}
-
 	
 	/**
 	 *
