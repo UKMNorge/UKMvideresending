@@ -1,4 +1,16 @@
 <?php
+
+use UKMNorge\Twig\Twig;
+
+
+/**
+ * Legger til Twig-path for UKMmønstring-modulen.
+ * Dette for å kunne rendre info-skjema, som administreres derfra,
+ * og har templates og kontrollere der.
+ */
+require_once('UKM/Twig/Twig.php');
+Twig::addPath(UKMmonstring::getTwigPath());
+
 $monstring = UKMVideresending::getFra();
 $skjema = $monstring->getSkjema( isset( $_GET['fylke'] ) ? $_GET['fylke'] : null );
 	
