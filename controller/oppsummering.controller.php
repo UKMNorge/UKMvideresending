@@ -1,5 +1,8 @@
 <?php
 
+use UKMNorge\Innslag\Typer;
+require_once('UKM/Autoloader.php');
+
 $summering = [];
 foreach( UKMVideresending::getTil() as $monstring ) {
 	
@@ -89,7 +92,7 @@ foreach( UKMVideresending::getTil() as $monstring ) {
 	 * SUMMER OPP KATEGORIENE OG TOTALEN
 	**/
 	// SUMMER ALLE SCENE-KATEGORIER TIL EN SCENE-VARIABEL
-	foreach( innslag_typer::getAllScene() as $scene_kategori ) {
+	foreach( Typer::getAllScene() as $scene_kategori ) {
 		$sort_key = $scene_kategori->getKey() == 'scene' ? 'annet' : $scene_kategori->getKey();
 		if( is_array( $sum_monstring[ $sort_key ] ) ) {
 			foreach( $sum_monstring[ $sort_key ] as $key => $val ) {
