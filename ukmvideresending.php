@@ -7,24 +7,41 @@ Author: UKM Norge / M Mandal / A Hustad
 Version: 3.0 
 Author URI: http://mariusmandal.no
 */
-require_once('class/UKMModul.class.php');
+
+use UKMNorge\Arrangement\Arrangement;
+
+require_once('UKM/Autoloader.php');
 
 
-class UKMVideresending extends UKMmodul {
-	public static $monstring = null;
-	public static $til = null;
+class UKMVideresending extends UKMNorge\Wordpress\Modul {
+	public static $action = 'informasjon';
+    public static $path_plugin = null;
+    public static $monstring = null;
+    public static $til = null;
 	
 	/**
 	 * Initier Videresending-objektet
 	 *
 	**/
-	public static function init( $pl_id=null ) {
-		self::$view_data = [];
-		self::$monstring = new monstring_v2( $pl_id );
-		self::$action = 'informasjon';
+	public static function init($plugin_path) {
+		self::$monstring = new Arrangement( get_option('pl_id') );
 		
-		parent::init( $pl_id );
-	}
+		parent::init( $plugin_path );
+    }
+    
+    public static function hook() {
+        # Kun initier på mønstringssider
+        if( is_numeric( get_option('pl_id') )	 ) {
+            UKMVideresending::init( get_option('pl_id') );
+            if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
+                add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
+                add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
+            }
+        }
+
+        # Network dash kjører uten mønstringside
+        add_filter( 'UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments'] );
+    }
 	
 	/**
 	 * Get type mønstring vi videresender fra
@@ -50,7 +67,6 @@ class UKMVideresending extends UKMmodul {
 	 * @return array[ monstring_v2 ]
 	**/
 	public static function getTil() {
-		require_once('UKM/monstringer.class.php');
 		if( self::getType() == 'fylke' )  {
 			$monstringer = [
 				monstringer_v2::land( self::getFra()->getSesong() )
@@ -447,19 +463,5 @@ class UKMVideresending extends UKMmodul {
 }
 
 
-
-## HOOK MENU AND SCRIPTS
-if(is_admin()) {
-	
-	# Kun initier på mønstringssider
-	if( is_numeric( get_option('pl_id') )	 ) {
-		UKMVideresending::init( get_option('pl_id') );
-		if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
-			add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
-			add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
-		}
-	}
-
-	# Network dash kjører uten mønstringside
-	add_filter( 'UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments'] );
-}
+UKMVideresending::init(__DIR__);
+UKMVideresending::hook();
