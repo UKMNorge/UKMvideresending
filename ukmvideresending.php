@@ -24,7 +24,9 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 *
 	**/
 	public static function init($plugin_path) {
-		self::$monstring = new Arrangement( get_option('pl_id') );
+        if( is_numeric( get_option('pl_id') ) ) {
+            self::$monstring = new Arrangement( get_option('pl_id') );
+        }
 		
 		parent::init( $plugin_path );
     }
