@@ -14,7 +14,7 @@ require_once('UKM/Autoloader.php');
 
 
 class UKMVideresending extends UKMNorge\Wordpress\Modul {
-	public static $action = 'informasjon';
+	public static $action = 'snart';
     public static $path_plugin = null;
     public static $monstring = null;
     public static $til = null;
@@ -34,7 +34,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
     public static function hook() {
         # Kun initier på mønstringssider
         if( is_numeric( get_option('pl_id') )	 ) {
-            UKMVideresending::init( get_option('pl_id') );
             if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
                 add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
                 add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
@@ -69,6 +68,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 * @return array[ monstring_v2 ]
 	**/
 	public static function getTil() {
+        return [];
 		if( self::getType() == 'fylke' )  {
 			$monstringer = [
 				monstringer_v2::land( self::getFra()->getSesong() )
@@ -177,27 +177,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 		echo $data;
 		die();
 	}
-
-	/**
-	 * Generer admin-GUI
-	 *
-	 * @return void, echo GUI.
-	**/
-	public static function admin() {
-		## SETUP LOGGER
-		global $current_user;
-		get_currentuserinfo();
-		require_once('UKM/logger.class.php'); 
-		UKMlogger::setID( 'wordpress', $current_user->ID, get_option('pl_id') );
-
-		## ACTION CONTROLLER
-		require_once('controller/'. self::getAction() .'.controller.php');
-		
-		## RENDER
-		echo TWIG( ucfirst(self::getAction()) .'/forside.html.twig', self::getViewData() , dirname(__FILE__), true);
-		echo TWIGjs( dirname(__FILE__) );
-		return;
-	}
+	
 	public static function script() {
 		wp_enqueue_script('WPbootstrap3_js');
 		wp_enqueue_style('WPbootstrap3_css');
@@ -233,7 +213,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 			'Videresending',
 			'editor', 
 			'UKMVideresending',
-			['UKMVideresending','admin'],
+			['UKMVideresending','renderAdmin'],
 			'dashicons-external',#'//ico.ukm.no/paper-airplane-20.png',
 			90
 		);
