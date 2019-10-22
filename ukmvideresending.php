@@ -7,24 +7,42 @@ Author: UKM Norge / M Mandal / A Hustad
 Version: 3.0 
 Author URI: http://mariusmandal.no
 */
-require_once('class/UKMModul.class.php');
+
+use UKMNorge\Arrangement\Arrangement;
+
+require_once('UKM/Autoloader.php');
 
 
-class UKMVideresending extends UKMmodul {
-	public static $monstring = null;
-	public static $til = null;
+class UKMVideresending extends UKMNorge\Wordpress\Modul {
+	public static $action = 'snart';
+    public static $path_plugin = null;
+    public static $monstring = null;
+    public static $til = null;
 	
 	/**
 	 * Initier Videresending-objektet
 	 *
 	**/
-	public static function init( $pl_id=null ) {
-		self::$view_data = [];
-		self::$monstring = new monstring_v2( $pl_id );
-		self::$action = 'informasjon';
+	public static function init($plugin_path) {
+        if( is_numeric( get_option('pl_id') ) ) {
+            self::$monstring = new Arrangement( get_option('pl_id') );
+        }
 		
-		parent::init( $pl_id );
-	}
+		parent::init( $plugin_path );
+    }
+    
+    public static function hook() {
+        # Kun initier på mønstringssider
+        if( is_numeric( get_option('pl_id') )	 ) {
+            if( get_option('pl_id') ) {
+                add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
+                add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
+            }
+        }
+
+        # Network dash kjører uten mønstringside
+        add_filter( 'UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments'] );
+    }
 	
 	/**
 	 * Get type mønstring vi videresender fra
@@ -50,7 +68,7 @@ class UKMVideresending extends UKMmodul {
 	 * @return array[ monstring_v2 ]
 	**/
 	public static function getTil() {
-		require_once('UKM/monstringer.class.php');
+        return [];
 		if( self::getType() == 'fylke' )  {
 			$monstringer = [
 				monstringer_v2::land( self::getFra()->getSesong() )
@@ -159,27 +177,7 @@ class UKMVideresending extends UKMmodul {
 		echo $data;
 		die();
 	}
-
-	/**
-	 * Generer admin-GUI
-	 *
-	 * @return void, echo GUI.
-	**/
-	public static function admin() {
-		## SETUP LOGGER
-		global $current_user;
-		get_currentuserinfo();
-		require_once('UKM/logger.class.php'); 
-		UKMlogger::setID( 'wordpress', $current_user->ID, get_option('pl_id') );
-
-		## ACTION CONTROLLER
-		require_once('controller/'. self::getAction() .'.controller.php');
-		
-		## RENDER
-		echo TWIG( ucfirst(self::getAction()) .'/forside.html.twig', self::getViewData() , dirname(__FILE__), true);
-		echo TWIGjs( dirname(__FILE__) );
-		return;
-	}
+	
 	public static function script() {
 		wp_enqueue_script('WPbootstrap3_js');
 		wp_enqueue_style('WPbootstrap3_css');
@@ -204,39 +202,29 @@ class UKMVideresending extends UKMmodul {
         }
 		wp_enqueue_script( 'UKMVideresending_script_videresending', plugin_dir_url( __FILE__ ) .'ukmvideresending.js');
 	}
-	
-	/**
-	 * Registrer conditions for menyen
-	**/
-	public static function menu_conditions( $_CONDITIONS ) {
-		return array_merge( $_CONDITIONS, 
-			['UKMVideresending' => 'monstring_er_startet']
-		);
-	}
 
 	/**
 	 * Registrer menyer
 	 *
 	**/
 	public static function meny() {
-		UKM_add_menu_page(
-			'monstring', 
+		$page = add_menu_page(
 			'Videresending', 
 			'Videresending',
 			'editor', 
 			'UKMVideresending',
-			['UKMVideresending','admin'],
-			'//ico.ukm.no/paper-airplane-20.png',
-			20
+			['UKMVideresending','renderAdmin'],
+			'dashicons-external',#'//ico.ukm.no/paper-airplane-20.png',
+			90
 		);
-		UKM_add_scripts_and_styles(
-			'UKMVideresending_admin',	# Page-hook
-			['UKMVideresending', 'script']	# Script-funksjon
+		add_action(
+			'admin_print_styles-' . $page,
+			['UKMVideresending', 'script']
 		);
-
+		
 		if( self::getType() == 'fylke') {
 			// Legg videresendingsskjemaet som en submenu under Mønstring.
-			UKM_add_submenu_page(
+			add_submenu_page(
 				'UKMMonstring', 
 				'Videresendingsskjema', 
 				'Skjema for videresending', 
@@ -244,12 +232,12 @@ class UKMVideresending extends UKMmodul {
 				'UKMVideresendingsskjema', 
 				['UKMVideresending','skjema']
 			);
-			UKM_add_scripts_and_styles(
-				'UKMVideresending_skjema',
-				['UKMVideresending', 'skjema_script']
-			);
+			#UKM_add_scripts_and_styles(
+			#	'UKMVideresending_skjema',
+			#	['UKMVideresending', 'skjema_script']
+			#);
 			// Legg nominasjon som en submenu under Mønstring.
-			UKM_add_submenu_page(
+			add_submenu_page(
 				'UKMVideresending',
 				'Nominasjon',
 				'Nominasjoner',
@@ -257,21 +245,10 @@ class UKMVideresending extends UKMmodul {
 				'UKMnominasjon',
 				['UKMVideresending', 'nominasjon']
 			);
-			UKM_add_scripts_and_styles(
-				'UKMVideresending_nominasjon',
-				['UKMVideresending', 'nominasjon_script']
-			);
-
-			// Hookes inn under fylkets mønstring-meny
-			// da dette er det mest logiske stedet å vise det, selv
-			// om informasjonen brukes kun til videresendingen for lokalkontakter
-			UKM_add_submenu_page(	'UKMMonstring', 
-									'Infotekst om videresending', 
-									'Infotekst om videresending', 
-									'editor', 
-									'UKMmonstring_videresending_info',
-									['UKMVideresending','info_fra_fylket']
-								);
+			#UKM_add_scripts_and_styles(
+			#	'UKMVideresending_nominasjon',
+			#	['UKMVideresending', 'nominasjon_script']
+			#);
 		}
 	}
 	
@@ -310,18 +287,6 @@ class UKMVideresending extends UKMmodul {
 		wp_enqueue_style( 'UKMVideresending_style', plugin_dir_url( __FILE__ ) .'ukmvideresending.css');
 		wp_enqueue_script( 'UKMVideresending_script_nominasjon', plugin_dir_url( __FILE__ ) .'javascript/nominasjon.js');
 	}
-
-	public static function info_fra_fylket() {
-		$option_name = 'videresending_info_pl'.get_option('pl_id');
-		if( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-			$TWIG['saved'] = update_site_option($option_name, $_POST['videresending_editor'] );
-		}
-		$TWIGdata = array('UKM_HOSTNAME' => UKM_HOSTNAME);
-		echo TWIG('Informasjon/editor_pre.html.twig', $TWIGdata, dirname(__FILE__) );
-		wp_editor( stripslashes(get_site_option($option_name)), 'videresending_editor', $settings = array() );
-		echo TWIG('Informasjon/editor_post.html.twig', $TWIGdata, dirname(__FILE__) );
-	}
-
 	
 	/**
 	 *
@@ -480,20 +445,5 @@ class UKMVideresending extends UKMmodul {
 }
 
 
-
-## HOOK MENU AND SCRIPTS
-if(is_admin()) {
-	
-	# Kun initier på mønstringssider
-	if( is_numeric( get_option('pl_id') )	 ) {
-		UKMVideresending::init( get_option('pl_id') );
-		if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
-			add_action('UKM_admin_menu', ['UKMVideresending', 'meny'], 101);
-			add_filter('UKM_admin_menu_conditions', ['UKMvideresending','menu_conditions']);
-			add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
-		}
-	}
-
-	# Network dash kjører uten mønstringside
-	add_filter( 'UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments'] );
-}
+UKMVideresending::init(__DIR__);
+UKMVideresending::hook();
