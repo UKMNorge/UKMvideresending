@@ -34,7 +34,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
     public static function hook() {
         # Kun initier på mønstringssider
         if( is_numeric( get_option('pl_id') )	 ) {
-            if( get_option('site_type') == 'fylke' || get_option('site_type') == 'kommune' ) {
+            if( get_option('pl_id') ) {
                 add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
                 add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
             }
