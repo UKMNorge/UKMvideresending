@@ -55,7 +55,7 @@ if( $innslag->getType()->harTitler() ) {
 			'navn'			=> $person->getNavn(),
 			'mobil'			=> $person->getMobil(),
 			'alder'			=> $person->getAlderTall(),
-			'instrument'	=> $person->getInstrument(),
+			'instrument'	=> $person->getRolle(),
 			'videresendt'	=> $person->erVideresendtTil( $valgt_til->getId() )
 		];
 		$data['personer'][]		= $person;
@@ -70,7 +70,7 @@ else {
 		'navn'			=> $person->getNavn(),
 		'mobil'			=> $person->getMobil(),
 		'alder'			=> $person->getAlderTall(),
-		'instrument'	=> $person->getInstrument(),
+		'instrument'	=> $person->getRolle(),
 		'videresendt'	=> $person->erVideresendtTil( $valgt_til->getId() )
 	];
 }
