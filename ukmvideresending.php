@@ -54,7 +54,11 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 * @return string (kommune|fylke|land)
 	**/	
 	public static function getType() {
-		return self::$monstring->getType();
+		try {
+            return self::$monstring->getType();
+        } catch( Exception $e ) {
+            return 'kommune'; // laveste nivå
+        }
 	}
 	
 	/**
