@@ -1,6 +1,6 @@
 <?php
 
-use UKMNorge\Innslag\Typer;
+use UKMNorge\Innslag\Typer\Typer;
 require_once('UKM/Autoloader.php');
 
 $summering = [];
