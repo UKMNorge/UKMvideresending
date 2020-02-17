@@ -86,13 +86,18 @@
 					{% block data %}
                         {% if not mottaker.getArrangement().erRegistrert() %}
                             Arrangementet er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
-                        {% elseif mottaker.getAntallVideresendte() > 0 %}
-                			Du har videresendt {{ mottaker.getAntallVideresendte() }} innslag til {{ mottaker.getNavn() }}.
-                            <a href="?action={{GET('action')}}&til={{mottaker.getId()}}" class="btn btn-ukm btn-primary btn-xs">Endre videresending</a>
                         {% else %}
-                            Du har ikke videresendt innslag til {{ mottaker.getNavn() }}.
-                            <a href="?action={{GET('action')}}&til={{mottaker.getId()}}" class="btn btn-ukm btn-primary btn-xs">Start videresending</a>
+                            {% if mottaker.getAntallVideresendte() > 0 %}
+                                Du har videresendt {{ mottaker.getAntallVideresendte() }} innslag til {{ mottaker.getNavn() }}.
+                            {% else %}
+                                Du har ikke videresendt innslag til {{ mottaker.getNavn() }}.
+                            {% endif %}
+                            <br />
+                            <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
+                            <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm btn-primary btn-xs">Nominasjon</a>
+                            <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ mottaker.getAntallVideresendte() > 0 ? 'Endre' : 'Start' }} videresending</a>
                         {% endif %}
+
 					{% endblock %}
 				{% endembed %}
 			{% else %}

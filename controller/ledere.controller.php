@@ -4,7 +4,7 @@ require_once( 'UKM/leder.class.php' );
 UKMVideresending::calcAntallPersoner();
 
 $monstring = UKMVideresending::getFra();
-$festivalen = array_pop( UKMVideresending::getTil() );
+$festivalen = UKMVideresending::getValgtTil();
 
 /**
  * HENT UT INFORMASJON OM LEDERE

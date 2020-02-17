@@ -1,7 +1,7 @@
 <?php
 
 $monstring = UKMVideresending::getFra();
-$festivalen = array_pop( UKMVideresending::getTil() );
+$festivalen = UKMVideresending::getValgtTil('POST');
 
 // SLETT ALL FRA DENNE MØNSTRINGEN
 $SQLdel = new SQLdel(

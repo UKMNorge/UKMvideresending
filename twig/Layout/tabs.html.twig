@@ -1,5 +1,7 @@
+{% set baseLink = '?page='~ GET('page') ~'&til='~ GET('til')~'&action=' %}
+
 <div class="UKM_tabs UKM_tabs_5">
-	<a href="?page=UKMVideresending" {{ GET('page') == 'UKMVideresending' and tab == 'informasjon' ? 'class="active"' : ''}}>
+	<a href="{{baseLink ~'informasjon'}}" {{ tab == 'informasjon' ? 'class="active"'}}>
 		<div>
 			<span class="tab_header">Informasjon</span>
 			<img src="//ico.ukm.no/info-button-32.png" width="16"  border="0" /><br />
@@ -7,98 +9,71 @@
 		</div>
 	</a>
 	
-	{# VIS STATISTIKK-FANE I STEDET FOR DE ANDRE INNTIL STATISTIKK ER OPPGITT #}
-	{% if not fra.getPublikum() %}
-		<a href="?page=UKMVideresending&action=statistikk" {{ tab == 'statistikk' ? 'class="active"' : ''}}>
-			<div>
-				<span class="tab_header">Statistikk</span>
-				<img src="//ico.ukm.no/abacus-32.png" width="16"  border="0" /><br />
-				<span class="tab_description">Før du kan videresende</span>
-			</div>
-		</a>
-	{# STATISTIKK ER REGISTRERT #}
-	{% else %}
-		{# NOMINASJONER #}
-		{% if fra.getType() == 'fylke' %}
-			<a href="?page=UKMnominasjon&action=nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
-				<div>
-					<span class="tab_header">Nominasjon</span>
-					<img src="//ico.ukm.no/user-business-32.png" width="16"  border="0" /><br />
-					<span class="tab_description">Endre nominasjoner</span>
-				</div>
-			</a>
-		{% endif %}
-		
-		{# VIDERESENDING FRA KOMMUNE #}
-		{% if fra.getType() == 'kommune' and til|length > 1 %}
-			{% for monstring in til %}
-				<a href="?page=UKMVideresending&action=videresendte&fylke={{ monstring.getFylke().getId() }}" {{ tab == 'videresendte' and GET('fylke') == monstring.getFylke().getId() ? 'class="active"' : ''}}>
-					<div>
-						<span class="tab_header">{{ monstring.getFylke().getNavn() }}</span>
-						<img src="//ico.ukm.no/people-32.png" width="16"  border="0" /><br />
-						<span class="tab_description">Videresend deltakere</span>
-					</div>
-				</a>
-			{% endfor %}
-		{# VIDERESENDING FRA FYLKE #}
-		{% else %} 
-			<a href="?page=UKMVideresending&action=videresendte" {{ tab == 'videresendte' ? 'class="active"' : ''}}>
-				<div>
-					<span class="tab_header">Videresend</span>
-					<img src="//ico.ukm.no/people-32.png" width="16"  border="0" /><br />
-					<span class="tab_description">Velg deltakere</span>
-				</div>
-			</a>
-		{% endif %}
+
+    {# NOMINASJONER #}
+    {% if fra.getType() == 'fylke' %}
+        <a href="?page=UKMnominasjon&action=nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
+            <div>
+                <span class="tab_header">Nominasjon</span>
+                <img src="//ico.ukm.no/user-business-32.png" width="16"  border="0" /><br />
+                <span class="tab_description">Endre nominasjoner</span>
+            </div>
+        </a>
+    {% endif %}
+    
+
+    <a href="{{ baseLink }}videresendte" {{ tab == 'videresendte' ? 'class="active"' : ''}}>
+        <div>
+            <span class="tab_header">Videresend</span>
+            <img src="//ico.ukm.no/people-32.png" width="16"  border="0" /><br />
+            <span class="tab_description">Velg deltakere</span>
+        </div>
+    </a>
 
 
-		{# MEDIA #}
-		<a href="?page=UKMVideresending&action=media" {{ tab == 'media' ? 'class="active"' : ''}}>
-			<div>
-				<span class="tab_header">Media</span>
-				<img src="//ico.ukm.no/video-32.png" width="16"  border="0" /><br />
-				<span class="tab_description">Bilder, film og playback</span>
-			</div>
-		</a>
+    {# MEDIA #}
+    <a href="{{ baseLink }}media" {{ tab == 'media' ? 'class="active"' : ''}}>
+        <div>
+            <span class="tab_header">Media</span>
+            <img src="//ico.ukm.no/video-32.png" width="16"  border="0" /><br />
+            <span class="tab_description">Bilder, film og playback</span>
+        </div>
+    </a>
 
-		{# FYLKETS VIDERESENDINGSSKJEMA #}
-		{% if fra.getType() == 'kommune' %}
-			{% for monstring in til|filter(monstring => monstring.harSkjema()) %}
-				<a href="?page=UKMVideresending&action=skjema&fylke={{ monstring.getFylke().getId() }}" {{ tab == 'skjema' and GET('fylke') == monstring.getFylke().getId() ? 'class="active"' : ''}}>
-					<div>
-						<span class="tab_header">{{ til|length > 1 ? 'Info til '~ monstring.getFylke().getNavn() : 'Infoskjema' }}</span>
-						<img src="//ico.ukm.no/chart-32.png" width="16"  border="0" /><br />
-						<span class="tab_description">Info til fylkeskontakten</span>
-					</div>
-				</a>
-			{% endfor %}
-		{% endif %}
+    {# FYLKETS VIDERESENDINGSSKJEMA #}
+    {% if til.getType() != 'land' %}
+        <a href="{{ baseLink }}skjema&fylke={{ fra.getFylke().getId() }}" {{ tab == 'skjema' and GET('fylke') == fra.getFylke().getId() ? 'class="active"' : ''}}>
+            <div>
+                <span class="tab_header">{{ til|length > 1 ? 'Info til '~ fra.getFylke().getNavn() : 'Infoskjema' }}</span>
+                <img src="//ico.ukm.no/chart-32.png" width="16"  border="0" /><br />
+                <span class="tab_description">Info til fylkeskontakten</span>
+            </div>
+        </a>
+    {% endif %}
 
-		{% if fra.getType() == 'fylke' %}
-			<a href="?page=UKMVideresending&action=ledere" {{ tab == 'ledere' ? 'class="active"' : ''}}>
-				<div>
-					<span class="tab_header">Ledere</span>
-					<img src="//ico.ukm.no/user-business-32.png" width="16"  border="0" /><br />
-					<span class="tab_description">Ledere og overnatting</span>
-				</div>
-			</a>
+    {% if fra.getType() == 'fylke' %}
+        <a href="{{ baseLink }}ledere" {{ tab == 'ledere' ? 'class="active"' : ''}}>
+            <div>
+                <span class="tab_header">Ledere</span>
+                <img src="//ico.ukm.no/user-business-32.png" width="16"  border="0" /><br />
+                <span class="tab_description">Ledere og overnatting</span>
+            </div>
+        </a>
 
-			<a href="?page=UKMVideresending&action=reiseinfo" {{ tab == 'reiseinfo' ? 'class="active"' : ''}}>
-				<div>
-					<span class="tab_header">Reiseinfo</span>
-					<img src="//ico.ukm.no/buss-32.png" width="16"  border="0" /><br />
-					<span class="tab_description">Reise og tilrettelegging</span>
-				</div>
-			</a>
-		{% endif %}
-		
-		<a href="?page=UKMVideresending&action=oppsummering" {{ tab == 'oppsummering' ? 'class="active"' : ''}}>
-			<div>
-				<span class="tab_header">Oppsummering</span>
-				<img src="//ico.ukm.no/clipboard-32.png" width="16"  border="0" /><br />
-				<span class="tab_description">Status kvote og statistikk</span>
-			</div>
-		</a>
-
-	{% endif %}
+        <a href="{{ baseLink }}reiseinfo" {{ tab == 'reiseinfo' ? 'class="active"' : ''}}>
+            <div>
+                <span class="tab_header">Reiseinfo</span>
+                <img src="//ico.ukm.no/buss-32.png" width="16"  border="0" /><br />
+                <span class="tab_description">Reise og tilrettelegging</span>
+            </div>
+        </a>
+    {% endif %}
+    
+    <a href="{{ baseLink }}oppsummering" {{ tab == 'oppsummering' ? 'class="active"' : ''}}>
+        <div>
+            <span class="tab_header">Oppsummering</span>
+            <img src="//ico.ukm.no/clipboard-32.png" width="16"  border="0" /><br />
+            <span class="tab_description">Status kvote og statistikk</span>
+        </div>
+    </a>
 </div>

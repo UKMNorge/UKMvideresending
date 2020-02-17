@@ -15,16 +15,7 @@ $data = [
 ];
 
 // Mønstring det videresendes til
-if( $monstring->getType() == 'kommune' ) {
-	foreach( $monstring->getFylkesmonstringer() as $fylkesmonstring ) {
-		if( $fylkesmonstring->getFylke()->getId() == $innslag->getFylke()->getId() ) {
-			$data['til_navn']		= $fylkesmonstring->getNavn();
-			$valgt_til				= $fylkesmonstring;
-		}
-	}
-} else {
-	$valgt_til = array_pop( UKMVideresending::getTil() );
-}
+$valgt_til = UKMVideresending::loadValgtTil('POST');
 
 // Innslag med titler
 if( $innslag->getType()->harTitler() ) {
@@ -56,7 +47,7 @@ if( $innslag->getType()->harTitler() ) {
 			'mobil'			=> $person->getMobil(),
 			'alder'			=> $person->getAlderTall(),
 			'instrument'	=> $person->getRolle(),
-			'videresendt'	=> $person->erVideresendtTil( $valgt_til->getId() )
+			'videresendt'	=> $person->erPameldt( $valgt_til->getId() )
 		];
 		$data['personer'][]		= $person;
 	}
@@ -71,7 +62,7 @@ else {
 		'mobil'			=> $person->getMobil(),
 		'alder'			=> $person->getAlderTall(),
 		'instrument'	=> $person->getRolle(),
-		'videresendt'	=> $person->erVideresendtTil( $valgt_til->getId() )
+		'videresendt'	=> $person->erPameldt( $valgt_til->getId() )
 	];
 }
 

@@ -1,0 +1,11 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	{% if til.getInformasjonstekst() is empty %}
+		{{ til.getNavn() }}
+		har ikke lagt inn informasjon om kvoter eller
+									andre regler for videresending.
+	{% else %}
+		{{ til.getInformasjonstekst()|raw|nl2br }}
+	{% endif %}
+{% endblock %}

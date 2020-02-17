@@ -5,17 +5,8 @@ $monstring = UKMVideresending::getFra();
 
 // Alle typer innslag som er støttet
 $innslag_typer = [];
-if( $monstring->getType() == 'fylke' ) {
-	$festivalen = array_pop( UKMVideresending::getTil() );
-	foreach( $festivalen->getInnslagTyper() as $innslag_type ) {
-			$innslag_typer[ $innslag_type->getKey() ] = $innslag_type;
-		}
-} else {
-	foreach( $monstring->getFylkesmonstringer() as $fylkesmonstring ) {
-		foreach( $monstring->getInnslagTyper() as $innslag_type ) {
-			$innslag_typer[ $innslag_type->getKey() ] = $innslag_type;
-		}
-	}
+foreach( UKMVideresending::getValgtTil()->getInnslagTyper() as $innslag_type ) {
+    $innslag_typer[ $innslag_type->getKey() ] = $innslag_type;
 }
 
 // Finn alle videresendte innslag

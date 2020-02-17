@@ -1,7 +1,6 @@
 <?php
 
-$monstring = UKMVideresending::getFra();
-$festivalen = UKMVideresending::getTil()[0];
+$fra = UKMVideresending::getFra();
 
 if( isset( $_POST ) && sizeof( $_POST ) > 0 ) {
 	require_once('reiseinfo_save.controller.php');
@@ -11,8 +10,8 @@ $load = new SQL("SELECT *
 					FROM `smartukm_videresending_infoskjema`
 					WHERE `pl_id` = '#pl_to'
 					AND `pl_id_from` = '#pl_from'",
-				array(	'pl_to' 	=> $festivalen->getId(),
-						'pl_from'	=> $monstring->getId()
+				array(	'pl_to' 	=> UKMVideresending::getTil()->getId(),
+						'pl_from'	=> $fra->getId()
 					)
 				);
 $db = $load->run('array');
@@ -64,7 +63,7 @@ $data_intoleranse->uten = [];
 
 // LIST ALLE ALLERGIER
 $personer = [];
-foreach( $monstring->getInnslag()->getAll() as $innslag ) {
+foreach( $fra->getInnslag()->getAll() as $innslag ) {
     foreach( $innslag->getPersoner()->getAll() as $person ) {
 		
 		if( in_array( $person->getId(), $personer ) ) {

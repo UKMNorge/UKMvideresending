@@ -6,6 +6,8 @@
 </style>
 <div style="width: 98%;">
 
+    <h2>Videresending til {{til.getNavn()}}</h2>
+
 	<div class="UKM_tabs UKM_tabs_5">
 		{% embed "Layout/tabs.html.twig" %}{% endembed %}
 	</div>
@@ -15,18 +17,9 @@
 	</div>
 
 	<div class="UKM_content_wrapper">
-		{% if message is defined %}
-			<div class="alert alert-{{message.success ? 'success':'danger'}} col-xs-12 col-md-10">
-				{% if message.title is defined %}
-				<strong>{{message.title}}</strong><br />
-				{% endif %}
-				{{message.body}}
-			</div>
-			<div class="clearfix"></div>
-		{% endif %}
+		{% include "wp_modul.flashbag.html.twig" %}
 	
-		{% block content %}
-		{% endblock %}
+		{% block content %}{% endblock %}
 		<div class="clearfix"></div>
 	</div>
 </div>

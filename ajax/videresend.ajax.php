@@ -1,29 +1,15 @@
 <?php
 
-require_once('UKM/write_innslag.class.php');
-require_once('UKM/write_tittel.class.php');
-require_once('UKM/write_person.class.php');
+use UKMNorge\Arrangement\Write;
+use UKMNorge\Innslag\Titler\Write as WriteTittel;
 
-/**
- * loadValgtTil() avhenger av hvilket fylke som er valgt.
- * For fellesmønstringer på tvers av fylkesgrenser
- * trengs dette parameteret for å videresende til
- * riktig fylkesfestival.
- */
-if( isset( $_POST['fylke'] ) ) {
-	$_GET['fylke'] = $_POST['fylke'];
-}
-
-$monstring		= UKMVideresending::getFra();
-$innslag 		= $monstring->getInnslag()->get( $_POST['innslag'] );
-$videresend_til = UKMVideresending::loadValgtTil();
+$fra		= UKMVideresending::getFra();
+$innslag 	= $fra->getInnslag()->get( $_POST['innslag'] );
+$til        = UKMVideresending::loadValgtTil('POST')->getArrangement();
 
 // Videresend innslaget
 try {
-	$videresend_til->getInnslag()->leggTil( $innslag );
-	
-	$innslag = $videresend_til->getInnslag()->get( $innslag->getId() );
-	write_innslag::leggTil( $innslag );
+    Write::leggTilInnslag($til, $innslag, $fra);
 } catch( Exception $e ) {
 	/**
 	 * Selv om innslaget er videresendt fra før, betyr ikke det
@@ -46,14 +32,17 @@ if( $_POST['type'] == 'tittel' ) {
 	 * Henter fra mønstringen det skal videresendes til, slik at
 	 * tittelen meldes på riktig mønstring (og ikke avsender-mønstringen)
 	**/
-	$innslag = $videresend_til->getInnslag()->get( $_POST['innslag'] );	
+	$innslag = $til->getInnslag()->get( $_POST['innslag'] );	
 	$tittel = $innslag->getTitler()->get( $_POST['id'] );
 	$innslag->getTitler()->leggTil( $tittel );
 
-	write_tittel::leggTil( $tittel );
+	WriteTittel::leggtil( $tittel );
 }
 
-if( UKMVideresending::getFra()->getType() == 'fylke' ) {
-	UKMVideresending::calcAntallPersoner();
+// Hvis videresendt til UKM-festivalen skal vi telle opp antall personer
+// til noe..
+if( $til->getEierType() == 'land' ) {
+    UKMVideresending::calcAntallPersoner();
 }
+
 UKMVideresending::addResponseData('success',true);

@@ -1,7 +1,7 @@
 <?php
 	
 require_once('UKM/leder.class.php');
-$festivalen = array_pop( UKMVideresending::getTil() );
+$festivalen = UKMVideresending::getValgtTil('POST');
 
 $leder = new leder();
 $leder->set( 'l_type', 'reise' );

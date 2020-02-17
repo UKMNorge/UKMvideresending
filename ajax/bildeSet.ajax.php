@@ -4,18 +4,7 @@
 $monstring = UKMVideresending::getFra();
 $innslag = $monstring->getInnslag()->get( $_POST['innslag'] );
 
-
-// Mønstringen det videresendes til
-if( UKMVideresending::getFra()->getType() == 'kommune' ) {
-	foreach( UKMVideresending::getTil() as $fylkesmonstring ) {
-		if( $fylkesmonstring->getFylke()->getId() == $innslag->getFylke()->getId() ) {
-			$monstring = $fylkesmonstring;
-			break;
-		}
-	}
-} else {
-	$monstring = UKMVideresending::getTil()[0];
-}
+$monstring = UKMVideresending::getValgtTil('POST');
 
 // Sjekk at bildet tilhører innslaget
 $valgt_bilde = false;

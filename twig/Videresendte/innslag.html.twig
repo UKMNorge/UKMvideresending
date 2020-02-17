@@ -1,9 +1,10 @@
+{# INNSLAG MED TITLER #}
 {% if innslag.getType().harTitler() %}
 	{% for tittel in innslag.getTitler().getAll() %}
-		<li class="videresend_item list-group-item {{ tittel.erVideresendtTil( valgt_til ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
+		<li class="videresend_item list-group-item {{ tittel.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
 			<div class="row header">
 				<div class="col-1 col-xs-1">
-					<input type="checkbox" class="videresend" value="true" {{ tittel.erVideresendtTil( valgt_til ) ? 'checked="checked"' : ''}} />
+					<input type="checkbox" class="videresend" value="true" {{ tittel.erPameldt( til.getId() ) ? 'checked="checked"' : ''}} />
 				</div>
 				<div class="col-9 col-xs-9">
 					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - {{ tittel.getTittel() }}</span>
@@ -21,15 +22,15 @@
 		</li>
 	{# MANGLER TITLER OG KAN KUN AVMELDES #}
 	{% else %}
-		<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( valgt_til ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="0" id="tittel-0-{{ tittel.getId() }}">
+		<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="0" id="tittel-0-{{ tittel.getId() }}">
 			<div class="row header">
 				<div class="col-1 col-xs-1">
-					{% if innslag.erVideresendtTil( valgt_til ) %}
+					{% if innslag.erVideresendtTil( til.getId() ) %}
 						<input type="checkbox" class="videresend" value="true" checked="checked" />
 					{% endif %}
 				</div>
 				<div class="col-9 col-xs-9">
-					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - HAR INGEN TITLER {{ valgt_til.getType() == 'land' ? 'PÅ DIN FESTIVAL' }} og kan derfor ikke videresendes</span>
+					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - <span class="text-danger small">Har ingen titler påmeldt ditt arrangement og kan derfor ikke videresendes</span></span>
 					<span class="status"></span>
 				</div>
 				<div class="col-2 col-xs-2 text-muted muted small">
@@ -43,11 +44,12 @@
 			</div>
 		</li>	
 	{% endfor %}
+{# INNSLAG UTEN TITLER #}
 {% else %}
-	<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( valgt_til ) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
+	<li class="videresend_item list-group-item {{ innslag.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
 		<div class="row header">
 			<div class="col-1 col-xs-1">
-				<input type="checkbox" class="videresend" value="true" {{ innslag.erVideresendtTil( valgt_til ) ? 'checked="checked"' : ''}} />
+				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}} />
 			</div>
 			<div class="col-9 col-xs-9">
 				<span class="navn"><strong>{{ innslag.getNavn() }}</strong></span>

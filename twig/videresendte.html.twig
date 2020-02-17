@@ -2,7 +2,7 @@
 
 {% block content %}
 	<h2>
-		Videresend deltakere til {{ valgt_til.getNavn() }}
+		Videresend deltakere til {{ til.getArrangement().getNavn() }}
 	</h2>
 
 {#	
@@ -18,26 +18,30 @@
 	</div>
 #}
 
-	{% if not valgt_til.erRegistrert() %}
+    {# VIDERESENDING IKKE MULIG DA ARRANGEMENTET IKKE ER REGISTRERT #}
+	{% if not til.getArrangement().erRegistrert() %}
 		<p class="alert alert-error alert-danger">
 			Mønstringen er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
 		</p>
-	{% elseif date( valgt_til.getFrist2() ) > date() %}
+
+    {# VIDERESENDING HAR IKKE ÅPNET #}
+	{% elseif date( til.getArrangement().getFrist2() ) > date() %}
 		<p class="alert alert-warning">
 			<strong>
 				Videresendingen har ikke åpnet. Du kan videresende fra
-				{{ valgt_til.getFrist2()|dato('j.M') ~' kl. '~ valgt_til.getFrist2()|dato('H:i') }} 
+				{{ til.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist2()|dato('H:i') }} 
 				til
-				{{ valgt_til.getFrist1()|dato('j.M') ~' kl. '~ valgt_til.getFrist1()|dato('H:i') }}. 
+				{{ til.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist1()|dato('H:i') }}. 
 			</strong>
-	
-	{% elseif not valgt_til.erVideresendingApen() %}
+
+	{# VIDERESENDINGEN ER STENGT #}
+	{% elseif not til.getArrangement().erVideresendingApen() %}
 		<p class="alert alert-error alert-danger">
 			<strong>
 				Videresending er kun mulig fra
-				{{ valgt_til.getFrist2()|dato('j.M') ~' kl. '~ valgt_til.getFrist2()|dato('H:i') }} 
+				{{ til.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist2()|dato('H:i') }} 
 				til
-				{{ valgt_til.getFrist1()|dato('j.M') ~' kl. '~ valgt_til.getFrist1()|dato('H:i') }}. 
+				{{ til.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist1()|dato('H:i') }}. 
 			</strong>
 			<br />
 			Du kan ikke endre hvem som skal videresendes, men fortsatt ajourføre 
@@ -46,12 +50,14 @@
 			eller
 			<a href="?page=UKMdeltakere">informasjon (fra deltakermenyen)</a>.
 		</p>
+
+    {# VIDERESENDING ER MULIG #}
 	{% else %}
 		<p>
-			Listen viser kun innslag fra de kategoriene {{ valgt_til.getNavn() }} tar i mot.
+			Listen viser kun innslag fra de kategoriene {{ til.getArrangement().getNavn() }} tar i mot.
 		</p>
 		<div class="row">
-			{% for type_innslag in valgt_til.getInnslagTyper() %}
+			{% for type_innslag in til.getArrangement().getInnslagTyper() %}
 				<div class="innslagBlock col-xs-12">
 					<div class="innslagTypeHeader">
 						<img src="{{ type_innslag.getIcon() }}" height="45" />
@@ -61,20 +67,11 @@
 					
 					<ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
 						{# VIDERESENDING TIL FYLKE - GRUPPER PER FYLKE I TILFELLE LOKALMØNSTRING OVER FYLKESGRENSER #}
-						{% if fra.getType() == 'kommune' %}
-							{% for innslag in fra.getInnslag().filterByType( type_innslag, fra.getInnslag().getAllByFylke( valgt_til.getFylke() ) ) %}
-								{% embed "Videresendte/innslag.html.twig" %}{% endembed %}
-							{% else %}
-								<li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
-							{% endfor %}
-						{# VIDERESENDING TIL UKM-FESTIVALEN #}
-						{% else %}
-							{% for innslag in fra.getInnslag().getAllByType( type_innslag ) %}
-								{% embed "Videresendte/innslag.html.twig" %}{% endembed %}
-							{% else %}
-								<li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
-							{% endfor %}
-						{% endif %}
+                        {% for innslag in fra.getInnslag().filterByType( type_innslag, fra.getInnslag().getAllByFylke( til.getArrangement().getFylke() ) ) %}
+                            {% embed "Videresendte/Innslag.html.twig" %}{% endembed %}
+                        {% else %}
+                            <li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
+                        {% endfor %}
 					</ol>
 				</div>
 			{% endfor %}
