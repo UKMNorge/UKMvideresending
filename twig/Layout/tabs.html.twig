@@ -63,7 +63,7 @@
 
 		{# FYLKETS VIDERESENDINGSSKJEMA #}
 		{% if fra.getType() == 'kommune' %}
-			{% for monstring in til if monstring.harSkjema() %}
+			{% for monstring in til|filter(monstring => monstring.harSkjema()) %}
 				<a href="?page=UKMVideresending&action=skjema&fylke={{ monstring.getFylke().getId() }}" {{ tab == 'skjema' and GET('fylke') == monstring.getFylke().getId() ? 'class="active"' : ''}}>
 					<div>
 						<span class="tab_header">{{ til|length > 1 ? 'Info til '~ monstring.getFylke().getNavn() : 'Infoskjema' }}</span>

@@ -14,9 +14,9 @@ require_once('UKM/Autoloader.php');
 
 
 class UKMVideresending extends UKMNorge\Wordpress\Modul {
-	public static $action = 'snart';
+	public static $action = 'velg';
     public static $path_plugin = null;
-    public static $monstring = null;
+    public static $arrangement;
     public static $til = null;
 	
 	/**
@@ -24,15 +24,15 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 *
 	**/
 	public static function init($plugin_path) {
+        parent::init( $plugin_path );
+
         if( is_numeric( get_option('pl_id') ) ) {
             try {
-                self::$monstring = new Arrangement( get_option('pl_id') );
+                static::$arrangement = new Arrangement( intval(get_option('pl_id')) );
             } catch( Exception $e ) {
                 // silenty let the exception pass 🧙🏼‍♀️
             }
         }
-		
-		parent::init( $plugin_path );
     }
     
     public static function hook() {
@@ -54,10 +54,10 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 * @return string (kommune|fylke|land)
 	**/	
 	public static function getType() {
-		if( is_null( self::$monstring ) ) {
+		if( is_null( static::$arrangement ) ) {
             return 'kommune'; //laveste nivå
         }
-        return self::$monstring->getType();
+        return static::$arrangement->getType();
 	}
 	
 	/**
@@ -66,7 +66,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 * @return monstring_v2 $mønstring
 	**/
 	public static function getFra() {
-		return self::$monstring;
+		return static::$arrangement;
 	}
 	
 	/**
@@ -76,12 +76,12 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	**/
 	public static function getTil() {
         return [];
-		if( self::getType() == 'fylke' )  {
+		if( static::getType() == 'fylke' )  {
 			$monstringer = [
-				monstringer_v2::land( self::getFra()->getSesong() )
+				monstringer_v2::land( static::getFra()->getSesong() )
 			];
 		} else {
-			$monstringer = self::getFra()->getFylkesmonstringer();
+			$monstringer = static::getFra()->getFylkesmonstringer();
 		}
 		
 		foreach( $monstringer as $monstring ) {
@@ -106,7 +106,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	**/
 	public static function loadValgtTil() {
 		$valgt_til = false;
-		if( isset( $_GET['fylke'] ) && self::getFra()->getType() == 'kommune' && sizeof( self::getTil() ) > 1 ) {
+		if( isset( $_GET['fylke'] ) && static::getFra()->getType() == 'kommune' && sizeof( static::getTil() ) > 1 ) {
 			foreach( UKMVideresending::getTil() as $monstring ) {
 				if( $monstring->getFylke()->getId() == $_GET['fylke'] ) {
 					$valgt_til = $monstring;
@@ -119,7 +119,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 			$valgt_til = array_pop( UKMVideresending::getTil() );
 		}
 		
-		self::addViewData('valgt_til', $valgt_til );
+		static::addViewData('valgt_til', $valgt_til );
 		return $valgt_til;
 	}
 	
@@ -130,15 +130,15 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	 * @return array
 	**/
 	public static function getViewData() {
-		self::addViewData('fra', self::getFra() );
-		self::addViewData('til', self::getTil() );
-		self::addViewData('tab', self::getAction() );
+		static::addViewData('fra', static::getFra() );
+		static::addViewData('til', static::getTil() );
+		static::addViewData('tab', static::getAction() );
 		return parent::getViewData();
 	}
 	
 	public static function ajax() {
 		if( is_array( $_POST ) ) {
-			self::addResponseData('POST', $_POST );
+			static::addResponseData('POST', $_POST );
 		}
 		
 		try {
@@ -175,12 +175,12 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 				throw new Exception('Beklager, støtter ikke denne handlingen!');
 			}
 		} catch( Exception $e ) {
-			self::addResponseData('success', false);
-			self::addResponseData('message', $e->getMessage() );
-			self::addResponseData('code', $e->getCode() );
+			static::addResponseData('success', false);
+			static::addResponseData('message', $e->getMessage() );
+			static::addResponseData('code', $e->getCode() );
 		}
 		
-		$data = json_encode( self::getResponseData() );
+		$data = json_encode( static::getResponseData() );
 		echo $data;
 		die();
 	}
@@ -229,7 +229,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 			['UKMVideresending', 'script']
 		);
 		
-		if( self::getType() == 'fylke') {
+		if( static::getType() == 'fylke') {
 			// Legg videresendingsskjemaet som en submenu under Mønstring.
 			add_submenu_page(
 				'UKMMonstring', 
@@ -267,7 +267,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 		require_once('controller/skjema_admin.controller.php');
 		
 		## RENDER
-		echo TWIG( 'Skjema/admin.html.twig', self::getViewData() , dirname(__FILE__), true);
+		echo TWIG( 'Skjema/admin.html.twig', static::getViewData() , dirname(__FILE__), true);
 		return;
 	}
 	
@@ -285,7 +285,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 		require_once('controller/nominasjon.controller.php');
 		
 		## RENDER
-		echo TWIG( 'Nominasjon/forside.html.twig', self::getViewData() , dirname(__FILE__), true);
+		echo TWIG( 'Nominasjon/forside.html.twig', static::getViewData() , dirname(__FILE__), true);
 		return;
 	}
 	public static function nominasjon_script() {
@@ -330,7 +330,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	}
 	
 	public static function calcAntallPersoner() {
-		$monstring = self::getFra();
+		$monstring = static::getFra();
 		$festivalen = array_pop( UKMVideresending::getTil() );
 		
 		if( $monstring->getType() != 'fylke' ) {
@@ -351,14 +351,14 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 		}
 		$unike_personer = array_unique( $unike_personer );
 		
-		self::updateInfoskjema(
+		static::updateInfoskjema(
 			'systemet_overnatting_spektrumdeltakere',
 			sizeof( $unike_personer )
 		);
 	}
 	
 	public static function updateInfoskjema( $field, $value ) {
-		$monstring = self::getFra();
+		$monstring = static::getFra();
 		$festivalen = array_pop( UKMVideresending::getTil() );
 		
 		if( $monstring->getType() != 'fylke' ) {
@@ -409,7 +409,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul {
 	}
 	
 	public static function getInfoSkjema( $field ) {
-		$monstring = self::getFra();
+		$monstring = static::getFra();
 		$festivalen = array_pop( UKMVideresending::getTil() );
 		
 		if( $monstring->getType() != 'fylke' ) {

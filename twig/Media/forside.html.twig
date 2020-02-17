@@ -16,7 +16,7 @@
 				
 				<ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
 					{# VIDERESENDING TIL FYLKE - GRUPPER PER FYLKE I TILFELLE LOKALMØNSTRING OVER FYLKESGRENSER #}
-					{% for innslag in videresendte if innslag.getType().getKey() == type_innslag.getKey() %}
+					{% for innslag in videresendte|filter( innslag => innslag.getType().getKey() == type_innslag.getKey()) %}
 						{% embed "Media/innslag.html.twig" %}{% endembed %}
 					{% else %}
 						<li class="list-group-item ingen-pameldte alert-danger">Du har ingen videresendte i {{ type_innslag }}</li>
