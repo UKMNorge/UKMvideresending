@@ -101,6 +101,9 @@
                                 {% endif %}
                                 <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm btn-primary btn-xs">Nominasjon</a>
                                 <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ fra.getVideresendte(mottaker.getId()).getAntall() > 0 ? 'Endre' : 'Start' }} videresending</a>
+                                {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
+                                {% endif %}
                             {% endif %}
 
                         {% endblock %}

@@ -1,5 +1,5 @@
-$(document).on('click', 'li.person .header', function() {
-    var person = $(this).parents('li.person');
+jQuery(document).on('click', 'li.person .header', function() {
+    var person = jQuery(this).parents('li.person');
     var state = person.attr('data-state');
     if (state == 'hidden') {
         person.addClass('selected').attr('data-state', 'visible');
@@ -7,21 +7,21 @@ $(document).on('click', 'li.person .header', function() {
     } else {
         person.find('.data.row').slideUp(
             function() {
-                $(this).parents('li.person').removeClass('selected');
+                jQuery(this).parents('li.person').removeClass('selected');
             }
         );
         person.attr('data-state', 'hidden');
     }
 });
 
-$(document).on('click', '.intoleranse_update', function(e) {
+jQuery(document).on('click', '.intoleranse_update', function(e) {
     e.preventDefault();
-    $(this).html('Lagrer...').addClass('btn-primary').removeClass('btn-success');
-    var person = $(this).parents('li.person');
+    jQuery(this).html('Lagrer...').addClass('btn-primary').removeClass('btn-success');
+    var person = jQuery(this).parents('li.person');
 
     var allergener = [];
     person.find('input[type="checkbox"]:checked').each(function() {
-        allergener.push($(this).val());
+        allergener.push(jQuery(this).val());
     });
 
 
@@ -33,7 +33,7 @@ $(document).on('click', '.intoleranse_update', function(e) {
         liste: allergener
     };
 
-    $.post(
+    jQuery.post(
         ajaxurl,
         data,
         function(response) {
@@ -57,12 +57,12 @@ $(document).on('click', '.intoleranse_update', function(e) {
 
 
 function handleTilretteleggUpdate(response) {
-    var person = $('li.person#' + response.data.id);
+    var person = jQuery('li.person#' + response.data.id);
 
     if (response.data.intoleranse_human.length == 0) {
         person.slideUp(
             function() {
-                $(this).remove();
+                jQuery(this).remove();
             }
         );
     } else {
@@ -80,22 +80,27 @@ function handleTilretteleggUpdate(response) {
 }
 
 
-$(document).on('click', '#intoleranse_add', function(e) {
+jQuery(document).on('click', '#intoleranse_add', function(e) {
     e.preventDefault();
+    console.log(jQuery('#intoleranse_ny').val());
+    if (!jQuery('#intoleranse_ny').val()) {
+        alert('Velg en person fra listen før du trykker "legg til"');
+        return false;
+    }
     var data = {
         person: {
-            ID: $('#intoleranse_ny').val(),
-            navn: $('#intoleranse_ny option:selected').html(),
+            ID: jQuery('#intoleranse_ny').val(),
+            navn: jQuery('#intoleranse_ny option:selected').html(),
             intoleranse_liste: [],
             intoleranse_tekst: ''
         },
         allergener_kulturelle: JSON.parse(allergener_kulturelle),
         allergener_standard: JSON.parse(allergener_standard),
     };
-    $('#intoleranser').prepend(
+    jQuery('#intoleranser').prepend(
         twigJS_intoleransedeltaker.render(data)
     );
-    $('#intoleranse_ny option[value="' + data.person.ID + '"]').remove();
-    $('li.person#' + data.person.ID + ' .header').click();
+    jQuery('#intoleranse_ny option[value="' + data.person.ID + '"]').remove();
+    jQuery('li.person#' + data.person.ID + ' .header').click();
 
 });

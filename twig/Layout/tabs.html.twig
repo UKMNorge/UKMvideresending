@@ -1,11 +1,19 @@
 {% set baseLink = '?page='~ GET('page') ~'&til='~ GET('til')~'&action=' %}
 
+<style>
+    .UKM_tabs .dashicons {
+        margin-left: -.5em;
+        padding-right: 0;
+    }
+</style>
 <div class="UKM_tabs UKM_tabs_5">
     {% if not mottaker.getInformasjonstekst() is empty %}
         <a href="{{baseLink ~'informasjon'}}" {{ tab == 'informasjon' ? 'class="active"'}}>
             <div>
-                <span class="tab_header">Informasjon</span>
-                <img src="//ico.ukm.no/info-button-32.png" width="16"  border="0" /><br />
+                <span class="tab_header">
+                    <span class="dashicons dashicons-info"></span>
+                    Informasjon
+                </span>
                 <span class="tab_description">Info om videresendingen</span>
             </div>
         </a>
@@ -16,8 +24,11 @@
     {% if fra.getType() == 'fylke' %}
         <a href="?page=UKMnominasjon&action=nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
             <div>
-                <span class="tab_header">Nominasjon</span>
-                <img src="//ico.ukm.no/user-business-32.png" width="16"  border="0" /><br />
+                <span class="tab_header">
+                    <span class="dashicons dashicons-awards"></span>
+                    Nominasjon
+                </span>
+                <br />
                 <span class="tab_description">Endre nominasjoner</span>
             </div>
         </a>
@@ -26,8 +37,11 @@
 
     <a href="{{ baseLink }}videresendte" {{ tab == 'videresendte' ? 'class="active"' : ''}}>
         <div>
-            <span class="tab_header">Videresend</span>
-            <img src="//ico.ukm.no/people-32.png" width="16"  border="0" /><br />
+            <span class="tab_header">
+                <span class="dashicons dashicons-groups"></span>
+                Videresend
+            </span>
+            <br />
             <span class="tab_description">Velg deltakere</span>
         </div>
     </a>
@@ -36,8 +50,11 @@
     {# MEDIA #}
     <a href="{{ baseLink }}media" {{ tab == 'media' ? 'class="active"' : ''}}>
         <div>
-            <span class="tab_header">Media</span>
-            <img src="//ico.ukm.no/video-32.png" width="16"  border="0" /><br />
+            <span class="tab_header">
+                <span class="dashicons dashicons-admin-media"></span>
+                Media
+                </span>
+            <br />
             <span class="tab_description">Bilder, film og playback</span>
         </div>
     </a>
@@ -46,15 +63,20 @@
     {% if til.getType() == 'land' %}
         <a href="{{ baseLink }}ledere" {{ tab == 'ledere' ? 'class="active"' : ''}}>
             <div>
-                <span class="tab_header">Ledere</span>
-                <img src="//ico.ukm.no/user-business-32.png" width="16"  border="0" /><br />
+                <span class="tab_header">
+                    <span class="dashicons dashicons-businesswoman"></span>
+                    Ledere
+                </span>
                 <span class="tab_description">Ledere og overnatting</span>
             </div>
         </a>
 
         <a href="{{ baseLink }}reiseinfo" {{ tab == 'reiseinfo' ? 'class="active"' : ''}}>
             <div>
-                <span class="tab_header">Reiseinfo</span>
+                <span class="tab_header">
+                    <span class="dashicons dashicons-admin-site-alt"></span>
+                    Reiseinfo
+                </span>
                 <img src="//ico.ukm.no/buss-32.png" width="16"  border="0" /><br />
                 <span class="tab_description">Reise og tilrettelegging</span>
             </div>
@@ -62,17 +84,31 @@
     {% elseif til.harSkjema() %}
         <a href="{{ baseLink }}infoskjema&fylke={{ fra.getFylke().getId() }}" {{ tab == 'infoskjema' ? 'class="active"' : ''}}>
             <div>
-                <span class="tab_header">Infoskjema</span>
-                <img src="//ico.ukm.no/chart-32.png" width="16"  border="0" /><br />
+                <span class="tab_header">
+                    <span class="dashicons dashicons-forms"></span>
+                    Infoskjema
+                </span>
                 <span class="tab_description">Spørsmål fra arrangøren</span>
             </div>
         </a>
     {% endif %}
 
+    <a href="{{ baseLink }}intoleranser" {{ tab == 'intoleranser' ? 'class="active"' : ''}}>
+            <div>
+                <span class="tab_header">
+                    <span class="dashicons dashicons-carrot" style="margin-right:0;"></span>
+                    Intoleranser
+                </span>
+                <span class="tab_description">Reise og tilrettelegging</span>
+            </div>
+        </a>
+
     <a href="{{ baseLink }}oppsummering" {{ tab == 'oppsummering' ? 'class="active"' : ''}}>
         <div>
-            <span class="tab_header">Oppsummering</span>
-            <img src="//ico.ukm.no/clipboard-32.png" width="16"  border="0" /><br />
+            <span class="tab_header">
+                <span class="dashicons dashicons-clipboard"></span>
+                Oppsummering
+            </span>
             <span class="tab_description">Status kvote og statistikk</span>
         </div>
     </a>

@@ -1,92 +1,94 @@
-<h3 class="mt-3">Videresendt til {{ til.getNavn() }}</h3>
-<table class="table table-striped table-inverse">
-	<tbody>
-		<tr>
-			<th>Scene</th>
-			<th>{{ summering.scene.personer > 0 ? summering.scene.personer : 0 }} personer</th>
-			<th>{{ summering.scene.innslag > 0 ? summering.scene.innslag : 0 }} innslag</th>
-			<th>{{ summering.scene.varighet > 0 ? summering.scene.varighet|tid : 0 }}</th>
-		</tr>
-		<tr>
-			<td> &nbsp; Musikk</td>
-			<td>{{ summering.musikk.personer > 0 ? summering.musikk.personer : 0 }} personer</td>
-			<td>{{ summering.musikk.innslag > 0 ? summering.musikk.innslag : 0 }} innslag</td>
-			<td>{{ summering.musikk.varighet > 0 ? summering.musikk.varighet|tid : 0 }}</td>
-		</tr>
-		<tr>
-			<td> &nbsp; Dans</td>
-			<td>{{ summering.dans.personer > 0 ? summering.dans.personer : 0 }} personer</td>
-			<td>{{ summering.dans.innslag > 0 ? summering.dans.innslag : 0 }} innslag</td>
-			<td>{{ summering.dans.varighet > 0 ? summering.dans.varighet|tid : 0}}</td>
-		</tr>
-		<tr>
-			<td> &nbsp; Teater</td>
-			<td>{{ summering.teater.personer > 0 ? summering.teater.personer : 0 }} personer</td>
-			<td>{{ summering.teater.innslag > 0 ? summering.teater.innslag : 0 }} innslag</td>
-			<td>{{ summering.teater.varighet > 0 ? summering.teater.varighet|tid : 0 }}</td>
-		</tr>
-		<tr>
-			<td> &nbsp; Litteratur</td>
-			<td>{{ summering.litteratur.personer > 0 ? summering.litteratur.personer : 0 }} personer</td>
-			<td>{{ summering.litteratur.innslag > 0 ? summering.litteratur.innslag : 0 }} innslag</td>
-			<td>{{ summering.litteratur.varighet > 0 ? summering.litteratur.varighet|tid :0 }}</td>
-		</tr>
-		<tr>
-			<td> &nbsp; Annet på scene</td>
-			<td>{{ summering.annet.personer > 0 ? summering.annet.personer : 0 }} personer</td>
-			<td>{{ summering.annet.innslag > 0 ? summering.annet.innslag : 0 }} innslag</td>
-			<td>{{ summering.annet.varighet > 0 ? summering.annet.varighet|tid :0 }}</td>
-		</tr>
+<fieldset>
+    <legend class="mt-3">Videresendt til {{ til.getNavn() }}</legend>
+    <table class="table table-striped table-inverse">
+        <tbody>
+            <tr>
+                <th>Scene</th>
+                <th>{{ summering.scene.personer > 0 ? summering.scene.personer : 0 }} personer</th>
+                <th>{{ summering.scene.innslag > 0 ? summering.scene.innslag : 0 }} innslag</th>
+                <th>{{ summering.scene.varighet > 0 ? summering.scene.varighet|tid : 0 }}</th>
+            </tr>
+            <tr>
+                <td> &nbsp; Musikk</td>
+                <td>{{ summering.musikk.personer > 0 ? summering.musikk.personer : 0 }} personer</td>
+                <td>{{ summering.musikk.innslag > 0 ? summering.musikk.innslag : 0 }} innslag</td>
+                <td>{{ summering.musikk.varighet > 0 ? summering.musikk.varighet|tid : 0 }}</td>
+            </tr>
+            <tr>
+                <td> &nbsp; Dans</td>
+                <td>{{ summering.dans.personer > 0 ? summering.dans.personer : 0 }} personer</td>
+                <td>{{ summering.dans.innslag > 0 ? summering.dans.innslag : 0 }} innslag</td>
+                <td>{{ summering.dans.varighet > 0 ? summering.dans.varighet|tid : 0}}</td>
+            </tr>
+            <tr>
+                <td> &nbsp; Teater</td>
+                <td>{{ summering.teater.personer > 0 ? summering.teater.personer : 0 }} personer</td>
+                <td>{{ summering.teater.innslag > 0 ? summering.teater.innslag : 0 }} innslag</td>
+                <td>{{ summering.teater.varighet > 0 ? summering.teater.varighet|tid : 0 }}</td>
+            </tr>
+            <tr>
+                <td> &nbsp; Litteratur</td>
+                <td>{{ summering.litteratur.personer > 0 ? summering.litteratur.personer : 0 }} personer</td>
+                <td>{{ summering.litteratur.innslag > 0 ? summering.litteratur.innslag : 0 }} innslag</td>
+                <td>{{ summering.litteratur.varighet > 0 ? summering.litteratur.varighet|tid :0 }}</td>
+            </tr>
+            <tr>
+                <td> &nbsp; Annet på scene</td>
+                <td>{{ summering.annet.personer > 0 ? summering.annet.personer : 0 }} personer</td>
+                <td>{{ summering.annet.innslag > 0 ? summering.annet.innslag : 0 }} innslag</td>
+                <td>{{ summering.annet.varighet > 0 ? summering.annet.varighet|tid :0 }}</td>
+            </tr>
 
-		<tr>
-			<th>Film</th>
-			<td>{{ summering.video.personer > 0 ? summering.video.personer : 0 }} personer</td>
-			<td>{{ summering.video.innslag > 0 ? summering.video.innslag : 0 }} innslag</td>
-			<td>{{ summering.video.varighet > 0 ? summering.video.varighet|tid : 0 }}</td>
-		</tr>
-		<tr>
-			<th>Utstilling</th>
-			<td>{{ summering.utstilling.personer > 0 ? summering.utstilling.personer : 0 }} personer</td>
-			<td>{{ summering.utstilling.innslag > 0 ? summering.utstilling.innslag : 0 }} innslag</td>
-			<td>{{ summering.utstilling.titler  > 0 ? summering.utstilling.titler : 0 }} kunstverk</td>
-		</tr>
+            <tr>
+                <th>Film</th>
+                <td>{{ summering.video.personer > 0 ? summering.video.personer : 0 }} personer</td>
+                <td>{{ summering.video.innslag > 0 ? summering.video.innslag : 0 }} innslag</td>
+                <td>{{ summering.video.varighet > 0 ? summering.video.varighet|tid : 0 }}</td>
+            </tr>
+            <tr>
+                <th>Utstilling</th>
+                <td>{{ summering.utstilling.personer > 0 ? summering.utstilling.personer : 0 }} personer</td>
+                <td>{{ summering.utstilling.innslag > 0 ? summering.utstilling.innslag : 0 }} innslag</td>
+                <td>{{ summering.utstilling.titler  > 0 ? summering.utstilling.titler : 0 }} kunstverk</td>
+            </tr>
 
-		<tr>
-			<th>Arrangører</th>
-			<td>{{ summering.arrangor.personer > 0 ? summering.arrangor.personer : 0 }} personer</td>
-			<td></td>
-			<td></td>
-		</tr>
-		<tr>
-			<th>Konferansierer</th>
-			<td>{{ summering.konferansier.personer > 0 ? summering.konferansier.personer : 0 }} personer</td>
-			<td></td>
-			<td></td>
-		</tr>
-		<tr>
-			<th>UKM Media</th>
-			<td>{{ summering.nettredaksjon.personer > 0 ? summering.nettredaksjon.personer : 0 }} personer</td>
-			<td></td>
-			<td></td>
-		</tr>
-	</tbody>
-	
-	<tfoot>
-		<tr>
-			<th>TOTALT</th>
-			<th>
-				{{ summering.total.personer > 0 ? summering.total.personer : 0 }} personer
-				<br />
-				{{ summering.total.unike > 0 ? summering.total.unike : 0 }} unike personer
-			</th>
-			<th>
-				{{ summering.total.innslag > 0 ? summering.total.innslag : 0 }} innslag
-			</th>
-			<th>
-				{{ summering.total.varighet > 0 ? summering.total.varighet|tid : 0 }}
-			</th>
-		</tr>
-	</tfoot>
-</table>
+            <tr>
+                <th>Arrangører</th>
+                <td>{{ summering.arrangor.personer > 0 ? summering.arrangor.personer : 0 }} personer</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Konferansierer</th>
+                <td>{{ summering.konferansier.personer > 0 ? summering.konferansier.personer : 0 }} personer</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>UKM Media</th>
+                <td>{{ summering.nettredaksjon.personer > 0 ? summering.nettredaksjon.personer : 0 }} personer</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        
+        <tfoot>
+            <tr>
+                <th>TOTALT</th>
+                <th>
+                    {{ summering.total.personer > 0 ? summering.total.personer : 0 }} personer
+                    <br />
+                    {{ summering.total.unike > 0 ? summering.total.unike : 0 }} unike personer
+                </th>
+                <th>
+                    {{ summering.total.innslag > 0 ? summering.total.innslag : 0 }} innslag
+                </th>
+                <th>
+                    {{ summering.total.varighet > 0 ? summering.total.varighet|tid : 0 }}
+                </th>
+            </tr>
+        </tfoot>
+    </table>
 
-<p>&nbsp;</p>
+    <p>&nbsp;</p>
+</fieldset>
