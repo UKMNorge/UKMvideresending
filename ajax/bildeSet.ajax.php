@@ -1,10 +1,13 @@
 <?php
 
 // Innslaget	
-$monstring = UKMVideresending::getFra();
-$innslag = $monstring->getInnslag()->get( $_POST['innslag'] );
 
-$monstring = UKMVideresending::getValgtTil('POST');
+use UKMNorge\Database\SQL\Delete;
+use UKMNorge\Database\SQL\Insert;
+
+$fra = UKMVideresending::getFra();
+$innslag = $fra->getInnslag()->get( $_POST['innslag'] );
+
 
 // Sjekk at bildet tilhører innslaget
 $valgt_bilde = false;
@@ -39,7 +42,7 @@ $data = [
 ];
 
 // Slett gammel relasjon
-$old_rel = new SQLdel(
+$old_rel = new Delete(
 	'smartukm_videresending_media',
 	$data
 );
@@ -47,11 +50,13 @@ $old_rel->run();
 
 // Legg til ny data
 $data['rel_id']	= $valgt_bilde->getRelId();//$_POST['bilde'];
+$data['bilde_id'] = $valgt_bilde->getId();
 $data['m_type']	= $type;
+$data['pl_id'] = $fra->getId();
 
 
 // Sett inn ny relasjon
-$new_rel = new SQLins('smartukm_videresending_media');
+$new_rel = new Insert('smartukm_videresending_media');
 foreach( $data as $key => $val ) {
 	$new_rel->add( $key, $val );
 }

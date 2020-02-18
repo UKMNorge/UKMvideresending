@@ -4,7 +4,7 @@ require_once('UKM/write_innslag.class.php');
 require_once('UKM/write_tittel.class.php');
 require_once('UKM/write_person.class.php');
 
-$videresend_til = UKMVideresending::loadValgtTil('POST');
+$videresend_til = UKMVideresending::getValgtTil('POST');
 $innslag 		= $videresend_til->getInnslag()->get( $_POST['innslag'] );
 $person 		= $innslag->getPersoner()->get( $_POST['person'] );
 

@@ -3,8 +3,8 @@
 use UKMNorge\Arrangement\Write as WriteArrangement;
 use UKMNorge\Innslag\Titler\Write;
 
-$til        = UKMVideresending::loadValgtTil('POST')->getArrangement();
-$innslag 	= $til->getInnslag()->get( $_POST['innslag'] );
+$til        = UKMVideresending::getValgtTil();
+$innslag 	= $til->getArrangement()->getInnslag()->get( $_POST['innslag'] );
 
 /*
  * Innslaget har titler
@@ -22,7 +22,7 @@ if( $innslag->getType()->harTitler() ) {
 	**/
 	if( $innslag->getTitler()->getAntall() == 0 ) {
 		try {
-			$til->getInnslag()->fjern( $innslag );
+			$til->getArrangement()->getInnslag()->fjern( $innslag );
             WriteArrangement::fjernInnslag($innslag);
 		} catch( Exception $e ) {
 			/**
@@ -43,11 +43,11 @@ if( $innslag->getType()->harTitler() ) {
  * Innslaget har ikke titler (tittelløs)
 **/
 else {
-	$til->getInnslag()->fjern( $innslag );
+	$til->getArrangement()->getInnslag()->fjern( $innslag );
     WriteArrangement::fjernInnslag( $innslag );
 }
 
-if( $til->getEierType() == 'land' ) {
+if( $til->getArrangement()->getEierType() == 'land' ) {
 	UKMVideresending::calcAntallPersoner();
 }
 UKMVideresending::addResponseData('success',true);

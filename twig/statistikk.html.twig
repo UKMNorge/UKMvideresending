@@ -3,5 +3,5 @@
 {% block content %#}
 	<h3>Statistikk</h3>
 	
-	{% embed "Statistikk/skjema.html.twig" %}{% endembed %}
+	{% include "Statistikk/skjema.html.twig" with {arrangement: til} %}
 {#% endblock %#}

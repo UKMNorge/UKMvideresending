@@ -26,6 +26,11 @@ var UKMMedieItem = function($, innslag, tittel) {
         /** AJAX REQUESTS AND GUI LOAD STATUS	*/
         /****************************************/
 
+        getTilArrangement: function() {
+            var url = new URL(window.location.href);
+            return url.searchParams.get("til");
+        },
+
         /**
          * Faktisk gjør AJAX-kall
          **/
@@ -99,11 +104,11 @@ var UKMMedieItem = function($, innslag, tittel) {
         },
 
         velgBildeInnslag: function(bilde_id) {
-            self.ajax('bildeSet', { 'bilde': bilde_id });
+            self.ajax('bildeSet', { 'bilde': bilde_id, 'til': self.getTilArrangement() });
         },
 
         velgBildeKunstverk: function(bilde_id) {
-            self.ajax('bildeSet', { 'bilde': bilde_id, 'kunstverk': true });
+            self.ajax('bildeSet', { 'bilde': bilde_id, 'kunstverk': true, 'til': self.getTilArrangement() });
         },
         handleBildeSet: function(response) {
             self.cancelShow();

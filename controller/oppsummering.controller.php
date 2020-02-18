@@ -3,16 +3,11 @@
 use UKMNorge\Innslag\Typer\Typer;
 require_once('UKM/Autoloader.php');
 
-$summering = [];
+$fra = UKMVideresending::getFra();	
 $til = UKMVideresending::getValgtTil();	
-/**
- * SETT OPP MØNSTRINGS-OBJEKTET
- * Lag et array for summering
- * Finn ut hvilke kommuner denne mønstringen har
-**/
 
 // INITIER SUM-OBJEKT FOR MØNSTRINGEN
-$sum_monstring = 
+$sum = 
     [
         'personer' => [],
         'scene' => [
@@ -31,33 +26,16 @@ $sum_monstring =
         ],
     ];
 
-// HVILKE KOMMUNER SKAL INKLUDERES I DENNE OVERSIKTEN
-if( UKMVideresending::getFra()->getType() == 'kommune' ) {
-    $kommuner = [];
-    foreach(  UKMVideresending::getFra()->getKommuner() as $kommune ) {
-        $kommuner[] = $kommune->getId();
-    }
-}
+foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag_sendt ) {
+    // Reload innslag med riktig context, for å få riktig personer og titler
+    $innslag = $til->getInnslag()->get($innslag_sendt->getId());
 
-/**
- * LOOP ALLE INNSLAG I MOTTAKER-MØNSTRINGEN
- * Tell kun de som er fra kommunene i denne mønstringen (array $kommuner)
-**/
-foreach( $til->getInnslag()->getAll() as $innslag ) {
-    // KUN VIS INNSLAGENE SOM KOMMER FRA DENNE MØNSTRINGEN
-    if( UKMVideresending::getFra()->getType() == 'kommune' && !in_array( $innslag->getKommune()->getId(), $kommuner ) ) {
-        continue;
-    }
-    elseif( UKMVideresending::getFra()->getType() == 'fylke' && $innslag->getFylke()->getId() != UKMVideresending::getFra()->getFylke()->getId() ) {
-        continue;
-    }
-    
     // SET SORT-KEY FOR DETTE INNSLAGET (ALTSÅ HVOR LAGRES SUMMEN?)
     $sort_key = $innslag->getType()->getKey() == 'scene' ? 'annet' : $innslag->getType()->getKey();
     
     // INITIER DATA-ARRAY
-    if( !isset( $sum_monstring[ $sort_key ] ) ) {
-        $sum_monstring[ $sort_key ] = [
+    if( !isset( $sum[ $sort_key ] ) ) {
+        $sum[ $sort_key ] = [
             'innslag'	=> 0,
             'personer'	=> 0,
             'titler'	=> 0,
@@ -67,23 +45,23 @@ foreach( $til->getInnslag()->getAll() as $innslag ) {
     }
     
     // INNSLAG
-    $sum_monstring[ $sort_key ]['innslag'] += 1;
+    $sum[ $sort_key ]['innslag'] += 1;
     
     // PERSONER
     $antall_personer = 0;
-    foreach( $innslag->getPersoner()->getAllVideresendt( $til ) as $person ) {
+    foreach( $innslag->getPersoner()->getAll() as $person ) {
         $antall_personer++;
-        $sum_monstring[ $sort_key ]['personer'] ++;
-        $sum_monstring['personer'][] = $person->getId();
+        $sum[ $sort_key ]['personer'] ++;
+        $sum['personer'][] = $person->getId();
     }
     if( $antall_personer == 0 ) {
-        $sum_monstring[ $sort_key ]['mangler_personer'] = true;
+        $sum[ $sort_key ]['mangler_personer'] = true;
     }
     
     // VARIGHET
     if( $innslag->getType()->harTitler() ) {
-        $sum_monstring[ $sort_key ]['titler'] 	+= $innslag->getTitler()->getAntall();
-        $sum_monstring[ $sort_key ]['varighet'] 	+= $innslag->getVarighet()->getSekunder();
+        $sum[ $sort_key ]['titler'] 	+= $innslag->getTitler()->getAntall();
+        $sum[ $sort_key ]['varighet'] 	+= $innslag->getVarighet()->getSekunder();
     }
 }
 
@@ -93,9 +71,9 @@ foreach( $til->getInnslag()->getAll() as $innslag ) {
 // SUMMER ALLE SCENE-KATEGORIER TIL EN SCENE-VARIABEL
 foreach( Typer::getAllScene() as $scene_kategori ) {
     $sort_key = $scene_kategori->getKey() == 'scene' ? 'annet' : $scene_kategori->getKey();
-    if( is_array( $sum_monstring[ $sort_key ] ) ) {
-        foreach( $sum_monstring[ $sort_key ] as $key => $val ) {
-            $sum_monstring['scene'][ $key ] += $val;
+    if( is_array( $sum[ $sort_key ] ) ) {
+        foreach( $sum[ $sort_key ] as $key => $val ) {
+            $sum['scene'][ $key ] += $val;
         }
     }
 }
@@ -111,22 +89,21 @@ $summeres = [
 ];
 
 foreach( $summeres as $kategori ) {
-    if( isset( $sum_monstring[ $kategori ] ) ) {
-        foreach( $sum_monstring[ $kategori ] as $key => $val ) {
-            $sum_monstring['total'][ $key ] += $val;
+    if( isset( $sum[ $kategori ] ) ) {
+        foreach( $sum[ $kategori ] as $key => $val ) {
+            $sum['total'][ $key ] += $val;
         }
     }
 }
 
 // HVIS PERSONER ER VIDERESENDT, KALKULER ANTALL UNIKE
-if( is_array( $sum_monstring['personer'] ) ) {
-    $sum_monstring['total']['unike'] = sizeof( array_unique( $sum_monstring['personer'] ) );
+if( is_array( $sum['personer'] ) ) {
+    $sum['total']['unike'] = sizeof( array_unique( $sum['personer'] ) );
 }
 
-$summering[ $til->getId() ] = $sum_monstring;
-
-if( $til->getType() == 'land' ) {
-    UKMVideresending::addviewData('videresendte', $sum_monstring);
+if( $til->getArrangement()->getType() == 'land' ) {
+    throw new Exception('@todo: bruk metadata');
+    UKMVideresending::addviewData('videresendte', $sum);
 
     $kvote = new stdClass();
     $kvote->deltakere = get_site_option('UKMFvideresending_kvote_deltakere'.'_'.$til->getSesong());
@@ -142,5 +119,6 @@ if( $til->getType() == 'land' ) {
     UKMVideresending::addViewData('pris', $pris);
     require_once('ledere.controller.php');
 
-    UKMVideresending::addViewData('summering', $summering);
 }
+
+UKMVideresending::addViewData('summering', $sum);

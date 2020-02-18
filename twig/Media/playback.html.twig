@@ -1,15 +1,15 @@
-<div class="bilder text-{{ innslag.getPlayback().har() ? 'success' : 'warning' }}">
-	{% if innslag.getPlayback().har() %}
+<div class="bilder text-{{ innslag.getPlayback().getAntall() > 0 ? 'success' : 'warning' }}">
+	{% if innslag.getPlayback().getAntall() > 0 %}
 		<img src="https://ico.ukm.no/check-32.png" height="20" class="float-right pull-right" />
-		Har playbackfiler.
+		Har mediefiler.
 		<br />
-		<button class="btn btn-xs btn-default action" data-action="showPlaybackFiles">Mer info</button>
+		<button class="btn btn-xs btn-ukm action" data-action="showPlaybackFiles">Mer info</button>
 	{% else %}
 		<img src="https://ico.ukm.no/alert-32.png" height="20" class="float-right pull-right action" />
-		Ingen playback-filer funnet.
+		Ingen mediefiler funnet.
 	
 		<br />
-		<button class="btn btn-xs btn-default action" data-action="showPlaybackInfo">Last opp playback</button>
+		<button class="btn btn-xs btn-ukm action" data-action="showPlaybackInfo">Last opp fil</button>
 	{% endif %}
 	<div class="clearfix"></div>
 </div>

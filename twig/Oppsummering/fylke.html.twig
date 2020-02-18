@@ -1,5 +1,5 @@
 <div class="col-xs-12 col-md-8">
-	<h3>Videresending til {{ monstring.getNavn() }}</h3>
+	<h3>Videresending til {{ til.getNavn() }}</h3>
 	<table class="table table-striped">
 		<tbody>
 			{# TALL #}
@@ -52,7 +52,7 @@
 				<tr class="text-{{ videresendte.scene.varighet > (6*5*60) ? 'error':'success'}}">
 					<td></td>
 					<td>30 minutter</td>
-					<td>{{ videresendte.scene.varighet|varighet }}</td>
+					<td>{{ videresendte.scene.varighet|tid }}</td>
 					<td>{{ videresendte.scene.innslag > 5 ? 'OK *':'Over kvote!' }}</td>
 				</tr>
 				<tr>
@@ -82,7 +82,7 @@
 				<tr class="text-{{ videresendte.scene.varighet > (5*5*60) ? 'error':'success'}}">
 					<td></td>
 					<td>30 minutter</td>
-					<td>{{ videresendte.scene.varighet|varighet }}</td>
+					<td>{{ videresendte.scene.varighet|tid }}</td>
 					<td>{{ videresendte.scene.varighet > (5*5*60) ? 'Over kvote!':'OK' }}</td>
 				</tr>
 			{% endif %}

@@ -84,9 +84,9 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
      *
      * @return Mottaker
      **/
-    public static function loadValgtTil(String $request_method = 'GET')
+    public static function getValgtTil()
     {
-        $til = intval($request_method == 'POST' ? $_POST['til'] : $_GET['til']);
+        $til = intval($_REQUEST['til']);
         if (!static::$arrangement->getVideresending()->harMottaker($til)) {
             throw new Exception('Beklager, kan ikke se at du kan videresende til arrangementet du prøver å videresende til.');
         }
@@ -104,6 +104,9 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
     public static function getViewData()
     {
         static::addViewData('fra', static::getFra());
+        if( isset( $_REQUEST['til'] ) ) {
+            static::addViewData('til', static::getValgtTil());
+        }
         static::addViewData('tab', static::getAction());
         return parent::getViewData();
     }

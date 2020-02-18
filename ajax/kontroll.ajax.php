@@ -4,7 +4,7 @@
 
 use UKMNorge\Arrangement\Arrangement;
 
-$til        = UKMVideresending::loadValgtTil('POST')->getArrangement();
+$til        = UKMVideresending::getValgtTil('POST')->getArrangement();
 $fra        = new Arrangement( intval(get_option('pl_id')) );
 $innslag    = $fra->getInnslag()->get( intval($_POST['innslag']) );
 

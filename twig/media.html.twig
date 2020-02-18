@@ -1,0 +1,36 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+    {% if til.getEierType() == 'land' %}
+        <h3>
+            Tilse at alle innslag har riktige bilder, filmer, og andre mediefiler lastet opp og valgt.
+        </h3>
+    {% else %}
+        <h3>Se over bilder, filmer og andre mediefiler</h3>
+        
+        <p class="lead">
+            Før du starter å gjøre noe her, må du sjekke hva som faktisk kreves av {{ til.getNavn() }}, sånn at du ikke laster opp noe forgjeves.
+        </p>
+    {% endif %}
+
+	<div class="row">
+		{% for type_innslag in til.getArrangement().getInnslagTyper().getAll() %}
+			<div class="innslagBlock col-xs-12">
+				<div class="innslagTypeHeader">
+					<img src="{{ type_innslag.getIcon() }}" height="45" />
+					<h3>{{ type_innslag }}</h3>
+					<div class="clearfix"></div>
+				</div>
+				
+				<ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
+					{% for innslag in fra.getVideresendte( til.getArrangement().getId() ).getAll()|filter( innslag => innslag.getType().getKey() == type_innslag.getKey()) %}
+						{% embed "Media/innslag.html.twig" %}{% endembed %}
+					{% else %}
+						<li class="list-group-item ingen-pameldte alert-danger">Du har ingen videresendte i {{ type_innslag }}</li>
+					{% endfor %}
+				</ol>
+			</div>
+		{% endfor %}
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

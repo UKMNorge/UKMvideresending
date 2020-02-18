@@ -5,7 +5,7 @@ use UKMNorge\Innslag\Titler\Write as WriteTittel;
 
 $fra		= UKMVideresending::getFra();
 $innslag 	= $fra->getInnslag()->get( $_POST['innslag'] );
-$til        = UKMVideresending::loadValgtTil('POST')->getArrangement();
+$til        = UKMVideresending::getValgtTil('POST')->getArrangement();
 
 // Videresend innslaget
 try {

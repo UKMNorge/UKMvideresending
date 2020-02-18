@@ -1,6 +1,6 @@
 <?php
 
-UKMVideresending::loadValgtTil();
+UKMVideresending::getValgtTil();
 
 /*
 UKMVideresending::addViewData(
