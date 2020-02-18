@@ -182,7 +182,15 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         }
         // JS-app for leder-håndtering
         if (static::getAction() == 'reiseinfo' || static::getAction() == 'intoleranser' ) {
-            wp_enqueue_script('UKMVideresending_script_tilrettelegging', plugin_dir_url(__FILE__) . 'javascript/tilrettelegging.js');
+        }
+        switch( static::getAction() ) {
+            case 'nominasjon':
+                wp_enqueue_script('UKMVideresending_script_nominasjon', plugin_dir_url(__FILE__) . 'javascript/nominasjon.js');
+            break;
+            case 'reiseinfo':
+            case 'intoleranser':
+                wp_enqueue_script('UKMVideresending_script_tilrettelegging', plugin_dir_url(__FILE__) . 'javascript/tilrettelegging.js');
+            break;
         }
         wp_enqueue_script('UKMVideresending_script_videresending', plugin_dir_url(__FILE__) . 'ukmvideresending.js');
     }
@@ -217,23 +225,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 'UKMVideresendingsskjema',
                 ['UKMVideresending', 'skjema']
             );
-            #UKM_add_scripts_and_styles(
-            #	'UKMVideresending_skjema',
-            #	['UKMVideresending', 'skjema_script']
-            #);
-            // Legg nominasjon som en submenu under Mønstring.
-            add_submenu_page(
-                'UKMVideresending',
-                'Nominasjon',
-                'Nominasjoner',
-                'ukm_nominasjon',
-                'UKMnominasjon',
-                ['UKMVideresending', 'nominasjon']
-            );
-            #UKM_add_scripts_and_styles(
-            #	'UKMVideresending_nominasjon',
-            #	['UKMVideresending', 'nominasjon_script']
-            #);
         }
     }
 
@@ -255,26 +246,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         wp_enqueue_script('WPbootstrap3_js');
         wp_enqueue_style('WPbootstrap3_css');
         wp_enqueue_script('UKMVideresending_script_skjema_admin', plugin_dir_url(__FILE__) . 'javascript/skjema_admin.js');
-    }
-
-    /**
-     * Fylkene har eget menyvalg for nominasjonsskjema
-     **/
-    public static function nominasjon()
-    {
-        ## ACTION CONTROLLER
-        require_once('controller/nominasjon.controller.php');
-
-        ## RENDER
-        echo TWIG('Nominasjon/forside.html.twig', static::getViewData(), dirname(__FILE__), true);
-        return;
-    }
-    public static function nominasjon_script()
-    {
-        wp_enqueue_script('WPbootstrap3_js');
-        wp_enqueue_style('WPbootstrap3_css');
-        wp_enqueue_style('UKMVideresending_style', plugin_dir_url(__FILE__) . 'ukmvideresending.css');
-        wp_enqueue_script('UKMVideresending_script_nominasjon', plugin_dir_url(__FILE__) . 'javascript/nominasjon.js');
     }
 
     /**
