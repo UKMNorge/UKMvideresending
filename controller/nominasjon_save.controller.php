@@ -4,7 +4,7 @@ $fra = UKMVideresending::getFra();
 $nominert = $fra->getInnslag()->get( intval($_GET['id']) );
 
 // DO CREATE GENERIC NOMINASJON
-$nominasjon = write_nominasjon::create( 
+$nominasjon = Write::create( 
 	$nominert->getId(),				// Innslag ID
 	get_option('season'), 			// Sesong
 	'land', 						// TODOondemand: støtt også nominasjon fra lokal til fylke
