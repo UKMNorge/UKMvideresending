@@ -16,7 +16,7 @@
 	<tr class="text-{{ videresendt.varighet > 360 ? 'error':'success'}}">
 		<td></td>
 		<td>6 minutter</td>
-		<td>{{ videresendt.varighet|varighet }}</td>
+		<td>{{ videresendt.varighet|tid }}</td>
 		<td>{{ videresendt.varighet > 360 ? 'Over kvote!':'OK' }}</td>
 	</tr>
 	<tr class="text-{{ videresendt.personer > (videresendt.innslag * 2) ? 'error':'success'}}">
@@ -61,7 +61,7 @@
 	<tr class="text-{{ videresendt.varighet > 300 ? 'error':'success'}}">
 		<td></td>
 		<td>5 minutter</td>
-		<td>{{ videresendt.varighet|varighet }}</td>
+		<td>{{ videresendt.varighet|tid }}</td>
 		<td>{{ videresendt.varighet > 300 ? 'Over kvote!':'OK' }}</td>
 	</tr>
 	<tr class="text-{{ videresendt.personer > (videresendt.innslag * 2) ? 'error':'success'}}">

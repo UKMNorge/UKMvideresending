@@ -1,0 +1,18 @@
+<li class="list-group-item">
+    <div class="pull-right mt-0 small" align="right" style="margin-right:1em;">
+		<b class="text-muted">VIDERESENDING:</b>
+        <br />
+        fra 
+        {{ mottaker.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ mottaker.getArrangement().getFrist2()|dato('H:i') }}
+        <br />
+        til
+        {{ mottaker.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ mottaker.getArrangement().getFrist1()|dato('H:i') }}
+    </div>
+	<h4 class="mt-3 mb-3">
+		<span class="dashicons dashicons-buddicons-groups" style="color: #0073aa;font-size:1.3em;margin-top: -.05em;margin-right: .2em;"></span>
+		{{ mottaker.getNavn() }}
+	</h4>
+    <div class="clearfix"></div>
+	<hr class="clearfix mt-1 mb-3"/>
+    {% block data %}{% endblock %}
+</li>

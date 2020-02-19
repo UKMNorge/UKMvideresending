@@ -1,31 +1,20 @@
 <?php
-	
-require_once('UKM/write_innslag.class.php');
-require_once('UKM/write_tittel.class.php');
 
-/**
- * loadValgtTil() avhenger av hvilket fylke som er valgt.
- * For fellesmønstringer på tvers av fylkesgrenser
- * trengs dette parameteret for å videresende til
- * riktig fylkesfestival.
- */
-if( isset( $_POST['fylke'] ) ) {
-	$_GET['fylke'] = $_POST['fylke'];
-}
+use UKMNorge\Arrangement\Write as WriteArrangement;
+use UKMNorge\Innslag\Titler\Write;
 
-$monstring		= UKMVideresending::getFra();
-$videresend_til = UKMVideresending::loadValgtTil();
-$innslag 		= $videresend_til->getInnslag()->get( $_POST['innslag'] );
+$til        = UKMVideresending::getValgtTil();
+$innslag 	= $til->getArrangement()->getInnslag()->get( $_POST['innslag'] );
 
 /*
  * Innslaget har titler
 **/
-if( $_POST['type'] == 'tittel' ) {
+if( $innslag->getType()->harTitler() ) {
 	$tittel = $innslag->getTitler()->get( $_POST['id'] );
 	
 	// Fjern tittelen
-	$innslag->getTitler()->fjern( $tittel );
-	write_tittel::fjern( $tittel );
+    $innslag->getTitler()->fjern( $tittel );
+    Write::fjern($tittel);
 
 	/**
 	 * Meld av innslaget hvis dette var siste tittel
@@ -33,8 +22,8 @@ if( $_POST['type'] == 'tittel' ) {
 	**/
 	if( $innslag->getTitler()->getAntall() == 0 ) {
 		try {
-			$videresend_til->getInnslag()->fjern( $innslag );
-			write_innslag::fjern( $innslag );
+			$til->getArrangement()->getInnslag()->fjern( $innslag );
+            WriteArrangement::fjernInnslag($innslag);
 		} catch( Exception $e ) {
 			/**
 			 * Håndter feil som oppstår hvis innslaget
@@ -54,11 +43,11 @@ if( $_POST['type'] == 'tittel' ) {
  * Innslaget har ikke titler (tittelløs)
 **/
 else {
-	$videresend_til->getInnslag()->fjern( $innslag );
-	write_innslag::fjern( $innslag );
+	$til->getArrangement()->getInnslag()->fjern( $innslag );
+    WriteArrangement::fjernInnslag( $innslag );
 }
 
-if( UKMVideresending::getFra()->getType() == 'fylke' ) {
+if( $til->getArrangement()->getEierType() == 'land' ) {
 	UKMVideresending::calcAntallPersoner();
 }
 UKMVideresending::addResponseData('success',true);

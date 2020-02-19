@@ -1,18 +1,10 @@
 <?php
-require_once('UKM/logger.class.php');
-require_once('UKM/write_nominasjon.class.php');
 
-$monstring = new monstring_v2( get_option('pl_id') );
-
-#echo '<pre>';var_dump( $_POST );echo'</pre>';
-
-global $current_user;
-UKMlogger::setID( 'wordpress', $current_user->ID, get_option('pl_id') );
-
-$nominert = new innslag_v2( $_GET['id'] );
+$fra = UKMVideresending::getFra();
+$nominert = $fra->getInnslag()->get( intval($_GET['id']) );
 
 // DO CREATE GENERIC NOMINASJON
-$nominasjon = write_nominasjon::create( 
+$nominasjon = Write::create( 
 	$nominert->getId(),				// Innslag ID
 	get_option('season'), 			// Sesong
 	'land', 						// TODOondemand: støtt også nominasjon fra lokal til fylke

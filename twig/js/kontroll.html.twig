@@ -79,19 +79,17 @@
 	{% endif %}
 	
 	{% if har_titler %}
-		{% if not alle_personer %}
-			<p>
-				<label>
-					Kryss av for hvem som skal være med til {{ til_navn }}!
-				</label>
-			</p>
-		{% endif %}
+        <p>
+            <label>
+                Kryss av for hvem som skal være med til {{ til_navn }}!
+            </label>
+        </p>
 
 		<table class="table">
 			<thead>
 				<tr>
-					{% if not alle_personer %}<th class="col-xs-1"></th>{% endif %}
-					<th class="col-xs-{{ alle_personer ? 4 : 3 }}">Navn</th>
+					<th class="col-xs-1"></th>
+					<th class="col-xs-3">Navn</th>
 					<th class="col-xs-2">Mobil</th>
 					<th class="col-xs-2">Alder</th>
 					<th class="col-xs-3">Instrument/rolle</th>
@@ -99,13 +97,11 @@
 			</thead>
 			<tbody>
 				{% for person in personer %}
-					<tr class="person person-{{ person.id }}-i-{{ innslag_id }} {{ person.videresendt and not alle_personer ? 'alert-success' : '' }}">
+					<tr class="person person-{{ person.id }}-i-{{ innslag_id }} {{ person.videresendt ? 'alert-success' : '' }}">
 						
-						{% if not alle_personer %}
-							<td>
-								<input type="checkbox" {{ person.videresendt ? 'checked="checked"' : '' }} {{ videresendtil.mottakelig == false ? 'disabled="disabled"' : '' }} class="videresendPerson" data-person="{{ person.id }}" />
-							</td>
-						{% endif %}
+                        <td>
+                            <input type="checkbox" {{ person.videresendt ? 'checked="checked"' : '' }} {{ videresendtil.mottakelig == false ? 'disabled="disabled"' : '' }} class="videresendPerson" data-person="{{ person.id }}" />
+                        </td>
 
 						<td class="person_navn" data-navn="{{person.navn}}">
 							{{person.navn}}
@@ -151,6 +147,6 @@
 		</div>
 	{% endif %}
 	<div class="float-right pull-right">
-		<button type="button" class="submitKontroll btn btn-default">Lagre endringer</button>
+		<button type="button" class="submitKontroll btn btn-ukm btn-success">Lagre endringer</button>
 	</div>
 </form>

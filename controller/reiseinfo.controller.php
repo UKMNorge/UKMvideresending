@@ -1,7 +1,6 @@
 <?php
 
-$monstring = UKMVideresending::getFra();
-$festivalen = UKMVideresending::getTil()[0];
+$fra = UKMVideresending::getFra();
 
 if( isset( $_POST ) && sizeof( $_POST ) > 0 ) {
 	require_once('reiseinfo_save.controller.php');
@@ -11,8 +10,8 @@ $load = new SQL("SELECT *
 					FROM `smartukm_videresending_infoskjema`
 					WHERE `pl_id` = '#pl_to'
 					AND `pl_id_from` = '#pl_from'",
-				array(	'pl_to' 	=> $festivalen->getId(),
-						'pl_from'	=> $monstring->getId()
+				array(	'pl_to' 	=> UKMVideresending::getTil()->getId(),
+						'pl_from'	=> $fra->getId()
 					)
 				);
 $db = $load->run('array');
@@ -44,58 +43,3 @@ $tilrettelegging->annet = $db['tilrettelegging_annet'];
 UKMVideresending::addViewData('reise', $reise);
 UKMVideresending::addViewData('matogallergi', $matogallergi);
 UKMVideresending::addViewData('tilrettelegging', $tilrettelegging);
-
-
-
-
-// SETUP SENSITIVT-REQUESTER
-require_once('UKM/Sensitivt/Sensitivt.php');
-require_once('UKM/Sensitivt/Requester.php');
-$requester = new UKMNorge\Sensitivt\Requester(
-    'wordpress', 
-    wp_get_current_user()->ID,
-    get_option('pl_id')
-);
-UKMNorge\Sensitivt\Sensitivt::setRequester( $requester );
-
-$data_intoleranse = new stdClass();
-$data_intoleranse->med = [];
-$data_intoleranse->uten = [];
-
-// LIST ALLE ALLERGIER
-$personer = [];
-foreach( $monstring->getInnslag()->getAll() as $innslag ) {
-    foreach( $innslag->getPersoner()->getAll() as $person ) {
-		
-		if( in_array( $person->getId(), $personer ) ) {
-			continue;
-		}
-		$personer[] = $person->getId();
-
-        $allergi = $person->getSensitivt( $requester )->getIntoleranse();
-        if( $allergi->har() ) {
-			$data_intoleranse->med[] = person_data( $person, $allergi );
-        } else {
-            $data_intoleranse->uten[] = person_data( $person, false );
-        }
-    }
-}
-
-UKMVideresending::addViewData('personer', $data_intoleranse);
-
-require_once('UKM/allergener.class.php');
-UKMVideresending::addViewData('allergener_standard', Allergener::getStandard());
-UKMVideresending::addViewData('allergener_kulturelle', Allergener::getKulturelle());
-
-function person_data( $person, $allergi ) {
-	$data = new stdClass();
-	$data->ID = $person->getId();
-	$data->navn = $person->getNavn();
-	if( $allergi ) {
-		$data->intoleranse_liste = $allergi->getListe();
-		$data->intoleranse_human = $allergi->getListeHuman();
-		$data->intoleranse_tekst = $allergi->getTekst();
-	}
-
-	return $data;
-}

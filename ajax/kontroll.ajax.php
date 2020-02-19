@@ -1,30 +1,24 @@
 <?php
-require_once('UKM/innslag.class.php');
 
-$monstring = new monstring_v2( get_option('pl_id') );
-$innslag = $monstring->getInnslag()->get( $_POST['innslag'] );
+// Mønstring det videresendes til
+
+use UKMNorge\Arrangement\Arrangement;
+
+$til        = UKMVideresending::getValgtTil('POST')->getArrangement();
+$fra        = new Arrangement( intval(get_option('pl_id')) );
+$innslag    = $fra->getInnslag()->get( intval($_POST['innslag']) );
 
 // Basis-data
 $data = [
-	'har_titler'			=> $innslag->getType()->harTitler(),
+    'har_titler'			=> $innslag->getType()->harTitler(),
 	'har_tekniske'			=> $innslag->getType()->harTekniskeBehov(),
 	'type_id' 				=> $innslag->getType()->getId(),
 	'type_key' 				=> $innslag->getType()->getKey(),
 	'innslag_navn' 			=> $innslag->getNavn(),
-	'innslag_id' 			=> $innslag->getId(),
+    'innslag_id' 			=> $innslag->getId(),
+    'til_navn'              => $til->getNavn(),
 ];
 
-// Mønstring det videresendes til
-if( $monstring->getType() == 'kommune' ) {
-	foreach( $monstring->getFylkesmonstringer() as $fylkesmonstring ) {
-		if( $fylkesmonstring->getFylke()->getId() == $innslag->getFylke()->getId() ) {
-			$data['til_navn']		= $fylkesmonstring->getNavn();
-			$valgt_til				= $fylkesmonstring;
-		}
-	}
-} else {
-	$valgt_til = array_pop( UKMVideresending::getTil() );
-}
 
 // Innslag med titler
 if( $innslag->getType()->harTitler() ) {
@@ -42,13 +36,6 @@ if( $innslag->getType()->harTitler() ) {
 		$data['varighet']		= $tittel->getVarighet()->getSekunder();
 	}
 	
-	// Personer som følger innslaget
-	if( $innslag->getType()->getId() == 1 ) {
-		$data['alle_personer']	= true;
-	} else {
-		$data['alle_personer']	= false;
-	}
-	
 	foreach( $innslag->getPersoner()->getAll() as $person ) {
 		$person = [
 			'id'			=> $person->getId(),
@@ -56,7 +43,7 @@ if( $innslag->getType()->harTitler() ) {
 			'mobil'			=> $person->getMobil(),
 			'alder'			=> $person->getAlderTall(),
 			'instrument'	=> $person->getRolle(),
-			'videresendt'	=> $person->erVideresendtTil( $valgt_til->getId() )
+			'videresendt'	=> $person->erPameldt( $til->getId() )
 		];
 		$data['personer'][]		= $person;
 	}
@@ -71,7 +58,7 @@ else {
 		'mobil'			=> $person->getMobil(),
 		'alder'			=> $person->getAlderTall(),
 		'instrument'	=> $person->getRolle(),
-		'videresendt'	=> $person->erVideresendtTil( $valgt_til->getId() )
+		'videresendt'	=> $person->erPameldt( $til->getId() )
 	];
 }
 

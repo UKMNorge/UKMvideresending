@@ -11,8 +11,9 @@ use UKMNorge\Twig\Twig;
 require_once('UKM/Twig/Twig.php');
 Twig::addPath(UKMmonstring::getTwigPath());
 
-$monstring = UKMVideresending::getFra();
-$skjema = $monstring->getSkjema( isset( $_GET['fylke'] ) ? $_GET['fylke'] : null );
+$fra = UKMVideresending::getFra();
+$til = UKMVideresending::getValgtTil()->getArrangement();
+$skjema = $fra->getSkjema();
 	
 if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	$questions = array();
@@ -43,23 +44,18 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 	}
 	
 	if ( count( $errors ) == 0 ) {
-		UKMVideresending::addViewData(
-			'message',
-			[
-				'success' => true,
-				'body' => 'Skjema er lagret!'
-			]
-		);
+        UKMVideresending::getFlash()
+            ->success('Skjema er lagret!');
 	}
 	else {
-		UKMVideresending::addViewData(
-			'message',
-			[
-				'success' => false,
-				'body' => 'Ett eller flere av svarene dine ble ikke lagret. Prøv igjen.'
-			]
-		);
+        UKMVideresending::getFlash()
+            ->error('Ett eller flere av svarene dine ble ikke lagret. Prøv igjen.');
 	}
 }
 
-UKMVideresending::addViewData('skjema', $skjema);
+UKMVideresending::addViewData(
+    [
+        'skjema'=> $skjema,
+        'til' => $til
+    ]
+);

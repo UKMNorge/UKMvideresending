@@ -1,20 +1,23 @@
 <?php
 
-require_once('UKM/sql.class.php');
+use UKMNorge\Allergener\Allergener;
+use UKMNorge\Database\SQL\Query;
+use UKMNorge\Database\SQL\Write;
+
 require_once('UKM/mail.class.php');
-require_once('UKM/allergener.class.php');
+require_once('UKM/Autoloader.php');
 
 if( date('n') > 6 && date('n') < 8 ) {
-	$report = new SQL(
+	$report = new Query(
 		"SELECT `liste` 
 		FROM `ukm_sensitivt_intoleranse`"
 	);
 	$res = $report->run();
-	if( SQL::numRows( $res ) == 0 ) {
+	if( Query::numRows( $res ) == 0 ) {
 		die('Allergier allerede slettet');
 	}
 	$allergier = [];
-	while( $r = SQL::fetch( $res ) ) {
+	while( $r = Query::fetch( $res ) ) {
 		$mine_allergier = explode('|', $r['liste']);
 		
 		if( is_array( $mine_allergier ) ) {
@@ -43,7 +46,7 @@ if( date('n') > 6 && date('n') < 8 ) {
 		->subject('SLETTET: Allergier og intoleranser')
 		->ok();
 	
-	$sql = new SQLwrite("
+	$sql = new Write("
 		DELETE 
 		FROM `ukm_sensitivt_intoleranse`"
 	);

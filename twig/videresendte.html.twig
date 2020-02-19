@@ -1,0 +1,83 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	<fieldset>
+        <legend>
+            Videresend deltakere til {{ til.getArrangement().getNavn() }}
+        </legend>
+
+        {#	
+            <div class="alert alert-warning">
+                <strong>OBS:</strong>
+                Hvis du opplever problemer med å videresende, kan det være for at du bruker en utdatert nettleser.
+                <br />
+                Bruker du Internet Explorer vet vi at det kan oppstå problemer med videresending.
+                Vi anbefaler at du bruker 
+                <a href="https://www.google.com/chrome/browser/" target="_blank">Google Chrome</a>
+                eller
+                <a href="https://www.mozilla.org/nb-NO/firefox/" target="_blank">Mozilla Firefox</a>.
+            </div>
+        #}
+
+        {# VIDERESENDING IKKE MULIG DA ARRANGEMENTET IKKE ER REGISTRERT #}
+        {% if not til.getArrangement().erRegistrert() %}
+            <p class="alert alert-error alert-danger">
+                Mønstringen er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
+            </p>
+
+        {# VIDERESENDING HAR IKKE ÅPNET #}
+        {% elseif date( til.getArrangement().getFrist2() ) > date() %}
+            <p class="alert alert-warning">
+                <strong>
+                    Videresendingen har ikke åpnet. Du kan videresende fra
+                    {{ til.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist2()|dato('H:i') }} 
+                    til
+                    {{ til.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist1()|dato('H:i') }}. 
+                </strong>
+
+        {# VIDERESENDINGEN ER STENGT #}
+        {% elseif not til.getArrangement().erVideresendingApen() %}
+            <p class="alert alert-error alert-danger">
+                <strong>
+                    Videresending er kun mulig fra
+                    {{ til.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist2()|dato('H:i') }} 
+                    til
+                    {{ til.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist1()|dato('H:i') }}. 
+                </strong>
+                <br />
+                Du kan ikke endre hvem som skal videresendes, men fortsatt ajourføre 
+                <a href="?page=UKMVideresending&action=media">mediefiler</a>,
+                <a href="?page=UKMVideresending&action=media">playback</a>
+                eller
+                <a href="?page=UKMdeltakere">informasjon (fra deltakermenyen)</a>.
+            </p>
+
+        {# VIDERESENDING ER MULIG #}
+        {% else %}
+            <p>
+                Listen viser kun innslag fra de kategoriene {{ til.getArrangement().getNavn() }} tar i mot.
+            </p>
+            <div class="row">
+                {% for type_innslag in til.getArrangement().getInnslagTyper() %}
+                    <div class="innslagBlock col-xs-12">
+                        <div class="innslagTypeHeader">
+                            <img src="{{ type_innslag.getIcon() }}" height="45" />
+                            <h3>{{ type_innslag }}</h3>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
+                            {# VIDERESENDING TIL FYLKE - GRUPPER PER FYLKE I TILFELLE LOKALMØNSTRING OVER FYLKESGRENSER #}
+                            {% for innslag in fra.getInnslag().filterByType( type_innslag, fra.getInnslag().getAllByFylke( til.getArrangement().getFylke() ) ) %}
+                                {% embed "Videresendte/Innslag.html.twig" %}{% endembed %}
+                            {% else %}
+                                <li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                {% endfor %}
+                <div class="clearfix"></div>
+            </div>
+        {% endif %}
+    </fieldset>
+{% endblock %}

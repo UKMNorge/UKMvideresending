@@ -1,0 +1,10 @@
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+	<div style="width:98%">
+		{% include 'Oppsummering/'~ fra.getType() ~'.html.twig' %}
+		
+		<h3>Statistikk</h3>
+		{% embed "Statistikk/skjema.html.twig" %}{% endembed %}
+	</div>
+{% endblock %}
