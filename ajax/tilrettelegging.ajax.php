@@ -1,10 +1,11 @@
 <?php
 
-// SETUP SENSITIVT-REQUESTER
-require_once('UKM/Sensitivt/Sensitivt.php');
+use UKMNorge\Sensitivt\Requester;
+use UKMNorge\Sensitivt\Sensitivt;
+use UKMNorge\Sensitivt\Write\Intoleranse;
 
-UKMNorge\Sensitivt\Sensitivt::setRequester(
-    new UKMNorge\Sensitivt\Requester(
+Sensitivt::setRequester(
+    new Requester(
         'wordpress', 
         wp_get_current_user()->ID,
         get_option('pl_id')
@@ -14,7 +15,7 @@ UKMNorge\Sensitivt\Sensitivt::setRequester(
 
 // SET DATA
 require_once('UKM/Sensitivt/Write/Intoleranse.php');
-$intoleranse = new UKMNorge\Sensitivt\Write\Intoleranse( $_POST['id'] );
+$intoleranse = new Intoleranse( $_POST['id'] );
 
 if( !is_array( $_POST['liste'] ) ) {
 	$_POST['liste'] = [];

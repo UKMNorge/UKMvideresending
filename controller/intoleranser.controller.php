@@ -1,5 +1,7 @@
 <?php
 
+use UKMNorge\Allergener\Allergener;
+
 $fra = UKMVideresending::getFra();
 
 // SETUP SENSITIVT-REQUESTER
@@ -35,7 +37,6 @@ foreach( $fra->getInnslag()->getAll() as $innslag ) {
 
 UKMVideresending::addViewData('personer', $data_intoleranse);
 
-require_once('UKM/allergener.class.php');
 UKMVideresending::addViewData('allergener_standard', Allergener::getStandard());
 UKMVideresending::addViewData('allergener_kulturelle', Allergener::getKulturelle());
 
