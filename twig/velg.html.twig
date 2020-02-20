@@ -6,116 +6,114 @@
     </div>
 	<h1>Videresending</h1>
 
-    {% if not is_super_admin and not GET('showme') %}
-        <p>Videresending åpner 1. mars</p>
+    {% include "wp_modul.flashbag.html.twig" %}
+
+    {# AVSENDER-ARRANGEMENT ER IKKE FERDIG #}
+    {% if not fra.erFerdig() %}
+        <p class="lead">
+            Når arrangementet ditt er ferdig, kan du videresende innslag og personer fra denne siden.
+        </p>
+
+        <h2>Informasjon om kvoter</h2>
+        <ol class="list-group">
+            {% for mottaker in fra.getVideresending().getMottakere() %}
+                {% embed "Informasjon/AvsenderInfo.html.twig" %}
+                    {% block data %}
+                        {% if mottaker.getInformasjonstekst() is empty %}
+                            {{ mottaker.getNavn() }}
+                            har ikke lagt inn informasjon om kvoter eller
+                            andre regler for videresending.
+                        {% else %}
+                            {{ mottaker.getInformasjonstekst()|raw|nl2br }}
+                        {% endif %}
+                    {% endblock %}
+                {% endembed %}
+            {% else %}
+                <li class="list-group-item text-danger">
+                    Kontakt
+                    <a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
+                    da noe er feil satt opp med videresendingen fra ditt arrangement.
+                </li>
+            {% endfor %}
+        </ol>
+    
+    {# AVSENDER-ARRANGEMENT HAR IKKE OPPGITT ANTALL PUBLIKUMMERE #}
+    {% elseif fra.getPublikum() == 0 %}
+        <p class="lead">
+            Før du kan videresende må du oppgi hvor mange publikummere og eventuelt
+            uregistrerte deltakere på arrangementet.
+        </p>
+
+        {% embed "Statistikk/Skjema.html.twig" %}
+            {% block pre_submit %}
+                <p class="mt-3" style="max-width: 550px;">
+                    Trenger du å endre dette senere, trykker du på knappen "statistikk" 
+                    oppe til høyre på videresending-forsiden.
+                </p>
+            {% endblock %}
+        {% endembed %}
+    
+    {# DET ER INGEN ARRANGEMENT Å VIDERESENDE TIL #}
+    {% elseif not fra.getVideresending().harMottakere() %}
+        <p class="lead">Vi finner ingen som sier du kan videresende til de 😞</p>
+
+        <p>
+            Ta kontakt med de du ønsker å videresende til, og si at de må redigere
+            arrangementet sitt, og krysse av for at dere kan videresende til de.
+        </p>
+        <p>
+            Hvis noen av dere lurer på hvordan dette gjøres, er det bare å sende en e-post til
+            <a href="mailto:support@ukm.no">support@ukm.no</a>, så hjelper vi dere med å sette det opp.
+        </p>
+    
+    {# VELG HVILKET ARRANGEMENT Å VIDERESENDE TIL #}
     {% else %}
-        {% include "wp_modul.flashbag.html.twig" %}
-
-        {# AVSENDER-ARRANGEMENT ER IKKE FERDIG #}
-        {% if not fra.erFerdig() %}
-            <p class="lead">
-                Når arrangementet ditt er ferdig, kan du videresende innslag og personer fra denne siden.
-            </p>
-
-            <h2>Informasjon om kvoter</h2>
-            <ol class="list-group">
-                {% for mottaker in fra.getVideresending().getMottakere() %}
-                    {% embed "Informasjon/AvsenderInfo.html.twig" %}
-                        {% block data %}
-                            {% if mottaker.getInformasjonstekst() is empty %}
-                                {{ mottaker.getNavn() }}
-                                har ikke lagt inn informasjon om kvoter eller
-                                andre regler for videresending.
-                            {% else %}
-                                {{ mottaker.getInformasjonstekst()|raw|nl2br }}
-                            {% endif %}
-                        {% endblock %}
-                    {% endembed %}
-                {% else %}
-                    <li class="list-group-item text-danger">
-                        Kontakt
-                        <a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
-                        da noe er feil satt opp med videresendingen fra ditt arrangement.
-                    </li>
-                {% endfor %}
-            </ol>
+        <p>
+            For å fullføre videresendingen må du innom alle faner (videresendte, media osv) og fylle ut alle felt. 
+            <br />
+            Etter fristen kan du ajourføre media og detaljer på videresendingen, 
+            men det vil ikke være mulig å endre på hvilke innslag som er videresendt.
+        </p>
         
-        {# AVSENDER-ARRANGEMENT HAR IKKE OPPGITT ANTALL PUBLIKUMMERE #}
-        {% elseif fra.getPublikum() == 0 %}
-            <p class="lead">
-                Før du kan videresende må du oppgi hvor mange publikummere og eventuelt
-                uregistrerte deltakere på arrangementet.
-            </p>
-
-            {% embed "Statistikk/Skjema.html.twig" %}
-                {% block pre_submit %}
-                    <p class="mt-3" style="max-width: 550px;">
-                        Trenger du å endre dette senere, trykker du på knappen "statistikk" 
-                        oppe til høyre på videresending-forsiden.
-                    </p>
-                {% endblock %}
-            {% endembed %}
-        
-        {# DET ER INGEN ARRANGEMENT Å VIDERESENDE TIL #}
-        {% elseif not fra.getVideresending().harMottakere() %}
-            <p class="lead">Vi finner ingen som sier du kan videresende til de 😞</p>
-
-            <p>
-                Ta kontakt med de du ønsker å videresende til, og si at de må redigere
-                arrangementet sitt, og krysse av for at dere kan videresende til de.
-            </p>
-            <p>
-                Hvis noen av dere lurer på hvordan dette gjøres, er det bare å sende en e-post til
-                <a href="mailto:support@ukm.no">support@ukm.no</a>, så hjelper vi dere med å sette det opp.
-            </p>
-        
-        {# VELG HVILKET ARRANGEMENT Å VIDERESENDE TIL #}
-        {% else %}
-            <p>
-                For å fullføre videresendingen må du innom alle faner (videresendte, media osv) og fylle ut alle felt. 
-                <br />
-                Etter fristen kan du ajourføre media og detaljer på videresendingen, 
-                men det vil ikke være mulig å endre på hvilke innslag som er videresendt.
-            </p>
-            
-            {% if fra.getType() == 'fylke' %}
-                {% include "Informasjon/nasjonalt.html.twig" %}
-            {% endif %}
-
-
-            <ol class="list-group">
-                {% for mottaker in fra.getVideresending().getMottakere() %}
-                    {% embed "Informasjon/AvsenderInfo.html.twig" %}
-                        {% block data %}
-                            {% if not mottaker.getArrangement().erRegistrert() %}
-                                Arrangementet er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
-                            {% else %}
-                                {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
-                                    Du har videresendt {{ fra.getVideresendte(mottaker.getId()).getAntall() }} innslag til {{ mottaker.getNavn() }}.
-                                {% else %}
-                                    Du har ikke videresendt innslag til {{ mottaker.getNavn() }}.
-                                {% endif %}
-                                <br />
-                                {% if not mottaker.getInformasjonstekst() is empty %}
-                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
-                                {% endif %}
-                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm btn-primary btn-xs">Nominasjon</a>
-                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ fra.getVideresendte(mottaker.getId()).getAntall() > 0 ? 'Endre' : 'Start' }} videresending</a>
-                                {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
-                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
-                                {% endif %}
-                            {% endif %}
-
-                        {% endblock %}
-                    {% endembed %}
-                {% else %}
-                    <li class="list-group-item text-danger">
-                        Kontakt
-                        <a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
-                        da noe er feil satt opp med videresendingen fra ditt arrangement.
-                    </li>
-                {% endfor %}
-            </ol>
+        {% if fra.getType() == 'fylke' %}
+            {% include "Informasjon/nasjonalt.html.twig" %}
         {% endif %}
+
+
+        <ol class="list-group">
+            {% for mottaker in fra.getVideresending().getMottakere() %}
+                {% embed "Informasjon/AvsenderInfo.html.twig" %}
+                    {% block data %}
+                        {% if not mottaker.getArrangement().erRegistrert() %}
+                            Arrangementet er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
+                        {% else %}
+                            {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+                                Du har videresendt {{ fra.getVideresendte(mottaker.getId()).getAntall() }} innslag til {{ mottaker.getNavn() }}.
+                            {% else %}
+                                Du har ikke videresendt innslag til {{ mottaker.getNavn() }}.
+                            {% endif %}
+                            <br />
+                            {% if not mottaker.getInformasjonstekst() is empty %}
+                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
+                            {% endif %}
+                            {% if is_super_admin %}
+                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm superadmin btn-primary btn-xs">Nominasjon</a>
+                            {% endif %}
+                            <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ fra.getVideresendte(mottaker.getId()).getAntall() > 0 ? 'Endre' : 'Start' }} videresending</a>
+                            {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
+                            {% endif %}
+                        {% endif %}
+
+                    {% endblock %}
+                {% endembed %}
+            {% else %}
+                <li class="list-group-item text-danger">
+                    Kontakt
+                    <a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
+                    da noe er feil satt opp med videresendingen fra ditt arrangement.
+                </li>
+            {% endfor %}
+        </ol>
     {% endif %}
 </div>
