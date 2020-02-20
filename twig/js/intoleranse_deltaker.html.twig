@@ -2,7 +2,12 @@
 	<div class="header row">
 		<div class="col-xs-12">
 			<span class="type strong"></span>
-			<span class="navn">{{ person.navn }}</span>
+			<span class="navn">
+                {{ person.navn }}
+                <small class="text-muted"><span class="dashicons dashicons-smartphone" style="font-size:1.2em;padding-top:.4em;"></span>
+                <span class="UKMmobil UKMSMS" data-navn="{{person.navn}}" data-to="{{person.mobil}}">{{person.mobil}}</span>
+                </small>
+            </span>
 			<span class="status float-right pull-right small">{{ person.intoleranse_human }}</span>
 		</div>
 	</div>

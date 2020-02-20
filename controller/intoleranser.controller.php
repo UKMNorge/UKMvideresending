@@ -3,6 +3,7 @@
 use UKMNorge\Allergener\Allergener;
 
 $fra = UKMVideresending::getFra();
+$til = UKMVideresending::getValgtTil();
 
 // SETUP SENSITIVT-REQUESTER
 $requester = new UKMNorge\Sensitivt\Requester(
@@ -18,7 +19,7 @@ $data_intoleranse->uten = [];
 
 // LIST ALLE ALLERGIER
 $personer = [];
-foreach( $fra->getInnslag()->getAll() as $innslag ) {
+foreach( $fra->getVideresendte($til->getId())->getAll() as $innslag ) {
     foreach( $innslag->getPersoner()->getAll() as $person ) {
 		
 		if( in_array( $person->getId(), $personer ) ) {
@@ -44,6 +45,7 @@ function person_data( $person, $allergi ) {
 	$data = new stdClass();
 	$data->ID = $person->getId();
 	$data->navn = $person->getNavn();
+	$data->mobil = $person->getMobil();
 	if( $allergi ) {
 		$data->intoleranse_liste = $allergi->getListe();
 		$data->intoleranse_human = $allergi->getListeHuman();
