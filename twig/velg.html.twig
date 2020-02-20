@@ -89,7 +89,7 @@
                         {% else %}
                             {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
                                 Du har videresendt {{ fra.getVideresendte(mottaker.getId()).getAntall() }} innslag til {{ mottaker.getNavn() }}.
-                            {% else %}
+                            {% elseif mottaker.getArrangement().harVideresendingStartet() %}
                                 Du har ikke videresendt innslag til {{ mottaker.getNavn() }}.
                             {% endif %}
                             <br />
