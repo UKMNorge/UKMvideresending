@@ -93,15 +93,40 @@
                                 Du har ikke videresendt innslag til {{ mottaker.getNavn() }}.
                             {% endif %}
                             <br />
-                            {% if not mottaker.getInformasjonstekst() is empty %}
-                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
-                            {% endif %}
-                            {% if is_super_admin %}
-                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm superadmin btn-primary btn-xs">Nominasjon</a>
-                            {% endif %}
-                            <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ fra.getVideresendte(mottaker.getId()).getAntall() > 0 ? 'Endre' : 'Start' }} videresending</a>
-                            {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
-                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
+                            
+                            {# VIDERESENDINGEN ER ÅPEN #}
+                            {% if mottaker.getArrangement().erVideresendingApen() %}
+                                {# KNAPP TIL INFOTEKST #}
+                                {% if not mottaker.getInformasjonstekst() is empty %}
+                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
+                                {% endif %}
+                                {# KNAPP TIL NOMINASJON #}
+                                {% if is_super_admin %}
+                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm superadmin btn-primary btn-xs">Nominasjon</a>
+                                {% endif %}
+                                {# KNAPP TIL VIDERESENDTE #}
+                                <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ fra.getVideresendte(mottaker.getId()).getAntall() > 0 ? 'Endre' : 'Start' }} videresending</a>
+                                {# KNAPP TIL ALLERGI #}
+                                {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
+                                {% endif %}
+                            {# VIDERESENDINGEN ER STENGT #}
+                            {% else %}
+                                {# VIS INFOTEKST #}
+                                {% if mottaker.getArrangement().getInformasjonstekst() is not empty %}
+                                    {{ mottaker.getInformasjonstekst()|raw|nl2br }}
+                                {% endif %}
+
+                                {# FRISTEN HAR PASSERT, OG VI HAR PÅMELDTE HER - AJOURFØRE BØR VÆRE MULIG #}
+                                {% if mottaker.getArrangement().erVideresendingOver() and fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+                                    <p>Videresendingen er stengt, men du kan fortsatt ajourføre informasjon:</p>
+                                    {# KNAPP TIL VIDERESENDTE #}
+                                    <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=media" class="btn btn-ukm btn-primary btn-xs">Bilder, film og mediefiler</a>
+                                    {# KNAPP TIL ALLERGI #}
+                                    {% if fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+                                        <a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
                         {% endif %}
 
