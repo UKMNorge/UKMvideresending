@@ -30,9 +30,9 @@ foreach( $fra->getVideresendte($til->getId())->getAll() as $innslag ) {
         $id = $person->getNavn() .'-'. $person->getId();
         $allergi = $person->getSensitivt( $requester )->getIntoleranse();
         if( $allergi->har() ) {
-			$data_intoleranse->med[ $id ] = person_data( $person, $allergi );
+			$data_intoleranse->med[ $id ] = UKMVideresending::getIntoleransePersonData( $person, $allergi );
         } else {
-            $data_intoleranse->uten[ $id ] = person_data( $person, false );
+            $data_intoleranse->uten[ $id ] = UKMVideresending::getIntoleransePersonData( $person );
         }
     }
 }
@@ -43,17 +43,3 @@ ksort($data_intoleranse->uten);
 UKMVideresending::addViewData('personer', $data_intoleranse);
 UKMVideresending::addViewData('allergener_standard', Allergener::getStandard());
 UKMVideresending::addViewData('allergener_kulturelle', Allergener::getKulturelle());
-
-function person_data( $person, $allergi ) {
-	$data = new stdClass();
-	$data->ID = $person->getId();
-	$data->navn = $person->getNavn();
-	$data->mobil = $person->getMobil();
-	if( $allergi ) {
-		$data->intoleranse_liste = $allergi->getListe();
-		$data->intoleranse_human = $allergi->getListeHuman();
-		$data->intoleranse_tekst = $allergi->getTekst();
-	}
-
-	return $data;
-}

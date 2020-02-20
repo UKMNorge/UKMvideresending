@@ -15,7 +15,7 @@
 				<select id="intoleranse_ny" class="form-control">
                     <option value="false" selected disabled>Velg person</option>
 					{% for person in personer.uten %}
-						<option value="{{ person.ID }}">{{ person.navn }}</option>
+						<option value="{{ person.ID }}" data-mobil="{{person.mobil}}">{{ person.navn }}</option>
 					{% endfor %}
 				</select>
 				<span class="input-group-btn" style="padding-left: 1em;">

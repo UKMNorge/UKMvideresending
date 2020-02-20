@@ -82,7 +82,6 @@ function handleTilretteleggUpdate(response) {
 
 jQuery(document).on('click', '#intoleranse_add', function(e) {
     e.preventDefault();
-    console.log(jQuery('#intoleranse_ny').val());
     if (!jQuery('#intoleranse_ny').val()) {
         alert('Velg en person fra listen før du trykker "legg til"');
         return false;
@@ -91,6 +90,7 @@ jQuery(document).on('click', '#intoleranse_add', function(e) {
         person: {
             ID: jQuery('#intoleranse_ny').val(),
             navn: jQuery('#intoleranse_ny option:selected').html(),
+            mobil: jQuery('#intoleranse_ny option:selected').data('mobil'),
             intoleranse_liste: [],
             intoleranse_tekst: ''
         },

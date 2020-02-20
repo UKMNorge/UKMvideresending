@@ -10,6 +10,8 @@ Author URI: http://mariusmandal.no
 
 use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\Arrangement\Videresending\Mottaker;
+use UKMNorge\Innslag\Personer\Person;
+use UKMNorge\Sensitivt\Intoleranse;
 
 require_once('UKM/Autoloader.php');
 
@@ -412,6 +414,27 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             }
         }
         return $MESSAGES;
+    }
+
+    /**
+     * Hent et TwigJS-objekt av en person og dens allergier
+     *
+     * @param Person $person
+     * @param Intoleranse $allergi
+     * @return stdClass
+     */
+    public static function getIntoleransePersonData( Person $person, Intoleranse $allergi=null ) {
+        $data = new stdClass();
+        $data->ID = $person->getId();
+        $data->navn = $person->getNavn();
+        $data->mobil = $person->getMobil();
+        if( !is_null($allergi) ) {
+            $data->intoleranse_liste = $allergi->getListe();
+            $data->intoleranse_human = $allergi->getListeHuman();
+            $data->intoleranse_tekst = $allergi->getTekst();
+        }
+    
+        return $data;
     }
 }
 
