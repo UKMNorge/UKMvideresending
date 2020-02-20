@@ -24,20 +24,23 @@ foreach( $fra->getVideresendte($til->getId())->getAll() as $innslag ) {
 		
 		if( in_array( $person->getId(), $personer ) ) {
 			continue;
-		}
+        }
 		$personer[] = $person->getId();
-
+        
+        $id = $person->getNavn() .'-'. $person->getId();
         $allergi = $person->getSensitivt( $requester )->getIntoleranse();
         if( $allergi->har() ) {
-			$data_intoleranse->med[] = person_data( $person, $allergi );
+			$data_intoleranse->med[ $id ] = person_data( $person, $allergi );
         } else {
-            $data_intoleranse->uten[] = person_data( $person, false );
+            $data_intoleranse->uten[ $id ] = person_data( $person, false );
         }
     }
 }
 
-UKMVideresending::addViewData('personer', $data_intoleranse);
+ksort($data_intoleranse->med);
+ksort($data_intoleranse->uten);
 
+UKMVideresending::addViewData('personer', $data_intoleranse);
 UKMVideresending::addViewData('allergener_standard', Allergener::getStandard());
 UKMVideresending::addViewData('allergener_kulturelle', Allergener::getKulturelle());
 
