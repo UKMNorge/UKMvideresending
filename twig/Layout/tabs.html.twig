@@ -7,7 +7,7 @@
     }
 </style>
 <div class="UKM_tabs UKM_tabs_5">
-    {% if not mottaker.getInformasjonstekst() is empty %}
+    {% if not til.getInformasjonstekst() is empty %}
         <a href="{{baseLink ~'informasjon'}}" {{ tab == 'informasjon' ? 'class="active"'}}>
             <div>
                 <span class="tab_header">
