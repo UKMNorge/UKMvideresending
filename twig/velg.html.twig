@@ -6,7 +6,7 @@
     </div>
 	<h1>Videresending</h1>
 
-    {% if not is_super_admin %}
+    {% if not is_super_admin and not GET('showme') %}
         <p>Videresending åpner 1. mars</p>
     {% else %}
         {% include "wp_modul.flashbag.html.twig" %}
