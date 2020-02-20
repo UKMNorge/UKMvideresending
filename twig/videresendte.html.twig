@@ -71,7 +71,7 @@
                             {% for innslag in fra.getInnslag().filterByType( type_innslag, fra.getInnslag().getAllByFylke( til.getArrangement().getFylke() ) ) %}
                                 {% embed "Videresendte/Innslag.html.twig" %}{% endembed %}
                             {% else %}
-                                <li class="list-group-item ingen-pameldte alert-danger">Du har ingen påmeldte i {{ type_innslag }}</li>
+                                <li class="list-group-item ingen-pameldte">Du har ingen påmeldte i {{ type_innslag|lower }}</li>
                             {% endfor %}
                         </ol>
                     </div>
