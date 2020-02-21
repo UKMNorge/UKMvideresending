@@ -1,5 +1,9 @@
 {% extends "Layout/base.html.twig" %}
 
 {% block content %}
-	{% include "Skjema/innhold.html.twig" with {arrangement: til} %}
+<form method="POST" action="?page={{GET('page')}}&til={{GET('til')}}&action=infoskjema">
+	{% include "Skjema/innhold.html.twig" with {arrangement: til.getArrangement(), svarsett: til.getArrangement().getSkjema().getSvarSettFor( fra.getId() )} %}
+
+    <button type="submit" class="btn btn-ukm btn-success">Lagre</button>
+</form>
 {% endblock %}

@@ -1,5 +1,8 @@
 <?php
 
+use UKMNorge\Arrangement\Skjema\Sporsmal;
+use UKMNorge\Arrangement\Skjema\SvarSett;
+use UKMNorge\Arrangement\Skjema\Write as WriteSkjema;
 use UKMNorge\Twig\Twig;
 
 
@@ -13,49 +16,35 @@ Twig::addPath(UKMmonstring::getTwigPath());
 
 $fra = UKMVideresending::getFra();
 $til = UKMVideresending::getValgtTil()->getArrangement();
-$skjema = $fra->getSkjema();
-	
+$skjema = $til->getSkjema();
+
+$svarsett = $skjema->getSvarSettFor( $fra->getId() );
+$svarsett->getAll();
+
 if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-	$questions = array();
-	
 	foreach($_POST as $key => $value) {
-		if (strpos($key, 'question_') === 0) {
-			// value starts with book_
-			$str = explode('_', $key); // $str[0] = "question", $str[1] == id, $str[2] (if any) == "navn"/"mobil"/"epost"
-			$q_id = $str[1];
-	
-			if(count($str) > 2) {
-				$questions[$q_id][$str[2]] = $value;
-			} else {
-				$questions[$q_id] = $value;
-			}
+		if (strpos($key, 'sporsmal_') === 0) {
+            list( $trash, $id, $field) = explode('_', $key);
+            $svarsett->setSvar($id, $value );
 		}
 	}
-	
-	$results = array();
-	
-	$numQ = 0;
-	foreach ($questions as $q_id => $answer ) {
-		$res = $skjema->answerQuestion($q_id, $answer, $debug );
-		if( !is_numeric( $res ) ) {
-			$errors[] = $res->error();
-		}
-		$numQ++;
-	}
-	
-	if ( count( $errors ) == 0 ) {
+
+    try {
+        WriteSkjema::saveSvarSett( $svarsett );
+        UKMVideresending::getFlash()->success('Skjema er lagret!');
+    } catch( Exception $e ) {
         UKMVideresending::getFlash()
-            ->success('Skjema er lagret!');
-	}
-	else {
-        UKMVideresending::getFlash()
-            ->error('Ett eller flere av svarene dine ble ikke lagret. Prøv igjen.');
+            ->error(
+                'Ett eller flere av svarene dine ble ikke lagret. Vennligst prøv igjen. ' 
+                ."\r\n".
+                'Systemet sa: '. $e->getMessage()
+            );
 	}
 }
 
 UKMVideresending::addViewData(
     [
         'skjema'=> $skjema,
-        'til' => $til
+        'til' => $til,
     ]
 );
