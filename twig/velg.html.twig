@@ -9,7 +9,7 @@
     {% include "wp_modul.flashbag.html.twig" %}
 
     {# AVSENDER-ARRANGEMENT ER IKKE FERDIG #}
-    {% if not fra.erFerdig() %}
+    {% if not fra.erFerdig() and fra.getVideresending().harMottakere() %}
         <p class="lead">
             Når arrangementet ditt er ferdig, kan du videresende innslag og personer fra denne siden.
         </p>
@@ -38,7 +38,7 @@
         </ol>
     
     {# AVSENDER-ARRANGEMENT HAR IKKE OPPGITT ANTALL PUBLIKUMMERE #}
-    {% elseif fra.getPublikum() == 0 %}
+    {% elseif fra.erFerdig() and fra.getPublikum() == 0 %}
         <p class="lead">
             Før du kan videresende må du oppgi hvor mange publikummere og eventuelt
             uregistrerte deltakere på arrangementet.
@@ -55,17 +55,20 @@
     
     {# DET ER INGEN ARRANGEMENT Å VIDERESENDE TIL #}
     {% elseif not fra.getVideresending().harMottakere() %}
-        <p class="lead">Vi finner ingen som sier du kan videresende til de 😞</p>
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <p class="lead">
+                    Her kan du videresende til andre arrangement, men for øyeblikket er det ingen
+                    (hverken fylker eller {{ fra.getArrangement().getFylke().erOslo() ? 'bydeler' : 'kommuner' }})
+                    som har åpnet for at du kan videresende til dem.
+                </p>
 
-        <p>
-            Ta kontakt med de du ønsker å videresende til, og si at de må redigere
-            arrangementet sitt, og krysse av for at dere kan videresende til de.
-        </p>
-        <p>
-            Hvis noen av dere lurer på hvordan dette gjøres, er det bare å sende en e-post til
-            <a href="mailto:support@ukm.no">support@ukm.no</a>, så hjelper vi dere med å sette det opp.
-        </p>
-    
+                <p>
+                    Ta kontakt med administrator fro det arrangementet du ønsker å videresende til.
+                </p>
+            </div>
+        </div>
+
     {# VELG HVILKET ARRANGEMENT Å VIDERESENDE TIL #}
     {% else %}
         <p>
