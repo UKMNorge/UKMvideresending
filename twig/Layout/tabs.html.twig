@@ -91,7 +91,7 @@
                 <span class="tab_description">Reise og tilrettelegging</span>
             </div>
         </a>
-    {% elseif til.getArrangement().harSkjema() %}
+    {% elseif til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
         <a href="{{ baseLink }}infoskjema" {{ tab == 'infoskjema' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
