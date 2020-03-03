@@ -1,5 +1,12 @@
 <p>
-	<strong>Playbackfiler tilknyttet innslaget.</strong>
+	<strong>Mediefiler tilknyttet innslaget.</strong>
+</p>
+
+<p class="alert alert-danger">
+    OBS: Her laster du opp mediefiler som skal brukes i gjennomføringen (på scenen).
+    <br />
+    Bilder og film av innslaget skal lastes opp under menyvalget 
+    "<a href="edit.php">Nettside</a>".
 </p>
 
 <ol class="list-group">
@@ -7,15 +14,15 @@
 	<li class="list-group-item">
 		<div class="col-xs-6">
 			<strong>
-				{{fil.name}}
+				{{fil.navn}}
 			</strong>
 			<br />
 			<small>
-				<a href="//playback.ukm.no/{{fil.pl_id}}/{{fil.id}}/" target="_blank">{{fil.file}}</a>
+				<a href="{{fil.url}}/{{fil.fil}}/" target="_blank">{{fil.navn}}</a>
 			</small>
 		</div>
 		<div class="col-xs-6">
-			{{fil.description}}
+			{{fil.beskrivelse}}
 		</div>
 		<div class="clearfix"></div>
 	</li>
@@ -28,5 +35,5 @@
 	<strong>Trenger du å laste opp eller endre en fil?</strong>
 </p>
 <p>
-	<a href="?page=UKMplayback" class="btn btn-ukm btn-sm">Gå til playback</a>
+	<a href="?page=UKMplayback" class="btn btn-ukm btn-sm">Gå til mediefiler</a>
 </p>
