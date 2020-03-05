@@ -67,7 +67,7 @@
                         
                         <ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
                             {# VIDERESENDING TIL FYLKE - GRUPPER PER FYLKE I TILFELLE LOKALMØNSTRING OVER FYLKESGRENSER #}
-                            {% for innslag in fra.getInnslag().filterByType( type_innslag, fra.getInnslag().getAllByFylke( til.getArrangement().getFylke() ) ) %}
+                            {% for innslag in fra.getInnslag().getAllByType( type_innslag ) %}
                                 {% embed "Videresendte/Innslag.html.twig" %}{% endembed %}
                             {% else %}
                                 <li class="list-group-item ingen-pameldte text-muted">Du har ingen påmeldte i {{ type_innslag|lower }}</li>
