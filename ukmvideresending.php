@@ -43,6 +43,11 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         }
     }
 
+    /**
+     * Hooker modulen inn i Wordpress
+     *
+     * @return void
+     */
     public static function hook()
     {
         # Kun initier på mønstringssider
@@ -106,13 +111,18 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
     public static function getViewData()
     {
         static::addViewData('fra', static::getFra());
-        if( isset( $_REQUEST['til'] ) ) {
+        if (isset($_REQUEST['til'])) {
             static::addViewData('til', static::getValgtTil());
         }
         static::addViewData('tab', static::getAction());
         return parent::getViewData();
     }
 
+    /**
+     * Håndterer alle ajax-kall
+     *
+     * @return void
+     */
     public static function ajax()
     {
         if (is_array($_POST)) {
@@ -142,12 +152,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             ];
 
             if (in_array($_POST['subaction'], $supported_actions)) {
-                ## SETUP LOGGER
-                global $current_user;
-                get_currentuserinfo();
-                require_once('UKM/logger.class.php');
-                UKMlogger::setID('wordpress', $current_user->ID, get_option('pl_id'));
-
+                static::setupLogger();
                 require_once('ajax/' . $_POST['subaction'] . '.ajax.php');
             } else {
                 throw new Exception('Beklager, støtter ikke denne handlingen!');
@@ -163,6 +168,13 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         die();
     }
 
+    /**
+     * Legg til alle scripts som videresendingen bruker
+     * 
+     * (og ja, det er en del!)
+     *
+     * @return void
+     */
     public static function script()
     {
         wp_enqueue_script('WPbootstrap3_js');
@@ -183,16 +195,14 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             wp_enqueue_script('UKMVideresending_script_leder_overnatting', plugin_dir_url(__FILE__) . 'javascript/lederOvernatting.js');
         }
         // JS-app for leder-håndtering
-        if (static::getAction() == 'reiseinfo' || static::getAction() == 'intoleranser' ) {
-        }
-        switch( static::getAction() ) {
+        switch (static::getAction()) {
             case 'nominasjon':
                 wp_enqueue_script('UKMVideresending_script_nominasjon', plugin_dir_url(__FILE__) . 'javascript/nominasjon.js');
-            break;
+                break;
             case 'reiseinfo':
             case 'intoleranser':
                 wp_enqueue_script('UKMVideresending_script_tilrettelegging', plugin_dir_url(__FILE__) . 'javascript/tilrettelegging.js');
-            break;
+                break;
         }
         wp_enqueue_script('UKMVideresending_script_videresending', plugin_dir_url(__FILE__) . 'ukmvideresending.js');
     }
@@ -203,56 +213,30 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
      **/
     public static function meny()
     {
-        $page = add_menu_page(
-            'Videresending',
-            'Videresending',
-            'editor',
-            'UKMVideresending',
-            ['UKMVideresending', 'renderAdmin'],
-            'dashicons-external', #'//ico.ukm.no/paper-airplane-20.png',
-            90
-        );
         add_action(
-            'admin_print_styles-' . $page,
+            'admin_print_styles-' .
+                add_menu_page(
+                    'Videresending',
+                    'Videresending',
+                    'editor',
+                    'UKMVideresending',
+                    ['UKMVideresending', 'renderAdmin'],
+                    'dashicons-external', #'//ico.ukm.no/paper-airplane-20.png',
+                    90
+                ),
             ['UKMVideresending', 'script']
         );
-
-        if (static::getType() == 'fylke') {
-            // Legg videresendingsskjemaet som en submenu under Mønstring.
-            add_submenu_page(
-                'UKMMonstring',
-                'Videresendingsskjema',
-                'Skjema for videresending',
-                'editor',
-                'UKMVideresendingsskjema',
-                ['UKMVideresending', 'skjema']
-            );
-        }
     }
 
     /**
-     * Lar fylkene administrere sitt skjema
-     **/
-    public static function skjema()
+     * Håndter lagring
+     */
+    public static function save()
     {
-        ## ACTION CONTROLLER
-        require_once('controller/skjema_admin.controller.php');
-
-        ## RENDER
-        echo TWIG('Skjema/admin.html.twig', static::getViewData(), dirname(__FILE__), true);
-        return;
+        static::require('save/' . basename($_GET['save']) . '.save.php');
     }
 
-    public static function skjema_script()
-    {
-        wp_enqueue_script('WPbootstrap3_js');
-        wp_enqueue_style('WPbootstrap3_css');
-        wp_enqueue_script('UKMVideresending_script_skjema_admin', plugin_dir_url(__FILE__) . 'javascript/skjema_admin.js');
-    }
-
-    /**
-     *
-     **/
+    /*
     public static function middagsgjester($monstring_til, $monstring_fra)
     {
         $middagsgjester = array('ukm' => 0, 'fylke1' => 0, 'fylke2' => 0);
@@ -281,6 +265,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
 
     public static function overnattingssteder()
     {
+        die('Gjør dette dynamisk!');
         return [
             'deltakere'     => 'Landsbyen',
             'hotell'        => 'Lederhotellet',
@@ -341,17 +326,13 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         );
         $res = $sql->run();
 
-        /**
-         * Lik verdi = return true
-         **/
+        // Lik verdi = return true        
         $row = SQL::fetch($res);
         if ($row['field'] == $value) {
             return true;
         }
 
-        /**
-         * Finnes ikke i databasen? insert
-         **/
+        //  Finnes ikke i databasen? insert
         if (SQL::numRows($res) == 0) {
             $SQLins = new SQLins('smartukm_videresending_infoskjema');
             $SQLins->add('pl_id', $festivalen->getId());
@@ -369,6 +350,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         $res = $SQLins->run();
         return $res != -1;
     }
+
 
     public static function getInfoSkjema($field)
     {
@@ -415,6 +397,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         }
         return $MESSAGES;
     }
+    */
 
     /**
      * Hent et TwigJS-objekt av en person og dens allergier
@@ -423,17 +406,18 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
      * @param Intoleranse $allergi
      * @return stdClass
      */
-    public static function getIntoleransePersonData( Person $person, Intoleranse $allergi=null ) {
+    public static function getIntoleransePersonData(Person $person, Intoleranse $allergi = null)
+    {
         $data = new stdClass();
         $data->ID = $person->getId();
         $data->navn = $person->getNavn();
         $data->mobil = $person->getMobil();
-        if( !is_null($allergi) ) {
+        if (!is_null($allergi)) {
             $data->intoleranse_liste = $allergi->getListe();
             $data->intoleranse_human = $allergi->getListeHuman();
             $data->intoleranse_tekst = $allergi->getTekst();
         }
-    
+
         return $data;
     }
 }

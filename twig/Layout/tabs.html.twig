@@ -21,7 +21,7 @@
 	
 
     {# NOMINASJONER #}
-    {% if fra.getType() == 'fylke' %}
+    {% if is_super_admin %}
         <a href="?page=UKMnominasjon&action=nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">

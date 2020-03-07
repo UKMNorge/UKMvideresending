@@ -1,20 +1,22 @@
 <?php
-if( isset( $_POST['innslag'] ) && isset( $_POST['status'] ) ) {
-	require_once('UKM/logger.class.php');
-	require_once('UKM/write_nominasjon.class.php');
-	require_once('UKM/monstringer.class.php');
-	
-	global $current_user;
-	UKMlogger::setID( 'wordpress', $current_user->ID, get_option('pl_id') );
 
-	require_once('UKM/write_nominasjon.class.php');
-	$festival = monstringer_v2::land( get_option('season') );
-	
-	$innslag = new innslag_v2( $_POST['innslag'] );
-	$nominasjon = $innslag->getNominasjon( $festival );
+use UKMNorge\Innslag\Nominasjon\Write;
+
+if( isset( $_POST['innslag'] ) && isset( $_POST['status'] ) ) {
+
+    $til = UKMVideresending::getValgtTil();
+    $fra = UKMVideresending::getFra();
+    
+    $innslag = $fra->getInnslag()->get(intval($_POST['innslag']));
+	$nominasjon = $innslag->getNominasjoner()->getTil( $til->getId() );
 
 	try {
-		write_nominasjon::saveNominertState( $nominasjon, $_POST['status'] == 'true' );
+        // Opprett databaseraden i tilfelle den ikke finnes
+        // da saveState ikke har nok info til å opprette.
+        if( !$nominasjon->eksisterer() ) {
+            $nominasjon = Write::create( $innslag, $innslag->getContext()->getMonstring()->getId(), $til->getId());
+        }
+		Write::saveState( $nominasjon, $_POST['status'] == 'true' );
 	} catch( Exception $e ) {
 		die($e->getMessage());
 	}

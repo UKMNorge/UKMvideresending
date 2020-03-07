@@ -1,84 +1,90 @@
-<fieldset>
-    <legend>Kryss av de som skal nomineres til {{arrangement.getNavn()}}</legend>
-    <div class="row">
-        <div id="nominerte" class="col-12 col-xs-12">
-            {% for type, navn in nominasjonstyper %}
-                <h3>{{ navn }}</h3>
-                
-                <ol class="list-unstyled">
-                    {% for innslag in innslag[ type ] %}
-                        {% set nominasjon = innslag.getNominasjon(fra.getId(), til.getId()) %}
-                        {% set person = innslag.getPersoner().getSingle() %}
-                        
-                        <li class="card nominert-header {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-header-{{ innslag.getId() }}" data-type="{{ type }}" data-id="{{ innslag.getId() }}" style="max-width:95%">
-                            <div class="header">
-                                <div class="ikon">
-                                    <input type="checkbox" class="nominasjonstatus" {{ nominasjon.erNominert() ? 'checked' }} />
-                                </div>
-                                <p>
-                                    {{ innslag.getNavn() }}
-                                </p>
-                                {% if type == 'konferansier' %}
-                                    <div class="utfylt alert-success">
-                                        Konferansierer har ikke deltakerskjema
+{% extends "Layout/base.html.twig" %}
+
+{% block content %}
+    <fieldset>
+        <legend>Kryss av de som skal nomineres til {{til.getNavn()}}</legend>
+        <div class="row">
+            <div id="nominerte" class="col-12 col-xs-12">
+                {% for type, navn in nominasjonstyper %}
+                    <h3>{{ navn }}</h3>
+                    
+                    <ol class="list-unstyled">
+                        {% for innslag in innslag[ type ] %}
+                            {% set nominert = innslag.getNominasjoner().harTil(til.getId()) %}
+                            {% set nominasjon = nominert ? innslag.getNominasjoner().getTil(til.getId()) : false %}
+                            {% set person = innslag.getPersoner().getSingle() %}
+                            
+                            <li class="card nominert-header {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-header-{{ innslag.getId() }}" data-type="{{ type }}" data-id="{{ innslag.getId() }}" style="max-width:95%">
+                                <a name="innslag_{{innslag.getId()}}"></a>
+                                <div class="header">
+                                    <div class="ikon">
+                                        <input type="checkbox" class="nominasjonstatus" {{ nominasjon.erNominert() ? 'checked' }} />
                                     </div>
-                                {% else %}
-                                    <div class="utfylt {{ nominasjon.harDeltakerskjema() ? 'alert-success' : 'alert-danger' }}">
-                                        {{ person.getFornavn() }} {{ nominasjon.harDeltakerSkjema() ? 'har fylt' : 'må fylle' }} ut deltakerskjema.
-                                    </div>
-                                {% endif %}
-                                <div class="utfylt {{ nominasjon.harVoksenskjema() ? 'alert-success' : 'alert-danger' }}">
-                                    En voksen {{ nominasjon.harVoksenskjema() ? 'har fylt' : 'må fylle' }} ut skjema.
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="nominert-data {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-data-{{ innslag.getId() }}" {{ not nominasjon.erNominert() ? 'style="display:none;"' }}>
-                                <div class="row">
-                                    <div class="col-xs-12 col-lg-5">
-                                    {#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
-                                        <h4>Den voksnes vurdering av {{ person.getNavn() }}</h4>
-                                        <form action="?page={{GET('page')}}&save={{ type }}&id={{ innslag.getId() }}" method="POST">
-                                            {% embed "Nominasjon/skjema_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}
-                                            {% embed "Nominasjon/skjema_voksen.html.twig" %}{% endembed %}
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-submit btn-success">Lagre</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-xs-12 col-lg-6 col-lg-offset-1">
-                                        {% if type == 'konferansier' %}
-                                            {% embed "Nominasjon/vurdering_konferansier.html.twig" %}{% endembed %}
-                                        {% elseif nominasjon.harDeltakerSkjema() %}
-                                            <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
-                                            {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}
-                                        {% else %}
-                                            <h4>{{ person.getFornavn() }} har ikke levert sin egenvurdering</h4>
-                                            <p>
-                                                <a href="#" class="nominasjon-sms-purring" data-tel="{{ person.getMobil() }}">
-                                                    Send nominasjons-lenken på sms til {{ person.getFornavn() }}
-                                                </a>
-                                                <small>
-                                                    (dette tar deg til SMS-funksjonen, hvor du kan tilpasse meldingen før du sender den)
-                                                </small>
-                                            </p>
-                                        {% endif %}
+                                    <p>
+                                        {{ innslag.getNavn() }}
+                                    </p>
+                                    {% if type == 'konferansier' %}
+                                        <div class="utfylt alert-success">
+                                            Konferansierer har ikke deltakerskjema
+                                        </div>
+                                    {% else %}
+                                        <div class="utfylt {{ nominasjon.harDeltakerskjema() ? 'alert-success' : 'alert-danger' }}">
+                                            {{ person.getFornavn() }} {{ nominasjon.harDeltakerSkjema() ? 'har fylt' : 'må fylle' }} ut deltakerskjema.
+                                        </div>
+                                    {% endif %}
+                                    <div class="utfylt {{ nominasjon.harVoksenskjema() ? 'alert-success' : 'alert-danger' }}">
+                                        En voksen {{ nominasjon.harVoksenskjema() ? 'har fylt' : 'må fylle' }} ut skjema.
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </li>
-                    {% else %}
-                        <li>
-                            Ingen deltakere er påmeldt som {{ navn }}
-                        </li>
-                    {% endfor %}
-                </ol>
-            {% endfor %}
+                                <div class="nominert-data {{ nominasjon.erNominert() ? 'nominert' }}" id="nominert-data-{{ innslag.getId() }}" {{ not nominasjon.erNominert() ? 'style="display:none;"' }}>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-5">
+                                        {#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
+                                            <h4>Den voksnes vurdering av {{ person.getNavn() }}</h4>
+                                            <form action="?page={{GET('page')}}&til={{GET('til')}}&action={{GET('action')}}&id={{ innslag.getId() }}" method="POST">
+                                                {% embed "Nominasjon/skjema_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}
+                                                {% embed "Nominasjon/skjema_voksen.html.twig" %}{% endembed %}
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-submit btn-success">Lagre</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-xs-12 col-lg-6 col-lg-offset-1">
+                                            {% if type == 'konferansier' %}
+                                                {% embed "Nominasjon/vurdering_konferansier.html.twig" %}{% endembed %}
+                                            {% elseif nominasjon.harDeltakerSkjema() %}
+                                                <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
+                                                {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}
+                                            {% else %}
+                                                <h4>{{ person.getFornavn() }} har ikke levert sin egenvurdering</h4>
+                                                <p>
+                                                    <a href="#" class="nominasjon-sms-purring" data-tel="{{ person.getMobil() }}">
+                                                        Send nominasjons-lenken på sms til {{ person.getFornavn() }}
+                                                    </a>
+                                                    <small>
+                                                        (dette tar deg til SMS-funksjonen, hvor du kan tilpasse meldingen før du sender den)
+                                                    </small>
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        {% else %}
+                            <li>
+                                Ingen deltakere er påmeldt som {{ navn }}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-</fieldset>
-    <form action="?page=UKMSMS_gui" method="POST" id="nominasjon-reminder">
-    <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert til UKM-festivalen må du fylle ut nominasjonsskjema på http://ukm-festivalen.no/nominasjon i løpet av kort tid, for fristen går straks ut." />
-    <input type="hidden" name="UKMSMS_recipients" id="nominasjon-reminder-recipient" />
-</form>
+    </fieldset>
+        <form action="?page=UKMSMS_gui" method="POST" id="nominasjon-reminder">
+        <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert til UKM-festivalen må du fylle ut nominasjonsskjema på https://ukm-festivalen.no/nominasjon i løpet av kort tid, for fristen går straks ut." />
+        <input type="hidden" name="UKMSMS_recipients" id="nominasjon-reminder-recipient" />
+    </form>
+{% endblock %}

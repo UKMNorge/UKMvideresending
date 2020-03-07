@@ -1,9 +1,7 @@
 <?php
 
 if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-	if( in_array( $_GET['save'], ['nettredaksjon','media','konferansier','arrangor'] ) ) {
-		require_once('nominasjon_save.controller.php');
-	}
+    UKMVideresending::require('save/nominasjon.save.php');
 }
 
 UKMVideresending::addViewData(
@@ -22,7 +20,7 @@ foreach( $fra->getInnslag()->getAll() as $innslag ) {
 	if( !in_array( $innslag->getType()->getId(), [4,5,8] ) ) {
 		continue;
 	}
-	$alle_innslag[ $innslag->getType()->getKey() ][] = $innslag;
+    $alle_innslag[ $innslag->getType()->getKey() ][] = $innslag;
 }
 
 UKMVideresending::addViewData('innslag', $alle_innslag);

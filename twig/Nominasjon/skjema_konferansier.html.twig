@@ -12,7 +12,8 @@
 	<div class="radio">
 		<label>
 			<input type="radio" required name="filopplasting" class="filopplasting-ja" {{ nominasjon.getFilPlassering() == 'playback' ? 'checked' }} value="playback" />
-			Jeg har lastet opp / laster opp film(er) av {{ person.getFornavn() }} i playback-modulen
+			Jeg har lastet opp / laster opp film(er) av {{ person.getFornavn() }} i 
+            <a href="?page=UKMplayback">mediefiler-modulen</a>
 		</label>
 	</div>
 	<div class="radio">
