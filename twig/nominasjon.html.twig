@@ -3,6 +3,15 @@
 {% block content %}
     <fieldset>
         <legend>Kryss av de som skal nomineres til {{til.getNavn()}}</legend>
+
+        {% if til.getArrangement().getNominasjonInformasjon()|length > 0 %}
+            <div class="row">
+                <div class="col-12 col-xs-12">
+                    {{ til.getArrangement().getNominasjonInformasjon()|raw|nl2br }}
+                </div>
+            </div>
+        {% endif %}
+
         <div class="row">
             <div id="nominerte" class="col-12 col-xs-12">
                 {% for type in til.getArrangement().getInnslagTyper()|filter(type => type.kanHaNominasjon() and til.getArrangement().harNominasjonFor(type)) %}
