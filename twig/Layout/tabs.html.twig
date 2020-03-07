@@ -22,7 +22,7 @@
 
     {# NOMINASJONER #}
     {% if til.getArrangement().harNominasjon() %}
-        <a href="?page=UKMnominasjon&action=nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
+        <a href="{{ baseLink }}nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
                     <span class="dashicons dashicons-awards"></span>
