@@ -5,11 +5,11 @@
         <legend>Kryss av de som skal nomineres til {{til.getNavn()}}</legend>
         <div class="row">
             <div id="nominerte" class="col-12 col-xs-12">
-                {% for type, navn in nominasjonstyper %}
-                    <h3>{{ navn }}</h3>
+                {% for type in til.getArrangement().getInnslagTyper()|filter(type => type.kanHaNominasjon() and til.getArrangement().harNominasjonFor(type)) %}
+                    <h3>{{ type.getNavn() }}</h3>
                     
                     <ol class="list-unstyled">
-                        {% for innslag in innslag[ type ] %}
+                        {% for innslag in fra.getInnslag().getAllByType(type) %}
                             {% set nominert = innslag.getNominasjoner().harTil(til.getId()) %}
                             {% set nominasjon = nominert ? innslag.getNominasjoner().getTil(til.getId()) : false %}
                             {% set person = innslag.getPersoner().getSingle() %}
@@ -43,7 +43,7 @@
                                         {#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
                                             <h4>Den voksnes vurdering av {{ person.getNavn() }}</h4>
                                             <form action="?page={{GET('page')}}&til={{GET('til')}}&action={{GET('action')}}&id={{ innslag.getId() }}" method="POST">
-                                                {% embed "Nominasjon/skjema_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}
+                                                {% embed "Nominasjon/skjema_"~ ( type.getKey() == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
                                                 {% embed "Nominasjon/skjema_voksen.html.twig" %}{% endembed %}
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-submit btn-success">Lagre</button>
@@ -79,6 +79,8 @@
                             </li>
                         {% endfor %}
                     </ol>
+                {% else %}
+                    <p>{{ til.getNavn() }} har ingen deltakerkategorier som skal nomineres</p>
                 {% endfor %}
             </div>
         </div>

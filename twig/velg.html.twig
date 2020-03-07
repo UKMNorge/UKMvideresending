@@ -109,8 +109,8 @@
 									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
 								{% endif %}
 								{# KNAPP TIL NOMINASJON #}
-								{% if is_super_admin %}
-									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm superadmin btn-primary btn-xs">Nominasjon</a>
+								{% if mottaker.getArrangement().harNominasjon() %}
+									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm btn-primary btn-xs">Nominasjon</a>
 								{% endif %}
 								{# KNAPP TIL VIDERESENDTE #}
 								<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=videresendte" class="btn btn-ukm btn-primary btn-xs">{{ fra.getVideresendte(mottaker.getId()).getAntall() > 0 ? 'Endre' : 'Start' }}
@@ -137,8 +137,8 @@
 										<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=intoleranser" class="btn btn-ukm btn-primary btn-xs">Allergier og intoleranser</a>
 									{% endif %}
 									{# KNAPP TIL NOMINASJON #}
-									{% if is_super_admin %}
-										<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm superadmin btn-primary btn-xs">Nominasjon</a>
+									{% if mottaker.getArrangement().harNominasjon() %}
+										<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm btn-primary btn-xs">Nominasjon</a>
 									{% endif %}
 
 								{% endif %}
