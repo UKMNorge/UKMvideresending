@@ -59,7 +59,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         }
 
         # Network dash kjører uten mønstringside
-        add_filter('UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments']);
+        #add_filter('UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments']);
     }
 
     /**
