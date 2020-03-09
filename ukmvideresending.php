@@ -11,6 +11,7 @@ Author URI: http://mariusmandal.no
 use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\Arrangement\Videresending\Mottaker;
 use UKMNorge\Innslag\Personer\Person;
+use UKMNorge\Meta\Write as WriteMeta;
 use UKMNorge\Sensitivt\Intoleranse;
 
 require_once('UKM/Autoloader.php');
@@ -57,9 +58,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
             }
         }
-
-        # Network dash kjører uten mønstringside
-        #add_filter('UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments']);
     }
 
     /**
@@ -236,32 +234,38 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         static::require('save/' . basename($_GET['save']) . '.save.php');
     }
 
-    /*
-    public static function middagsgjester($monstring_til, $monstring_fra)
-    {
-        $middagsgjester = array('ukm' => 0, 'fylke1' => 0, 'fylke2' => 0);
-        $sql = new SQL(
-            "SELECT `ledermiddag_ukm`,
-								`ledermiddag_fylke1`,
-								`ledermiddag_fylke2`
-						FROM `smartukm_videresending_ledere_middag`
-						WHERE `pl_to` = '#pl_to'
-						AND `pl_from` = '#pl_from'",
-            array(
-                'pl_to' => $monstring_til,
-                'pl_from' => $monstring_fra
-            )
-        );
-        $res = $sql->run();
 
-        if ($res && mysql_num_rows($res) > 0) {
-            $r = SQL::fetch($res);
-            $middagsgjester['ukm'] = $r['ledermiddag_ukm'];
-            $middagsgjester['fylke1'] = $r['ledermiddag_fylke1'];
-            $middagsgjester['fylke2'] = $r['ledermiddag_fylke2'];
+    /**
+     * Beregn og lagre antall videresendte personer som metadata
+     *
+     * @throws Exception
+     * @return Bool
+     */
+    public static function beregnAntallVideresendtePersoner()
+    {
+        $fra = static::getFra();
+        $til = UKMVideresending::getValgtTil();
+
+
+        $unike_personer = [];
+        foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag ) {
+            foreach ($innslag->getPersoner()->getAll() as $person) {
+                $unike_personer[] = $person->getId();
+            }
         }
-        return $middagsgjester;
+        $unike_personer = array_unique($unike_personer);
+
+        WriteMeta::set(
+            $fra->getMeta('antall_videresendte_personer_til_'. $til->getId())
+                ->set(
+                    sizeof($unike_personer)
+                )
+        );
+
+        return true;
     }
+
+    /*
 
     public static function overnattingssteder()
     {
@@ -271,35 +275,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             'hotell'        => 'Lederhotellet',
             'privat'        => 'Privat/annet'
         ];
-    }
-
-    public static function calcAntallPersoner()
-    {
-        $monstring = static::getFra();
-        $festivalen = UKMVideresending::getValgtTil();
-
-        if ($monstring->getType() != 'fylke') {
-            throw new Exception('Kun fylkesmønstringer skal beregne antall personer totalt');
-        }
-
-        $unike_personer = [];
-        foreach ($festivalen->getInnslag()->getAll() as $innslag) {
-            if ($innslag->getFylke()->getId() != $monstring->getFylke()->getId()) {
-                continue;
-            }
-
-            foreach ($innslag->getPersoner()->getAll() as $person) {
-                if ($person->erVideresendtTil($festivalen)) {
-                    $unike_personer[] = $person->getId();
-                }
-            }
-        }
-        $unike_personer = array_unique($unike_personer);
-
-        static::updateInfoskjema(
-            'systemet_overnatting_spektrumdeltakere',
-            sizeof($unike_personer)
-        );
     }
 
     public static function updateInfoskjema($field, $value)
@@ -374,28 +349,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             ]
         );
         return $sql->run('field', 'field');
-    }
-
-    public static function checkDocuments($MESSAGES)
-    {
-        $month = date('n');
-        $season = ($month > 7) ? date('Y') + 1 : date('Y');
-
-        $info1 = get_site_option('UKMFvideresending_info1_' . $season);
-
-        if ($month < 6) {
-            if (!$info1 || empty($info1)) {
-                $MESSAGES[] = array(
-                    'level' => 'alert-warning',
-                    'module' => 'UKMVideresending',
-                    'header' => 'Info 1-dokumentet er ikke oppdatert fra i fjor!',
-                    'body' => 'Rett dette ved å legge inn rett dokument i Mønstringsmodulen.',
-                    'link' => '//ukm.no/festivalen/wp-admin/admin.php?page=UKMMonstring'
-                );
-                return $MESSAGES;
-            }
-        }
-        return $MESSAGES;
     }
     */
 

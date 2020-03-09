@@ -11,7 +11,6 @@ $person 		= $innslag->getPersoner()->get( $_POST['person'] );
 $innslag->getPersoner()->fjern( $person );
 write_person::fjern( $person );
 
-if( UKMVideresending::getFra()->getType() == 'fylke' ) {
-	UKMVideresending::calcAntallPersoner();
-}
+UKMVideresending::beregnAntallVideresendtePersoner();
+
 UKMVideresending::addResponseData('success',true);

@@ -1,5 +1,5 @@
 {% extends "Layout/base.html.twig" %}
-
+ 
 {% block content %}
 	<script>
 		var netter = [{% for natt in netter %}'{{ natt.dag~'_'~natt.mnd }}'{{ not loop.last ? ',' }}{% endfor %}];
