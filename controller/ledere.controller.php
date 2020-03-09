@@ -1,76 +1,38 @@
 <?php
-require_once( 'UKM/leder.class.php' );
 
-UKMVideresending::calcAntallPersoner();
+// Tell opp antall personer, sånn at vi er sikker på at vi jobber med riktig antall
 
-$monstring = UKMVideresending::getFra();
-$festivalen = UKMVideresending::getValgtTil();
+use UKMNorge\Arrangement\Videresending\Ledere\Leder;
+use UKMNorge\Arrangement\Videresending\Ledere\Ledere;
+use UKMNorge\Arrangement\Videresending\Ledere\Write as WriteLeder;
 
-/**
- * HENT UT INFORMASJON OM LEDERE
-**/
-$ledere = [];
-// HOVEDLEDER
-$hovedleder = new leder();
-$hovedleder_load = $hovedleder->load_by_type(
-	$monstring->getId(), 
-	$festivalen->getId(),
-	'hoved'
-);
-// Opprett hovedleder hvis dette ikke allerede er gjort
-if( !$hovedleder_load ) {
-	$hovedleder->set('type', 'hoved');
-	$hovedleder_create = $hovedleder->create(
-		$monstring->getId(), 
-		$festivalen->getId(), 
-		$festivalen->getSesong()
-	);
+UKMVideresending::beregnAntallVideresendtePersoner();
+
+$til = UKMVideresending::getValgtTil();
+$fra = UKMVideresending::getFra();
+
+// Sørg for at hovedleder og utstillingsleder finnes før vi starter
+$hovedleder = Leder::getByType( $fra->getId(), $til->getId(), 'hoved');
+if( !$hovedleder->eksisterer() ) {
+    WriteLeder::create($hovedleder);
 }
 
-// UTSTILLINGSLEDER
-$utstillingleder = new leder();
-$utstillingleder_load = $utstillingleder->load_by_type(
-	$monstring->getId(),
-	$festivalen->getId(),
-	'utstilling'
-);
-// Opprett utstillingsleder hvis dette ikke allerede er gjort
-if( !$utstillingleder_load ) {
-	$utstillingleder->set('type', 'utstilling');
-	$utstillingleder_create = $utstillingleder->create(
-		$monstring->getId(),
-		$festivalen->getId(),
-		$festivalen->getSesong()
-	);
+$utstillingleder = Leder::getByType( $fra->getId(), $til->getId(), 'utstilling');
+if( !$utstillingleder->eksisterer() ) {
+    WriteLeder::create($utstillingleder);
 }
 
-$ledere[] = $hovedleder;
-$ledere[] = $utstillingleder;
+$ledere = new Ledere( $fra->getId(), $til->getId() );
 
-// ANDRE LAGREDE LEDERE
-$andre_ledere = new SQL("
-	SELECT `l_id`
-	FROM `smartukm_videresending_ledere_ny`
-	WHERE `pl_id_from` = '#pl_from'
-	AND `pl_id_to` = '#pl_to'
-	AND `season` = '#season'
-	AND (`l_type` != 'utstilling' AND `l_type` != 'hoved')",
-	[
-		'pl_from' => $monstring->getId(),
-		'pl_to' => $festivalen->getId(),
-		'season' => $festivalen->getSesong(),
-	]
+UKMVideresending::addViewData(
+    [
+        'ledere' => $ledere,
+        'pris_hotelldogn' => $til->getArrangement()->getMetaValue('pris_hotelldogn'),
+        'overnattingssteder' => UKMVideresending::getOvernattingssteder( $til->getArrangement() )
+    ]
 );
-$res = $andre_ledere->run();
-
-while( $r = SQL::fetch( $res ) ) {
-	$ledere[] = new leder( $r['l_id'] );
-}
-
-
-/**
- * HOVEDLEDERE NATT
-**/
+/*
+## HOVEDLEDERE NATT
 
 // Hovedledere natt
 $nattledere = [];
@@ -94,9 +56,8 @@ if( $res ) {
 }
 
 UKMVideresending::addViewData('nattledere', $nattledere);
-UKMVideresending::addViewData('unike_deltakere', UKMVideresending::getInfoSkjema('systemet_overnatting_spektrumdeltakere'));
-UKMVideresending::addViewData('ledere', $ledere);
 UKMVideresending::addViewData('netter', $festivalen->getNetter());
 UKMVideresending::addViewData('overnattingssteder', UKMVideresending::overnattingssteder());
 UKMVideresending::addViewData('pris_hotelldogn',  get_site_option('UKMFvideresending_hotelldogn_pris_'. $festivalen->getSesong() ));
 UKMVideresending::addViewData('overnatting_kommentar', UKMVideresending::getInfoSkjema('overnatting_kommentar'));
+*/

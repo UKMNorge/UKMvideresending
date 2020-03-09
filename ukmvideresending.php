@@ -265,92 +265,24 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         return true;
     }
 
-    /*
-
-    public static function overnattingssteder()
+    /**
+     * Hent alle overnattingssteder for et gitt arrangement
+     *
+     * @param Arrangement $arrangement_til
+     * @return Array
+     */
+    public static function getOvernattingssteder( Arrangement $arrangement_til )
     {
-        die('Gjør dette dynamisk!');
+        $deltakerovernatting = $arrangement_til->getMetaValue('navn_deltakerovernatting') ? 
+            $arrangement_til->getMetaValue('navn_deltakerovernatting') :
+            'Deltakerovernatting';
+
         return [
-            'deltakere'     => 'Landsbyen',
+            'deltakere'     => $deltakerovernatting,
             'hotell'        => 'Lederhotellet',
             'privat'        => 'Privat/annet'
         ];
     }
-
-    public static function updateInfoskjema($field, $value)
-    {
-        $monstring = static::getFra();
-        $festivalen = UKMVideresending::getValgtTil();
-
-        if ($monstring->getType() != 'fylke') {
-            throw new Exception('Kun fylkesmønstringer skal benytte infoskjema');
-        }
-
-
-        $sql = new SQL(
-            "
-			SELECT `#field` AS `field`
-			FROM `smartukm_videresending_infoskjema`
-			WHERE `pl_id` = '#pl_to'
-				AND `pl_id_from` = '#pl_from'",
-            [
-                'pl_to' => $festivalen->getId(),
-                'pl_from' => $monstring->getId(),
-                'field' => $field
-            ]
-        );
-        $res = $sql->run();
-
-        // Lik verdi = return true        
-        $row = SQL::fetch($res);
-        if ($row['field'] == $value) {
-            return true;
-        }
-
-        //  Finnes ikke i databasen? insert
-        if (SQL::numRows($res) == 0) {
-            $SQLins = new SQLins('smartukm_videresending_infoskjema');
-            $SQLins->add('pl_id', $festivalen->getId());
-            $SQLins->add('pl_id_from', $monstring->getId());
-        } else {
-            $SQLins = new SQLins(
-                'smartukm_videresending_infoskjema',
-                [
-                    'pl_id' => $festivalen->getId(),
-                    'pl_id_from' => $monstring->getId()
-                ]
-            );
-        }
-        $SQLins->add($field, $value);
-        $res = $SQLins->run();
-        return $res != -1;
-    }
-
-
-    public static function getInfoSkjema($field)
-    {
-        $monstring = static::getFra();
-        $festivalen = UKMVideresending::getValgtTil();
-
-        if ($monstring->getType() != 'fylke') {
-            throw new Exception('Kun fylkesmønstringer skal benytte infoskjema');
-        }
-
-        $sql = new SQL(
-            "
-			SELECT `#field` AS `field`
-			FROM `smartukm_videresending_infoskjema`
-			WHERE `pl_id` = '#pl_to'
-				AND `pl_id_from` = '#pl_from'",
-            [
-                'pl_to' => $festivalen->getId(),
-                'pl_from' => $monstring->getId(),
-                'field' => $field
-            ]
-        );
-        return $sql->run('field', 'field');
-    }
-    */
 
     /**
      * Hent et TwigJS-objekt av en person og dens allergier

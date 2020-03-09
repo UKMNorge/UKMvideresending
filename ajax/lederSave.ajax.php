@@ -1,19 +1,22 @@
 <?php
-	
-require_once('UKM/leder.class.php');
+
+use UKMNorge\Arrangement\Videresending\Ledere\Leder;
+use UKMNorge\Arrangement\Videresending\Ledere\Write;
+
+require_once('UKM/Autoloader.php');
 	
 foreach( $_POST as $data ) {
 	if( isset( $data['name'] ) && isset( $data['value'] ) ) {
 		$_FORM[ $data['name'] ] = $data['value'];
 	}
 }
-	
-$leder = new leder( $_POST['leder'] );
-$leder->set('l_type', $_FORM['leder_type']);
-$leder->set('l_navn', $_FORM['leder_navn'] );
-$leder->set('l_mobilnummer', str_replace(' ','', $_FORM['leder_mobil'] ) );
-$leder->set('l_epost', $_FORM['leder_epost']);
 
-$res = $leder->update();
+$leder = Leder::getById( intval($_POST['leder']) );
+$leder->setType( $_FORM['leder_type'] );
+$leder->setNavn( $_FORM['leder_navn']);
+$leder->setMobil( intval( str_replace(' ', '', $_FORM['leder_mobil'] ) ) );
+$leder->setEpost( $_FORM['leder_epost']);
 
-UKMVideresending::addResponseData('success', $res);
+$leder = Write::save( $leder );
+
+UKMVideresending::addResponseData('success', true);

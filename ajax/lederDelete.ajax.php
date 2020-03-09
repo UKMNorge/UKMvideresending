@@ -1,8 +1,10 @@
 <?php
-	
-require_once('UKM/leder.class.php');
-	
-$leder = new leder( $_POST['leder'] );
-$res = $leder->delete( UKMVideresending::getFra()->getId() );
+
+use UKMNorge\Arrangement\Videresending\Ledere\Leder;
+use UKMNorge\Arrangement\Videresending\Ledere\Write;
+
+$leder = Leder::getById( intval($_POST['leder'] ));
+
+$res = Write::delete( $leder );
 
 UKMVideresending::addResponseData('success', $res);

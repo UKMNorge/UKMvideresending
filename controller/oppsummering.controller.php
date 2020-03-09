@@ -102,22 +102,21 @@ if( is_array( $sum['personer'] ) ) {
 }
 
 if( $til->getArrangement()->getType() == 'land' ) {
-    throw new Exception('@todo: bruk metadata');
     UKMVideresending::addviewData('videresendte', $sum);
 
     $kvote = new stdClass();
-    $kvote->deltakere = get_site_option('UKMFvideresending_kvote_deltakere'.'_'.$til->getSesong());
-    $kvote->ledere = get_site_option('UKMFvideresending_kvote_ledere'.'_'.$til->getSesong());
+    $kvote->deltakere = intval($til->getArrangement()->getMetaValue('kvote_deltakere'));
+    $kvote->ledere = intval($til->getArrangement()->getMetaValue('kvote_ledere'));
     $kvote->total = $kvote->deltakere + $kvote->ledere;
 
     $pris = new stdClass();
-    $pris->subsidiert = get_site_option('UKMFvideresending_avgift_subsidiert'.'_'.$til->getSesong());
-    $pris->ordinar = get_site_option('UKMFvideresending_avgift_ordinar'.'_'.$til->getSesong());;
-    $pris->reise = get_site_option('UKMFvideresending_avgift_reise'.'_'.$til->getSesong());;
+    $pris->subsidiert = intval($til->getArrangement()->getMetaValue('avgift_subsidiert'));
+    $pris->ordinar = intval($til->getArrangement()->getMetaValue('avgift_ordinar'));
+    $pris->reise = intval($til->getArrangement()->getMetaValue('avgift_reise'));
 
     UKMVideresending::addViewData('kvote', $kvote);
     UKMVideresending::addViewData('pris', $pris);
-    require_once('ledere.controller.php');
+#    require_once('ledere.controller.php');
 
 }
 
