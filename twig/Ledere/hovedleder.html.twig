@@ -15,7 +15,7 @@
 					<select class="hovedleder" name="hovedleder-{{ natt|dato('d_m') }}">
 						{% for leder in ledere.getAll() %}
 							<option value="{{ leder.getId() }}" class="hovedleder-{{ leder.getId() }}" {{ hovedledere.get(natt|dato('d_m')).getLederId() == leder.getId() ? 'selected="selected"' : ''}}>
-								{{ leder.getNavn() }} ({{ leder.type_nice }})
+								{{ leder.getNavn() }} ({{ leder.getTypeNavn() }})
 							</option>
 						{% endfor %}
 					</select>
