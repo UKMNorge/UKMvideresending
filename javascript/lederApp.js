@@ -260,7 +260,7 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
         },
 
         handleLederSaveHoved: function(response) {
-            $('button#hovedleder_save').html('Lagret.').addClass('btn-success').removeClass('btn-primary');
+            $('button#hovedleder_save').html('Lagret').addClass('btn-success').removeClass('btn-primary');
             setTimeout(
                 function() {
                     $('button#hovedleder_save').html('Lagre ansvarlig leder');
