@@ -34,33 +34,3 @@ UKMVideresending::addViewData(
         'overnattingssteder' => UKMVideresending::getOvernattingssteder( $til->getArrangement() )
     ]
 );
-/*
-## HOVEDLEDERE NATT
-
-// Hovedledere natt
-$nattledere = [];
-foreach( $festivalen->getNetter() as $natt ) {
-	$nattledere[ $natt->format('d_m') ] = null;
-}
-
-$sql = new SQL("
-	SELECT `dato`, `l_id` 
-	FROM `smartukm_videresending_ledere_nattleder`
-	WHERE `pl_id_from` = '#plid'",
-	[
-		'plid' => $monstring->getId()
-	]
-);
-$res = $sql->run();
-if( $res ) {
-	while( $r = SQL::fetch( $res ) ) {
-		$nattledere[ $r['dato'] ] = $r['l_id'];
-	}
-}
-
-UKMVideresending::addViewData('nattledere', $nattledere);
-UKMVideresending::addViewData('netter', $festivalen->getNetter());
-UKMVideresending::addViewData('overnattingssteder', UKMVideresending::overnattingssteder());
-UKMVideresending::addViewData('pris_hotelldogn',  get_site_option('UKMFvideresending_hotelldogn_pris_'. $festivalen->getSesong() ));
-UKMVideresending::addViewData('overnatting_kommentar', UKMVideresending::getInfoSkjema('overnatting_kommentar'));
-*/
