@@ -67,8 +67,9 @@
 						<tr>
 							<th>{{ sted }}</th>
 							{% for dato in netter %}
+                                {% set natt = dato|date('d_m') %}
 								<td width="40">
-									<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ dato|date('d_m') }}" value="{{ sted_key }}" {% if leder.natt[ dato|date('d_m') ] is defined and leder.natt[ dato|date('d_m') ].sted is defined and leder.natt[ dato|date('d_m') ].sted == sted_key %} checked="checked" {% endif %}/>
+									<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ natt }}" value="{{ sted_key }}" {% if leder.netter[natt] is defined and leder.netter[natt].sted is defined and leder.netter[natt].sted == sted_key %} checked="checked" {% endif %}/>
 								</td>
 							{% endfor %}
 						</tr>

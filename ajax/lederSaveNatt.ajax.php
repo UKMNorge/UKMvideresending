@@ -1,7 +1,12 @@
 <?php
-require_once('UKM/leder.class.php');
 
-$leder = new leder( $_POST['leder'] );
-$res = $leder->natt( $_POST['dato'], $_POST['sted'] );
+use UKMNorge\Arrangement\Videresending\Ledere\Leder;
+use UKMNorge\Arrangement\Videresending\Ledere\Write;
 
-UKMVideresending::addResponseData('success', $res !== false );
+$leder = Leder::getById( intval( $_POST['leder'] ) );
+$natt = $leder->getNatt( $_POST['dato'] );
+$natt->setSted($_POST['sted'] );
+
+$res = Write::saveNatt($natt);
+
+UKMVideresending::addResponseData('success', !!$res );
