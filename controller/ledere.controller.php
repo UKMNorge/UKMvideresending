@@ -2,6 +2,7 @@
 
 // Tell opp antall personer, sånn at vi er sikker på at vi jobber med riktig antall
 
+use UKMNorge\Arrangement\Videresending\Ledere\Hovedledere;
 use UKMNorge\Arrangement\Videresending\Ledere\Leder;
 use UKMNorge\Arrangement\Videresending\Ledere\Ledere;
 use UKMNorge\Arrangement\Videresending\Ledere\Write as WriteLeder;
@@ -23,10 +24,12 @@ if( !$utstillingleder->eksisterer() ) {
 }
 
 $ledere = new Ledere( $fra->getId(), $til->getId() );
+$hovedledere = new Hovedledere($fra->getId(), $til->getId());
 
 UKMVideresending::addViewData(
     [
         'ledere' => $ledere,
+        'hovedledere' => $hovedledere,
         'pris_hotelldogn' => $til->getArrangement()->getMetaValue('pris_hotelldogn'),
         'overnattingssteder' => UKMVideresending::getOvernattingssteder( $til->getArrangement() )
     ]
