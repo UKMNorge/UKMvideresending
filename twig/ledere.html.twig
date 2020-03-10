@@ -60,7 +60,7 @@
 		<div class="col-xs-12 col-md-4">
 			<div class="form-group" style="margin-top: 1em;">
 				<label>Eventuelle kommentarer ang. overnatting</label>
-				<textarea class="form-control" name="" id="kommentarer_overnatting">{{ overnatting_kommentar }}</textarea>
+				<textarea class="form-control" name="" id="kommentarer_overnatting">{{ fra.getMetaValue('kommentar_overnatting_til_'~ til.getId()) }}</textarea>
 				<p>
 					Hvis noen deltakere ikke skal sove i {{ overnattingssteder['deltakere']|lower }} kan du spesifisere dette her, etter avtale med arrangøren.
 				</p>
