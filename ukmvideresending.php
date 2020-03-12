@@ -203,17 +203,17 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
      **/
     public static function meny()
     {
-        $page = add_menu_page(
-            'Videresending',
-            'Videresending',
-            'editor',
-            'UKMVideresending',
-            ['UKMVideresending', 'renderAdmin'],
-            'dashicons-external', #'//ico.ukm.no/paper-airplane-20.png',
-            90
-        );
         add_action(
-            'admin_print_styles-' . $page,
+            'admin_print_styles-' .
+                add_menu_page(
+                    'Send videre',
+                    'Send videre',
+                    'editor',
+                    'UKMVideresending',
+                    ['UKMVideresending', 'renderAdmin'],
+                    'dashicons-external', #'//ico.ukm.no/paper-airplane-20.png',
+                    90
+                ),
             ['UKMVideresending', 'script']
         );
 
