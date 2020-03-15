@@ -27,6 +27,12 @@ $sum =
     ];
 
 foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag_sendt ) {
+    
+    // Hopp over videresendte innslag av en type som ikke lenger er støttet.
+    if( !$til->getArrangement()->getInnslagTyper()->har( $innslag_sendt->getType() ) ) {
+        continue;
+    }
+    
     // Reload innslag med riktig context, for å få riktig personer og titler
     $innslag = $til->getInnslag()->get($innslag_sendt->getId());
 
@@ -69,8 +75,11 @@ foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag_sendt ) {
  * SUMMER OPP KATEGORIENE OG TOTALEN
 **/
 // SUMMER ALLE SCENE-KATEGORIER TIL EN SCENE-VARIABEL
-foreach( Typer::getAllScene() as $scene_kategori ) {
-    $sort_key = $scene_kategori->getKey() == 'scene' ? 'annet' : $scene_kategori->getKey();
+foreach( $til->getArrangement()->getInnslagTyper()->getAll() as $tillatt_kategori ) {
+    if( !$tillatt_kategori->erScene() ) {
+        continue;
+    }
+    $sort_key = $tillatt_kategori->getKey() == 'scene' ? 'annet' : $tillatt_kategori->getKey();
     if( is_array( $sum[ $sort_key ] ) ) {
         foreach( $sum[ $sort_key ] as $key => $val ) {
             $sum['scene'][ $key ] += $val;
@@ -79,16 +88,12 @@ foreach( Typer::getAllScene() as $scene_kategori ) {
 }
 
 // SUMMER ALT TIL EN TOTAL, BRUK DISSE KATEGORIENE
-$summeres = [
-    'scene',
-    'utstilling',
-    'video',
-    'arrangor',
-    'konferansier',
-    'nettredaksjon'
-];
-
-foreach( $summeres as $kategori ) {
+foreach( $sum as $kategori => $trash ) {
+    // Hopper over grupperingene, som ikke skal brukes
+    // til å beregne total-grunnlag
+    if( in_array( $kategori, ['scene','personer','total'] )) {
+        continue;
+    }
     if( isset( $sum[ $kategori ] ) ) {
         foreach( $sum[ $kategori ] as $key => $val ) {
             $sum['total'][ $key ] += $val;
