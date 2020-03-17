@@ -100,12 +100,17 @@
                                             {% else %}
                                                 <h4>{{ person.getFornavn() }} har ikke levert sin egenvurdering</h4>
                                                 <p>
-                                                    <a href="#" class="nominasjon-sms-purring" data-tel="{{ person.getMobil() }}">
-                                                        Send nominasjons-lenken på sms til {{ person.getFornavn() }}
+                                                    Når du har lagret din vurdering, må du sende nominasjons-lenke på sms til {{person.getFornavn()}},
+                                                    så {{person.getKjonnspronomen()}} får fylt ut sin del av skjemaet.
+                                                </p>
+                                                
+                                                <p>
+                                                    <a href="#" class="nominasjon-sms-purring btn btn-ukm btn-sm" data-tel="{{ person.getMobil() }}">
+                                                        Send nominasjons-lenke til {{ person.getFornavn() }}
                                                     </a>
-                                                    <small>
-                                                        (dette tar deg til SMS-funksjonen, hvor du kan tilpasse meldingen før du sender den)
-                                                    </small>
+                                                </p>
+                                                <p class="small">
+                                                    Dette tar deg til SMS-funksjonen, hvor du kan tilpasse meldingen før du sender den.
                                                 </p>
                                             {% endif %}
                                         </div>
@@ -127,7 +132,11 @@
         </div>
     </fieldset>
         <form action="?page=UKMSMS_gui" method="POST" id="nominasjon-reminder">
-        <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert til UKM-festivalen må du fylle ut nominasjonsskjema på https://ukm-festivalen.no/nominasjon i løpet av kort tid, for fristen går straks ut." />
+        {% if arrangement.getEierType() == 'land' %}
+            <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert til UKM-festivalen må du fylle ut nominasjonsskjema på https://ukm-festivalen.no/nominasjon i løpet av kort tid, for fristen går straks ut." />
+        {% else %}
+            <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert må du fylle ut nominasjonsskjema på https://delta.ukm.no/nominasjon i løpet av kort tid, for fristen går straks ut." />
+        {% endif %}
         <input type="hidden" name="UKMSMS_recipients" id="nominasjon-reminder-recipient" />
     </form>
 {% endblock %}
