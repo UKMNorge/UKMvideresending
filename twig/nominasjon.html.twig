@@ -4,6 +4,16 @@
     <fieldset>
         <legend>Kryss av de som skal nomineres til {{til.getNavn()}}</legend>
 
+        <div class="row" style="max-width:97%">
+            <div class="col-12 col-xs-12">
+                <div class="alert alert-info">
+                    Det er stor forskjell på de ulike nominasjonene.
+                    Hvis den du skal nominere ikke ligger i riktig liste, 
+                    må du først <a href="?page=UKMdeltakere">melde på personen i riktig kategori</a>.
+                </div>
+            </div>
+        </div>
+
         {% if til.getArrangement().getNominasjonInformasjon()|length > 0 %}
             <div class="row">
                 <div class="col-12 col-xs-12">
