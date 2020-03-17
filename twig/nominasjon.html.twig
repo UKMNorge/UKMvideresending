@@ -61,6 +61,28 @@
                                         <div class="col-xs-12 col-lg-5">
                                         {#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
                                             <h4>Den voksnes vurdering av {{ person.getNavn() }}</h4>
+                                            <p class="text-muted">
+                                                Hvis {{ person.getFornavn() }} skal nomineres som 
+                                                {% if type == 'Media' %}
+                                                    arrangør/konferansier, og ikke media, 
+                                                {% elseif type == 'Arrangør' %}
+                                                    media/konferansier, og ikke arrangør,
+                                                {% elseif type == 'Konferansier' %}
+                                                    arrangør/media, og ikke konferansier,
+                                                {% endif %}
+                                                kan du ikke bruke dette skjemaet. Da må du fylle ut et 
+                                                {% if type == 'Media' %}
+                                                    arrangør/konferansier-skjema.
+                                                {% elseif type == 'Arrangør' %}
+                                                    media/konferansier-skjema.
+                                                {% elseif type == 'Konferansier' %}
+                                                    arrangør/media-skjema.
+                                                {% endif %}
+                                                <br />
+                                                Finner du ikke {{ person.getFornavn() }} der? 
+                                                Da må {{ person.getKjonnspronomen() }} <a href="?page=UKMdeltakere">meldes på</a> først.
+                                            </p>
+                                            
                                             <form action="?page={{GET('page')}}&til={{GET('til')}}&action={{GET('action')}}&id={{ innslag.getId() }}" method="POST">
                                                 {% embed "Nominasjon/skjema_"~ ( type.getKey() == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
                                                 {% embed "Nominasjon/skjema_voksen.html.twig" %}{% endembed %}
