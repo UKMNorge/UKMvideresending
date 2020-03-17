@@ -85,8 +85,15 @@
                                                 </p>
                                                 {% embed "Nominasjon/skjema_"~ ( type.getKey() == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
                                                 {% embed "Nominasjon/skjema_voksen.html.twig" %}{% endembed %}
+
+                                                {% if type.getKey() != 'konferansier' %}
+                                                    <div class="form-group" style="margin-bottom: 2em;">
+                                                        <label>{{ person.getFornavn() }} sitt mobilnummer</label>
+                                                        <input type="tel" name="deltaker-mobil" maxlength="8" value="{{ person.getMobil() }}" class="form-control" required />
+                                                    </div>
+                                                {% endif %}
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-submit btn-success">Lagre</button>
+                                                    <button type="submit" class="btn btn-submit btn-ukm btn-sm btn-success">Lagre</button>
                                                 </div>
                                             </form>
                                         </div>

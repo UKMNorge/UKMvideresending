@@ -1,6 +1,7 @@
 <?php
 
 use UKMNorge\Innslag\Nominasjon\Write;
+use UKMNorge\Innslag\Personer\Write as WritePerson;
 
 $fra = UKMVideresending::getFra();
 $til = UKMVideresending::getValgtTil();
@@ -44,6 +45,13 @@ try {
     $nominasjon->setVoksen($voksen);
 
     Write::saveState( $nominasjon, true );
+
+    if( isset($_POST['deltaker-mobil'])) {
+        $person = $innslag->getPerson();
+        if( $person->getMobil() != $_POST['deltaker-mobil']);
+        $person->setMobil($_POST['deltaker-mobil']);
+        WritePerson::save($person);
+    }
 
     UKMVideresending::getFlash()->success(
         'Lagret nominasjon for '. 
