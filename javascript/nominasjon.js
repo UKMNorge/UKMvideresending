@@ -63,11 +63,13 @@ jQuery(document).ready(function() {
 jQuery(document).on('nominasjon:konferansier:url:hide', function(e, id) {
     //	console.log('HIDE', id, e);
     jQuery('li#nominert-header-' + id + ' .filopplasting-url').parents('div.form-group').slideUp();
+    jQuery('li#nominert-header-' + id + ' .mediefilerWarning').fadeIn();
 });
 
 jQuery(document).on('nominasjon:konferansier:url:show', function(e, id) {
     //	console.log('SHOW', id, e);
     jQuery('li#nominert-header-' + id + ' .filopplasting-url').parents('div.form-group').slideDown();
+    jQuery('li#nominert-header-' + id + ' .mediefilerWarning').fadeOut(250);
 });
 
 
