@@ -11,6 +11,7 @@ Author URI: http://mariusmandal.no
 use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\Arrangement\Videresending\Mottaker;
 use UKMNorge\Innslag\Personer\Person;
+use UKMNorge\Meta\Write as WriteMeta;
 use UKMNorge\Sensitivt\Intoleranse;
 
 require_once('UKM/Autoloader.php');
@@ -43,6 +44,11 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         }
     }
 
+    /**
+     * Hooker modulen inn i Wordpress
+     *
+     * @return void
+     */
     public static function hook()
     {
         # Kun initier på mønstringssider
@@ -52,9 +58,6 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
             }
         }
-
-        # Network dash kjører uten mønstringside
-        add_filter('UKMWPNETWDASH_messages', ['UKMVideresending', 'checkDocuments']);
     }
 
     /**
@@ -106,13 +109,18 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
     public static function getViewData()
     {
         static::addViewData('fra', static::getFra());
-        if( isset( $_REQUEST['til'] ) ) {
+        if (isset($_REQUEST['til'])) {
             static::addViewData('til', static::getValgtTil());
         }
         static::addViewData('tab', static::getAction());
         return parent::getViewData();
     }
 
+    /**
+     * Håndterer alle ajax-kall
+     *
+     * @return void
+     */
     public static function ajax()
     {
         if (is_array($_POST)) {
@@ -142,12 +150,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             ];
 
             if (in_array($_POST['subaction'], $supported_actions)) {
-                ## SETUP LOGGER
-                global $current_user;
-                get_currentuserinfo();
-                require_once('UKM/logger.class.php');
-                UKMlogger::setID('wordpress', $current_user->ID, get_option('pl_id'));
-
+                static::setupLogger();
                 require_once('ajax/' . $_POST['subaction'] . '.ajax.php');
             } else {
                 throw new Exception('Beklager, støtter ikke denne handlingen!');
@@ -163,6 +166,13 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         die();
     }
 
+    /**
+     * Legg til alle scripts som videresendingen bruker
+     * 
+     * (og ja, det er en del!)
+     *
+     * @return void
+     */
     public static function script()
     {
         wp_enqueue_script('WPbootstrap3_js');
@@ -183,16 +193,14 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             wp_enqueue_script('UKMVideresending_script_leder_overnatting', plugin_dir_url(__FILE__) . 'javascript/lederOvernatting.js');
         }
         // JS-app for leder-håndtering
-        if (static::getAction() == 'reiseinfo' || static::getAction() == 'intoleranser' ) {
-        }
-        switch( static::getAction() ) {
+        switch (static::getAction()) {
             case 'nominasjon':
                 wp_enqueue_script('UKMVideresending_script_nominasjon', plugin_dir_url(__FILE__) . 'javascript/nominasjon.js');
-            break;
+                break;
             case 'reiseinfo':
             case 'intoleranser':
                 wp_enqueue_script('UKMVideresending_script_tilrettelegging', plugin_dir_url(__FILE__) . 'javascript/tilrettelegging.js');
-            break;
+                break;
         }
         wp_enqueue_script('UKMVideresending_script_videresending', plugin_dir_url(__FILE__) . 'ukmvideresending.js');
     }
@@ -206,6 +214,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         add_action(
             'admin_print_styles-' .
                 add_menu_page(
+
                     'Send videre',
                     'Send videre',
                     'editor',
@@ -216,204 +225,64 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 ),
             ['UKMVideresending', 'script']
         );
-
-        if (static::getType() == 'fylke') {
-            // Legg videresendingsskjemaet som en submenu under Mønstring.
-            add_submenu_page(
-                'UKMMonstring',
-                'Videresendingsskjema',
-                'Skjema for videresending',
-                'editor',
-                'UKMVideresendingsskjema',
-                ['UKMVideresending', 'skjema']
-            );
-        }
     }
 
     /**
-     * Lar fylkene administrere sitt skjema
-     **/
-    public static function skjema()
+     * Håndter lagring
+     */
+    public static function save()
     {
-        ## ACTION CONTROLLER
-        require_once('controller/skjema_admin.controller.php');
-
-        ## RENDER
-        echo TWIG('Skjema/admin.html.twig', static::getViewData(), dirname(__FILE__), true);
-        return;
+        static::require('save/' . basename($_GET['save']) . '.save.php');
     }
 
-    public static function skjema_script()
-    {
-        wp_enqueue_script('WPbootstrap3_js');
-        wp_enqueue_style('WPbootstrap3_css');
-        wp_enqueue_script('UKMVideresending_script_skjema_admin', plugin_dir_url(__FILE__) . 'javascript/skjema_admin.js');
-    }
 
     /**
+     * Beregn og lagre antall videresendte personer som metadata
      *
-     **/
-    public static function middagsgjester($monstring_til, $monstring_fra)
+     * @throws Exception
+     * @return Bool
+     */
+    public static function beregnAntallVideresendtePersoner()
     {
-        $middagsgjester = array('ukm' => 0, 'fylke1' => 0, 'fylke2' => 0);
-        $sql = new SQL(
-            "SELECT `ledermiddag_ukm`,
-								`ledermiddag_fylke1`,
-								`ledermiddag_fylke2`
-						FROM `smartukm_videresending_ledere_middag`
-						WHERE `pl_to` = '#pl_to'
-						AND `pl_from` = '#pl_from'",
-            array(
-                'pl_to' => $monstring_til,
-                'pl_from' => $monstring_fra
-            )
-        );
-        $res = $sql->run();
+        $fra = static::getFra();
+        $til = UKMVideresending::getValgtTil();
 
-        if ($res && mysql_num_rows($res) > 0) {
-            $r = SQL::fetch($res);
-            $middagsgjester['ukm'] = $r['ledermiddag_ukm'];
-            $middagsgjester['fylke1'] = $r['ledermiddag_fylke1'];
-            $middagsgjester['fylke2'] = $r['ledermiddag_fylke2'];
-        }
-        return $middagsgjester;
-    }
-
-    public static function overnattingssteder()
-    {
-        return [
-            'deltakere'     => 'Landsbyen',
-            'hotell'        => 'Lederhotellet',
-            'privat'        => 'Privat/annet'
-        ];
-    }
-
-    public static function calcAntallPersoner()
-    {
-        $monstring = static::getFra();
-        $festivalen = UKMVideresending::getValgtTil();
-
-        if ($monstring->getType() != 'fylke') {
-            throw new Exception('Kun fylkesmønstringer skal beregne antall personer totalt');
-        }
 
         $unike_personer = [];
-        foreach ($festivalen->getInnslag()->getAll() as $innslag) {
-            if ($innslag->getFylke()->getId() != $monstring->getFylke()->getId()) {
-                continue;
-            }
-
+        foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag ) {
             foreach ($innslag->getPersoner()->getAll() as $person) {
-                if ($person->erVideresendtTil($festivalen)) {
-                    $unike_personer[] = $person->getId();
-                }
+                $unike_personer[] = $person->getId();
             }
         }
         $unike_personer = array_unique($unike_personer);
 
-        static::updateInfoskjema(
-            'systemet_overnatting_spektrumdeltakere',
-            sizeof($unike_personer)
+        WriteMeta::set(
+            $fra->getMeta('antall_videresendte_personer_til_'. $til->getId())
+                ->set(
+                    sizeof($unike_personer)
+                )
         );
+
+        return true;
     }
 
-    public static function updateInfoskjema($field, $value)
+    /**
+     * Hent alle overnattingssteder for et gitt arrangement
+     *
+     * @param Arrangement $arrangement_til
+     * @return Array
+     */
+    public static function getOvernattingssteder( Arrangement $arrangement_til )
     {
-        $monstring = static::getFra();
-        $festivalen = UKMVideresending::getValgtTil();
+        $deltakerovernatting = $arrangement_til->getMetaValue('navn_deltakerovernatting') ? 
+            $arrangement_til->getMetaValue('navn_deltakerovernatting') :
+            'Deltakerovernatting';
 
-        if ($monstring->getType() != 'fylke') {
-            throw new Exception('Kun fylkesmønstringer skal benytte infoskjema');
-        }
-
-
-        $sql = new SQL(
-            "
-			SELECT `#field` AS `field`
-			FROM `smartukm_videresending_infoskjema`
-			WHERE `pl_id` = '#pl_to'
-				AND `pl_id_from` = '#pl_from'",
-            [
-                'pl_to' => $festivalen->getId(),
-                'pl_from' => $monstring->getId(),
-                'field' => $field
-            ]
-        );
-        $res = $sql->run();
-
-        /**
-         * Lik verdi = return true
-         **/
-        $row = SQL::fetch($res);
-        if ($row['field'] == $value) {
-            return true;
-        }
-
-        /**
-         * Finnes ikke i databasen? insert
-         **/
-        if (SQL::numRows($res) == 0) {
-            $SQLins = new SQLins('smartukm_videresending_infoskjema');
-            $SQLins->add('pl_id', $festivalen->getId());
-            $SQLins->add('pl_id_from', $monstring->getId());
-        } else {
-            $SQLins = new SQLins(
-                'smartukm_videresending_infoskjema',
-                [
-                    'pl_id' => $festivalen->getId(),
-                    'pl_id_from' => $monstring->getId()
-                ]
-            );
-        }
-        $SQLins->add($field, $value);
-        $res = $SQLins->run();
-        return $res != -1;
-    }
-
-    public static function getInfoSkjema($field)
-    {
-        $monstring = static::getFra();
-        $festivalen = UKMVideresending::getValgtTil();
-
-        if ($monstring->getType() != 'fylke') {
-            throw new Exception('Kun fylkesmønstringer skal benytte infoskjema');
-        }
-
-        $sql = new SQL(
-            "
-			SELECT `#field` AS `field`
-			FROM `smartukm_videresending_infoskjema`
-			WHERE `pl_id` = '#pl_to'
-				AND `pl_id_from` = '#pl_from'",
-            [
-                'pl_to' => $festivalen->getId(),
-                'pl_from' => $monstring->getId(),
-                'field' => $field
-            ]
-        );
-        return $sql->run('field', 'field');
-    }
-
-    public static function checkDocuments($MESSAGES)
-    {
-        $month = date('n');
-        $season = ($month > 7) ? date('Y') + 1 : date('Y');
-
-        $info1 = get_site_option('UKMFvideresending_info1_' . $season);
-
-        if ($month < 6) {
-            if (!$info1 || empty($info1)) {
-                $MESSAGES[] = array(
-                    'level' => 'alert-warning',
-                    'module' => 'UKMVideresending',
-                    'header' => 'Info 1-dokumentet er ikke oppdatert fra i fjor!',
-                    'body' => 'Rett dette ved å legge inn rett dokument i Mønstringsmodulen.',
-                    'link' => '//ukm.no/festivalen/wp-admin/admin.php?page=UKMMonstring'
-                );
-                return $MESSAGES;
-            }
-        }
-        return $MESSAGES;
+        return [
+            'deltakere'     => $deltakerovernatting,
+            'hotell'        => 'Lederhotellet',
+            'privat'        => 'Privat/annet'
+        ];
     }
 
     /**
@@ -423,17 +292,18 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
      * @param Intoleranse $allergi
      * @return stdClass
      */
-    public static function getIntoleransePersonData( Person $person, Intoleranse $allergi=null ) {
+    public static function getIntoleransePersonData(Person $person, Intoleranse $allergi = null)
+    {
         $data = new stdClass();
         $data->ID = $person->getId();
         $data->navn = $person->getNavn();
         $data->mobil = $person->getMobil();
-        if( !is_null($allergi) ) {
+        if (!is_null($allergi)) {
             $data->intoleranse_liste = $allergi->getListe();
             $data->intoleranse_human = $allergi->getListeHuman();
             $data->intoleranse_tekst = $allergi->getTekst();
         }
-    
+
         return $data;
     }
 }

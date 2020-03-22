@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th>Sted</th>
-			{% for natt in netter %}
+			{% for natt in til.getArrangement().getNetter %}
 				<th>{{ natt|dato('d.m') }}</th>
 			{% endfor %}
 		</tr>
@@ -11,7 +11,7 @@
 		{% for sted_key, sted in overnattingssteder %}
 			<tr>
 				<th>{{ sted }}</th>
-				{% for natt in netter %}
+				{% for natt in til.getArrangement().getNetter() %}
 					<td id="status-{{ sted_key }}-{{ natt|dato('d_m') }}" {{ sted_key == 'deltakere' ? 'class="alert-danger"'}}>0</td>
 				{% endfor %}
 			</tr>

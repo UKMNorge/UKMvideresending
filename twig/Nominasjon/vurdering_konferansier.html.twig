@@ -1,5 +1,14 @@
-<h3>Egenvurdering</h3>
+<h4>Egenvurdering</h4>
 <p>
 	Konferansierene skal ikke levere noen egenvurdering, 
 	og nomineres kun basert på den voksnes vurdering.
 </p>
+
+{% if innslag.getMediefiler().getAntall() == 0 %}
+    <p class="mediefilerWarning text-danger" style="display:none;">
+        <span class="dashicons dashicons-warning"></span>
+        Det er ikke 
+        <a href="?page=UKMplayback&action=upload">lastet opp noen mediefiler</a>
+         av {{ innslag.getNavn() }} enda!
+    </p>
+{% endif %}

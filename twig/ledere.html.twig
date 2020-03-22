@@ -1,10 +1,10 @@
 {% extends "Layout/base.html.twig" %}
-
+ 
 {% block content %}
 	<script>
-		var netter = [{% for natt in netter %}'{{ natt.dag~'_'~natt.mnd }}'{{ not loop.last ? ',' }}{% endfor %}];
+		var netter = [{% for natt in til.getArrangement().getNetter() %}'{{ natt|date("d_m") }}'{{ not loop.last ? ',' }}{% endfor %}];
 		var steder = [{% for key,sted in overnattingssteder %}{'{{ key }}': '{{ sted }}'}{{ not loop.last ? ',' }}{% endfor %}];
-		var deltakere = {{ unike_deltakere > 0 ? unike_deltakere : 0 }};
+		var deltakere = {{ fra.getMetaValue('antall_videresendte_personer_til_'~ til.getId()) }};
 		var pris_hotelldogn = {{ pris_hotelldogn }};
 	</script>
 
@@ -13,8 +13,8 @@
 			<h3>Registrer dine ledere, og hvor de overnatter de ulike nettene</h3>
 			
 			<ol class="list-group" id="alle_ledere">
-				{% for leder in ledere %}
-					{% include "js/ledere_leder.html.twig" %}
+				{% for leder in ledere.getAll() %}
+					{% include "js/ledere_leder.html.twig" with {leder: leder.getJsObject(), netter: til.getArrangement().getNetter() } %}
 				{% endfor %}
 			</ol>
 			
@@ -37,7 +37,11 @@
 				Systemet har beregnet at 
 				<span class="deltakere_i_landsbyen">x deltakere</span>
 				skal sove i {{ overnattingssteder['deltakere']|lower }}.
-				UKM-festivalen krever minst én leder per 10 deltakere i {{ overnattingssteder['deltakere']|lower }} hver natt.
+                UKM-festivalen krever minst 
+                {{ til.getArrangement().getMetaValue('ledere_per_deltakere') }}
+                leder{{ til.getArrangement().getMetaValue('ledere_per_deltakere') != 0 ? 'e' }} per 
+                {{ til.getArrangement().getMetaValue('ledere_per_deltakere_deltakere') }} deltakere 
+                i {{ overnattingssteder['deltakere']|lower }} hver natt.
 				
 				<span class="hotelldogn">
 				<br />
@@ -56,7 +60,7 @@
 		<div class="col-xs-12 col-md-4">
 			<div class="form-group" style="margin-top: 1em;">
 				<label>Eventuelle kommentarer ang. overnatting</label>
-				<textarea class="form-control" name="" id="kommentarer_overnatting">{{ overnatting_kommentar }}</textarea>
+				<textarea class="form-control" name="" id="kommentarer_overnatting">{{ fra.getMetaValue('kommentar_overnatting_til_'~ til.getId()) }}</textarea>
 				<p>
 					Hvis noen deltakere ikke skal sove i {{ overnattingssteder['deltakere']|lower }} kan du spesifisere dette her, etter avtale med arrangøren.
 				</p>

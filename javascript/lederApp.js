@@ -185,7 +185,7 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
 
         handleLederCreate: function(response) {
             $('#alle_ledere').append(twigJS_ledereleder.render(response));
-            $('button#leder_create').html('Legg til leder.').addClass('btn-success').removeClass('btn-warning');
+            $('button#leder_create').html('Legg til leder').addClass('btn-success').removeClass('btn-warning');
 
             var leder = self.registerLeder($('#leder_' + response.leder.ID));
             self.addHovedLeder(leder);
@@ -260,7 +260,7 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
         },
 
         handleLederSaveHoved: function(response) {
-            $('button#hovedleder_save').html('Lagret.').addClass('btn-success').removeClass('btn-primary');
+            $('button#hovedleder_save').html('Lagret').addClass('btn-success').removeClass('btn-primary');
             setTimeout(
                 function() {
                     $('button#hovedleder_save').html('Lagre ansvarlig leder');
@@ -274,9 +274,12 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
          * Faktisk gjør AJAX-kall
          **/
         ajax: function(action, param_data) {
+            var url = new URL(window.location.href);
+
             var data = {
                 action: 'UKMVideresending_ajax',
                 subaction: action,
+                til: url.searchParams.get("til")
             };
 
             if (null !== param_data && undefined !== param_data) {

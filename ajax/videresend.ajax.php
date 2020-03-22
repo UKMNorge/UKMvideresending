@@ -39,10 +39,6 @@ if( $_POST['type'] == 'tittel' ) {
 	WriteTittel::leggtil( $tittel );
 }
 
-// Hvis videresendt til UKM-festivalen skal vi telle opp antall personer
-// til noe..
-if( $til->getEierType() == 'land' ) {
-    UKMVideresending::calcAntallPersoner();
-}
+UKMVideresending::beregnAntallVideresendtePersoner();
 
 UKMVideresending::addResponseData('success',true);

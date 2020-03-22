@@ -3,19 +3,19 @@
 </h3>
 
 <p>
-	Velg én ansvarlig leder per natt i {{ overnattingssteder['deltakere']|lower }} som vil være kontaktperson for UKM Norge, vakter osv.
+	Velg én ansvarlig leder per natt i {{ overnattingssteder['deltakere']|lower }} som vil være kontaktperson for arrangøren, arrangørens nattevakter o.l.
 </p>
 
 <form id="hovedledere">
 	<table class="table table-striped">
-		{% for natt in netter %}
+		{% for natt in til.getArrangement().getNetter() %}
 			<tr>
 				<td>{{ natt|dato('l d.m') }}</td>
 				<td>
 					<select class="hovedleder" name="hovedleder-{{ natt|dato('d_m') }}">
-						{% for leder in ledere %}
-							<option value="{{ leder.l_id }}" class="hovedleder-{{ leder.l_id }}" {{ nattledere[ natt|dato('d_m') ] == leder.l_id ? 'selected="selected"' : ''}}>
-								{{ leder.l_navn }} ({{ leder.type_nice }})
+						{% for leder in ledere.getAll() %}
+							<option value="{{ leder.getId() }}" class="hovedleder-{{ leder.getId() }}" {{ hovedledere.get(natt|dato('d_m')).getLederId() == leder.getId() ? 'selected="selected"' : ''}}>
+								{{ leder.getNavn() }} ({{ leder.getTypeNavn() }})
 							</option>
 						{% endfor %}
 					</select>

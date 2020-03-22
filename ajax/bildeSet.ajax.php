@@ -43,7 +43,7 @@ $data = [
 
 // Slett gammel relasjon
 $old_rel = new Delete(
-	'smartukm_videresending_media',
+	'ukm_videresending_media',
 	$data
 );
 $old_rel->run();
@@ -56,7 +56,7 @@ $data['pl_id'] = $fra->getId();
 
 
 // Sett inn ny relasjon
-$new_rel = new Insert('smartukm_videresending_media');
+$new_rel = new Insert('ukm_videresending_media');
 foreach( $data as $key => $val ) {
 	$new_rel->add( $key, $val );
 }

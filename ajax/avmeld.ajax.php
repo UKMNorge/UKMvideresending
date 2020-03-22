@@ -47,7 +47,6 @@ else {
     WriteArrangement::fjernInnslag( $innslag );
 }
 
-if( $til->getArrangement()->getEierType() == 'land' ) {
-	UKMVideresending::calcAntallPersoner();
-}
+UKMVideresending::beregnAntallVideresendtePersoner();
+
 UKMVideresending::addResponseData('success',true);

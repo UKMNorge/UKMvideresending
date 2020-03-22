@@ -1,27 +1,25 @@
 <?php
 
-$monstring = UKMVideresending::getFra();
-$festivalen = UKMVideresending::getValgtTil('POST');
+use UKMNorge\Arrangement\Videresending\Ledere\Hovedleder;
+use UKMNorge\Arrangement\Videresending\Ledere\Hovedledere;
+use UKMNorge\Arrangement\Videresending\Ledere\Leder;
+use UKMNorge\Arrangement\Videresending\Ledere\Write;
 
-// SLETT ALL FRA DENNE MØNSTRINGEN
-$SQLdel = new SQLdel(
-	'smartukm_videresending_ledere_nattleder', 
-	[
-		'pl_id_from' => $monstring->getId()
-	]
-);
-$SQLdel->run();
+$fra = UKMVideresending::getFra();
+$til = UKMVideresending::getValgtTil();
 
+$hovedledere = new Hovedledere($fra->getId(), $til->getId());
 
 foreach( $_POST as $data ) {
 	if( isset( $data['name'] ) && isset( $data['value'] ) ) {
-		$dato = str_replace('hovedleder-', '', $data['name']);
-		$leder = $data['value'];
-		$SQL = new SQLins('smartukm_videresending_ledere_nattleder');
-		$SQL->add('l_id', $leder);
-		$SQL->add('dato', $dato );
-		$SQL->add('pl_id_from', $monstring->getId());
-		$SQL->run();
+        $dato = str_replace('hovedleder-', '', $data['name']);
+        $leder_id = intval($data['value']);
+
+        $ny_leder = Leder::getById( $leder_id );
+
+        $hovedleder = $hovedledere->get($dato);
+        $hovedleder->setLeder($ny_leder);
+        Write::saveHovedLeder($hovedleder);
 	}
 }
 

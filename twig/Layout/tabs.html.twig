@@ -21,8 +21,8 @@
 	
 
     {# NOMINASJONER #}
-    {% if fra.getType() == 'fylke' %}
-        <a href="?page=UKMnominasjon&action=nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
+    {% if til.getArrangement().harNominasjon() %}
+        <a href="{{ baseLink }}nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
                     <span class="dashicons dashicons-awards"></span>
@@ -69,8 +69,8 @@
         </div>
     </a>
 
-    {# FYLKETS VIDERESENDINGSSKJEMA #}
-    {% if til.getType() == 'land' %}
+    {# LEDERE #}
+    {% if til.getArrangement().getMetaValue('harLederskjema') %}
         <a href="{{ baseLink }}ledere" {{ tab == 'ledere' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
@@ -80,18 +80,9 @@
                 <span class="tab_description">Ledere og overnatting</span>
             </div>
         </a>
+    {% endif %}
 
-        <a href="{{ baseLink }}reiseinfo" {{ tab == 'reiseinfo' ? 'class="active"' : ''}}>
-            <div>
-                <span class="tab_header">
-                    <span class="dashicons dashicons-admin-site-alt"></span>
-                    Reiseinfo
-                </span>
-                <img src="//ico.ukm.no/buss-32.png" width="16"  border="0" /><br />
-                <span class="tab_description">Reise og tilrettelegging</span>
-            </div>
-        </a>
-    {% elseif til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
+    {% if til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
         <a href="{{ baseLink }}infoskjema" {{ tab == 'infoskjema' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">

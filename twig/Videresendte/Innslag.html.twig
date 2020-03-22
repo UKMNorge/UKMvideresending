@@ -4,10 +4,13 @@
 		<li class="videresend_item list-group-item {{ tittel.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
 			<div class="row header">
 				<div class="col-1 col-xs-1">
-					<input type="checkbox" class="videresend" value="true" {{ tittel.erPameldt( til.getId() ) ? 'checked="checked"' : ''}} />
+					<input type="checkbox" class="videresend" value="true" {{ tittel.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
 				</div>
 				<div class="col-9 col-xs-9">
-					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - {{ tittel.getTittel() }}</span>
+					<span class="navn">
+						<strong>{{ innslag.getNavn() }}</strong>
+						-
+						{{ tittel.getTittel() }}</span>
 					<span class="status"></span>
 				</div>
 				<div class="col-2 col-xs-2 text-muted muted small">
@@ -16,21 +19,24 @@
 			</div>
 			<div class="row data" style="display:none;">
 				<div class="col1 col-xs-1"></div>
-				<div class="col-11 col-xs-11 kontroll">
-				</div>
+				<div class="col-11 col-xs-11 kontroll"></div>
 			</div>
 		</li>
-	{# MANGLER TITLER OG KAN KUN AVMELDES #}
+		{# MANGLER TITLER OG KAN KUN AVMELDES #}
 	{% else %}
 		<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="0" id="tittel-0-{{ tittel.getId() }}">
 			<div class="row header">
 				<div class="col-1 col-xs-1">
 					{% if innslag.erVideresendtTil( til.getId() ) %}
-						<input type="checkbox" class="videresend" value="true" checked="checked" />
+						<input type="checkbox" class="videresend" value="true" checked="checked"/>
 					{% endif %}
 				</div>
 				<div class="col-9 col-xs-9">
-					<span class="navn"><strong>{{ innslag.getNavn() }}</strong> - <span class="text-danger small">Har ingen titler påmeldt ditt arrangement og kan derfor ikke videresendes</span></span>
+					<span class="navn">
+						<strong>{{ innslag.getNavn() }}</strong>
+						-
+						<span class="text-danger small">Har ingen titler påmeldt ditt arrangement og kan derfor ikke videresendes</span>
+					</span>
 					<span class="status"></span>
 				</div>
 				<div class="col-2 col-xs-2 text-muted muted small">
@@ -39,21 +45,44 @@
 			</div>
 			<div class="row data" style="display:none;">
 				<div class="col1 col-xs-1"></div>
-				<div class="col-11 col-xs-11 kontroll">
-				</div>
+				<div class="col-11 col-xs-11 kontroll"></div>
 			</div>
-		</li>	
+		</li>
 	{% endfor %}
-{# INNSLAG UTEN TITLER #}
+	{# INNSLAG UTEN TITLER #}
 {% else %}
 	<li class="videresend_item list-group-item {{ innslag.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
 		<div class="row header">
 			<div class="col-1 col-xs-1">
-				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}} />
+				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
 			</div>
 			<div class="col-9 col-xs-9">
-				<span class="navn"><strong>{{ innslag.getNavn() }}</strong></span>
+				<span class="navn">
+					<strong>{{ innslag.getNavn() }}</strong>
+				</span>
 				<span class="status"></span>
+				{% if innslag.getType().kanHaNominasjon() and til.getArrangement().harNominasjonFor(innslag.getType()) and innslag.getNominasjoner().getTil(til.getId()).har() %}
+					<a href="?page={{GET('page')}}&til={{GET('til')}}&action=nominasjon#innslag_{{innslag.getId()}}">
+                        <span class="label label-success" style="margin-left: 1em;">
+                            <span class="dashicons dashicons-awards" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+                            nominert
+                        </span>
+                        {% if innslag.getType().getKey() != 'konferansier' %}
+                            {% if not innslag.getNominasjoner().getTil(til.getId()).harDeltakerskjema() %}
+                                <span class="label label-danger" style="margin-left: 1em;">
+                                    <span class="dashicons dashicons-warning" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+                                    mangler deltakerskjema
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                        {% if not innslag.getNominasjoner().getTil(til.getId()).harVoksenskjema() %}
+                            <span class="label label-danger" style="margin-left: 1em;">
+                                <span class="dashicons dashicons-warning" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+                                mangler voksenskjema
+                            </span>
+                        {% endif %}
+                    </a>
+				{% endif %}
 			</div>
 			<div class="col-2 col-xs-2 text-muted muted small">
 				{{ innslag.getKommune().getNavn() }}
@@ -61,8 +90,7 @@
 		</div>
 		<div class="row data" style="display:none;">
 			<div class="col1 col-xs-1"></div>
-			<div class="col-11 col-xs-11 kontroll">
-			</div>
+			<div class="col-11 col-xs-11 kontroll"></div>
 		</div>
 	</li>
 {% endif %}

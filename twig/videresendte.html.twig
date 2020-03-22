@@ -22,7 +22,7 @@
         {# VIDERESENDING IKKE MULIG DA ARRANGEMENTET IKKE ER REGISTRERT #}
         {% if not til.getArrangement().erRegistrert() %}
             <p class="alert alert-error alert-danger">
-                Mønstringen er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
+                Arrangementet er ikke registrert, og videresending er derfor ikke mulig. Ta kontakt med arrangøren.
             </p>
 
         {# VIDERESENDING HAR IKKE ÅPNET #}
@@ -61,7 +61,15 @@
                     <div class="innslagBlock col-xs-12">
                         <div class="innslagTypeHeader">
                             <img src="{{ type_innslag.getIcon() }}" height="45" />
-                            <h3>{{ type_innslag }}</h3>
+                            <h3>
+                                {{ type_innslag }}
+                                {% if type_innslag.kanHaNominasjon() and til.getArrangement().harNominasjonFor(type_innslag) %}
+                                    <small class="text-info" style="margin-left: 1em;">
+                                        <span class="dashicons dashicons-warning" style="margin-top:.3em;"></span>
+                                        Husk at {{ type_innslag.getNavn()|lower }}-deltakere skal nomineres før de videresendes.
+                                    </small>
+                                {% endif %}
+                            </h3>
                             <div class="clearfix"></div>
                         </div>
                         
