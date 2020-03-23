@@ -1,5 +1,7 @@
 <?php
-	
+
+use UKMNorge\Database\SQL\Query;
+
 $monstring_fra = UKMVideresending::getFra();
 $season = $monstring_fra->getSesong();
 
@@ -246,7 +248,7 @@ UKMVideresending::addViewData('videresendt', $videresendte);
 
 if( $monstring->getType() == 'land' ) {
 	// LEDERE
-	$ledere = new SQL("SELECT COUNT(`l_id`) AS `num_ledere`
+	$ledere = new Query("SELECT COUNT(`l_id`) AS `num_ledere`
 						FROM `smartukm_videresending_ledere_ny`
 						WHERE `pl_id_from` = '#pl_from'
 						AND `pl_id_to` = '#pl_to'

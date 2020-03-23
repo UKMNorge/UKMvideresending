@@ -1,5 +1,10 @@
 <?php
-require_once('UKM/write_innslag.class.php');
+
+use UKMNorge\Innslag\Personer\Write as WritePerson;
+use UKMNorge\Innslag\Titler\Write as WriteTittel;
+use UKMNorge\Innslag\Write;
+
+require_once('UKM/Autoloader.php');
 
 $monstring = UKMVideresending::getFra();
 $innslag = $monstring->getInnslag()->get( $_POST['innslag'] );
@@ -42,7 +47,7 @@ if( isset( $_FORM['tekniske_behov'] ) ) {
 }
 
 # LAGRE INNSLAG
-write_innslag::save( $innslag );
+Write::save( $innslag );
 
 
 
@@ -50,7 +55,6 @@ write_innslag::save( $innslag );
  * INFORMASJON OM EVENTUELLE TITLER
 **/
 if( $_POST['type'] == 'tittel' ) {
-	require_once('UKM/write_tittel.class.php');
 	$tittel = $innslag->getTitler()->get( $_POST['id'] );
 	
 	// TITTELEN
@@ -67,7 +71,7 @@ if( $_POST['type'] == 'tittel' ) {
 	}
 	
 	# LAGRE TITTEL
-	write_tittel::save( $tittel );
+	WriteTittel::save( $tittel );
 }
 
 
@@ -75,7 +79,6 @@ if( $_POST['type'] == 'tittel' ) {
  * INFORMASJON OM EVENTUELLE PERSONER
 **/
 if( isset( $_FORM['personer'] ) ) {
-	require_once('UKM/write_person.class.php');
 
 	foreach( $_FORM['personer'] as $person_id => $persondata ) {
 		$person = $innslag->getPersoner()->get( $person_id );
@@ -86,18 +89,18 @@ if( isset( $_FORM['personer'] ) ) {
 		}
 		// ALDER
 		if( isset( $persondata['alder'] ) ) {
-			$person->setFodselsdato( write_person::fodselsdatoFraAlder( $persondata['alder'] ) );
+			$person->setFodselsdato( WritePerson::fodselsdatoFraAlder( $persondata['alder'] ) );
 		}
 		
 		# LAGRE PERSON
-		write_person::save( $person );
+		WritePerson::save( $person );
 		
 		// INSTRUMENT
 		if( isset( $persondata['instrument'] ) ) {
 			$person->setRolle( $persondata['instrument'] );
 			
 			# LAGRE INSTRUMENT / ROLLE
-			write_person::saveRolle( $person );
+			WritePerson::saveRolle( $person );
 		}
 		
 	}
