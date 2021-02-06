@@ -26,13 +26,13 @@
             </p>
 
         {# VIDERESENDING HAR IKKE ÅPNET #}
-        {% elseif date( til.getArrangement().getFrist2() ) > date() %}
+        {% elseif date( til.getArrangement().getVideresendingApner() ) > date() %}
             <p class="alert alert-warning">
                 <strong>
                     Videresendingen har ikke åpnet. Du kan videresende fra
-                    {{ til.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist2()|dato('H:i') }} 
+                    {{ til.getArrangement().getVideresendingApner()|dato('j.M') ~' kl. '~ til.getArrangement().getVideresendingApner()|dato('H:i') }} 
                     til
-                    {{ til.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist1()|dato('H:i') }}. 
+                    {{ til.getArrangement().getVideresendingStenger()|dato('j.M') ~' kl. '~ til.getArrangement().getVideresendingStenger()|dato('H:i') }}. 
                 </strong>
 
         {# VIDERESENDINGEN ER STENGT #}
@@ -40,9 +40,9 @@
             <p class="alert alert-error alert-danger">
                 <strong>
                     Videresending er kun mulig fra
-                    {{ til.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist2()|dato('H:i') }} 
+                    {{ til.getArrangement().getVideresendingApner()|dato('j.M') ~' kl. '~ til.getArrangement().getVideresendingApner()|dato('H:i') }} 
                     til
-                    {{ til.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ til.getArrangement().getFrist1()|dato('H:i') }}. 
+                    {{ til.getArrangement().getVideresendingStenger()|dato('j.M') ~' kl. '~ til.getArrangement().getVideresendingStenger()|dato('H:i') }}. 
                 </strong>
                 <br />
                 Du kan ikke endre hvem som skal videresendes, men fortsatt ajourføre 
