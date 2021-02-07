@@ -3,10 +3,10 @@
 		<b class="text-muted">VIDERESENDING:</b>
         <br />
         fra 
-        {{ mottaker.getArrangement().getFrist2()|dato('j.M') ~' kl. '~ mottaker.getArrangement().getFrist2()|dato('H:i') }}
+        {{ mottaker.getArrangement().getVideresendingApner()|dato('j.M') ~' kl. '~ mottaker.getArrangement().getVideresendingApner()|dato('H:i') }}
         <br />
         til
-        {{ mottaker.getArrangement().getFrist1()|dato('j.M') ~' kl. '~ mottaker.getArrangement().getFrist1()|dato('H:i') }}
+        {{ mottaker.getArrangement().getVideresendingStenger()|dato('j.M') ~' kl. '~ mottaker.getArrangement().getVideresendingStenger()|dato('H:i') }}
     </div>
 	<h4 class="mt-3 mb-3">
 		<span class="dashicons dashicons-buddicons-groups" style="color: #0073aa;font-size:1.3em;margin-top: -.05em;margin-right: .2em;"></span>
