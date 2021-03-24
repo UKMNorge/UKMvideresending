@@ -184,8 +184,8 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
         },
 
         _dayPaaNorsk: function(dag) {
-            var norsk = ['man','tir','ons','tor','fre','lør','søn'];
-            return norsk[dag-1];
+            var norsk = ['søn', 'man','tir','ons','tor','fre','lør'];
+            return norsk[dag];
         },
 
         handleLederCreate: function(response) {
