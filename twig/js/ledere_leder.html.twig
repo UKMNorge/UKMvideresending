@@ -54,24 +54,42 @@
 				<thead>
 					<tr>
 						<th width="*%">Overnattingssted</th>
-						{% for dato in netter %}
-							<th width="40">
-								{{ dato|dato('D') }}
-								<small>{{ dato|dato('d.m') }}</small>
-							</th>
-						{% endfor %}
+						{% if netterAntall > 0 %}
+							{% for i in 0..netterAntall-1 %}
+								<th width="40">
+									{{ netterjs[i][1] }}
+									<small>{{ netterjs[i][0] }}</small>
+								</th>
+							{% endfor %}
+						{% else %}
+							{% for dd in netter %}
+								<th width="40">
+									{{ dd|dato('D') }}
+									<small>{{ dd|dato('d.m') }}</small>
+								</th>
+							{% endfor %}
+						{% endif %}
 					</tr>
 				</thead>
 				<tbody>
 					{% for sted_key, sted in overnattingssteder %}
 						<tr>
 							<th>{{ sted }}</th>
-							{% for dato in netter %}
-                                {% set natt = dato|date('d_m') %}
-								<td width="40">
-									<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ natt }}" value="{{ sted_key }}" {% if leder.netter[natt] is defined and leder.netter[natt].sted is defined and leder.netter[natt].sted == sted_key %} checked="checked" {% endif %}/>
-								</td>
-							{% endfor %}
+							{% if netterAntall > 0 %}
+								{% for i in 0..netterAntall-1 %}
+									{% set natt = netterjs[2] %}
+									<td width="40">
+										<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ natt }}" value="{{ sted_key }}" {% if leder.netter[natt] is defined and leder.netter[natt].sted is defined and leder.netter[natt].sted == sted_key %} checked="checked" {% endif %}/>
+									</td>
+								{% endfor %}
+							{% else %}
+								{% for dato in netter %}
+									{% set natt = dato|date('d_m') %}
+									<td width="40">
+										<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ natt }}" value="{{ sted_key }}" {% if leder.netter[natt] is defined and leder.netter[natt].sted is defined and leder.netter[natt].sted == sted_key %} checked="checked" {% endif %}/>
+									</td>
+								{% endfor %}
+							{% endif %}
 						</tr>
 					{% endfor %}
 				</tbody>

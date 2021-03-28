@@ -183,7 +183,32 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
             self.ajax('lederCreate');
         },
 
+        _dayPaaNorsk: function(dag) {
+            var norsk = ['søn', 'man','tir','ons','tor','fre','lør'];
+            return norsk[dag];
+        },
+
         handleLederCreate: function(response) {
+            var netterjs = [];
+            for (var key in response.netter) {
+                if (response.netter.hasOwnProperty(key)) {
+                    var dt = new Date(response.netter[key].date)
+                    var date = dt.getDate() < 10 ? '0' + dt.getDate() : dt.getDate();
+                    var month = dt.getMonth()+1 < 10 ? '0' + (dt.getMonth()+1) : (dt.getMonth()+1);
+                    
+                    netterjs.push(
+                        [ 
+                            date + '.' + month,
+                            self._dayPaaNorsk(dt.getDay()),
+                            date + '_' + month
+                        ]    
+                    );
+                }
+            }
+
+            response.netterjs = netterjs;
+            response.netterAntall = netterjs.length;
+
             $('#alle_ledere').append(twigJS_ledereleder.render(response));
             $('button#leder_create').html('Legg til leder').addClass('btn-success').removeClass('btn-warning');
 
