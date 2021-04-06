@@ -178,31 +178,31 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         wp_enqueue_script('WPbootstrap3_js');
         wp_enqueue_style('WPbootstrap3_css');
         wp_enqueue_script('TwigJS');
-        wp_enqueue_style('UKMVideresending_style', plugin_dir_url(__FILE__) . 'ukmvideresending.css');
-        wp_enqueue_script('UKMVideresending_script_emitter', plugin_dir_url(__FILE__) . 'javascript/emitter.js');
+        wp_enqueue_style('UKMVideresending_style', static::getPluginUrl() . 'ukmvideresending.css');
+        wp_enqueue_script('UKMVideresending_script_emitter', static::getPluginUrl() . 'javascript/emitter.js');
         // JS-app for videresending
-        wp_enqueue_script('UKMVideresending_script_videresend_app', plugin_dir_url(__FILE__) . 'javascript/videresendApp.js');
-        wp_enqueue_script('UKMVideresending_script_videresend_item', plugin_dir_url(__FILE__) . 'javascript/videresendItem.js?v=2019-03-13-V2');
+        wp_enqueue_script('UKMVideresending_script_videresend_app', static::getPluginUrl() . 'javascript/videresendApp.js');
+        wp_enqueue_script('UKMVideresending_script_videresend_item', static::getPluginUrl() . 'javascript/videresendItem.js?v=2019-03-13-V2');
         // JS-app for medie-håndtering
-        wp_enqueue_script('UKMVideresending_script_medie_app', plugin_dir_url(__FILE__) . 'javascript/medieApp.js');
-        wp_enqueue_script('UKMVideresending_script_medie_item', plugin_dir_url(__FILE__) . 'javascript/medieItem.js');
+        wp_enqueue_script('UKMVideresending_script_medie_app', static::getPluginUrl() . 'javascript/medieApp.js');
+        wp_enqueue_script('UKMVideresending_script_medie_item', static::getPluginUrl() . 'javascript/medieItem.js');
         // JS-app for leder-håndtering
         if (isset($_GET['action']) && $_GET['action'] == 'ledere') {
-            wp_enqueue_script('UKMVideresending_script_leder_app', plugin_dir_url(__FILE__) . 'javascript/lederApp.js');
-            wp_enqueue_script('UKMVideresending_script_leder_item', plugin_dir_url(__FILE__) . 'javascript/lederItem.js');
-            wp_enqueue_script('UKMVideresending_script_leder_overnatting', plugin_dir_url(__FILE__) . 'javascript/lederOvernatting.js');
+            wp_enqueue_script('UKMVideresending_script_leder_app', static::getPluginUrl() . 'javascript/lederApp.js');
+            wp_enqueue_script('UKMVideresending_script_leder_item', static::getPluginUrl() . 'javascript/lederItem.js');
+            wp_enqueue_script('UKMVideresending_script_leder_overnatting', static::getPluginUrl() . 'javascript/lederOvernatting.js');
         }
         // JS-app for leder-håndtering
         switch (static::getAction()) {
             case 'nominasjon':
-                wp_enqueue_script('UKMVideresending_script_nominasjon', plugin_dir_url(__FILE__) . 'javascript/nominasjon.js');
+                wp_enqueue_script('UKMVideresending_script_nominasjon', static::getPluginUrl() . 'javascript/nominasjon.js');
                 break;
             case 'reiseinfo':
             case 'intoleranser':
-                wp_enqueue_script('UKMVideresending_script_tilrettelegging', plugin_dir_url(__FILE__) . 'javascript/tilrettelegging.js');
+                wp_enqueue_script('UKMVideresending_script_tilrettelegging', static::getPluginUrl() . 'javascript/tilrettelegging.js');
                 break;
         }
-        wp_enqueue_script('UKMVideresending_script_videresending', plugin_dir_url(__FILE__) . 'ukmvideresending.js');
+        wp_enqueue_script('UKMVideresending_script_videresending', static::getPluginUrl() . 'ukmvideresending.js');
     }
 
     /**
