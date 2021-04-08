@@ -56,6 +56,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             if (get_option('pl_id')) {
                 add_action('admin_menu', ['UKMVideresending', 'meny'], 101);
                 add_action('wp_ajax_UKMVideresending_ajax', ['UKMVideresending', 'ajax']);
+                add_action('admin_init', [static::class, 'registerScript']);
             }
         }
     }
@@ -199,10 +200,14 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 break;
             case 'reiseinfo':
             case 'intoleranser':
-                wp_enqueue_script('UKMVideresending_script_tilrettelegging', static::getPluginUrl() . 'javascript/tilrettelegging.js');
+                wp_enqueue_script('UKMVideresending_script_tilrettelegging');
                 break;
         }
         wp_enqueue_script('UKMVideresending_script_videresending', static::getPluginUrl() . 'ukmvideresending.js');
+    }
+
+    public static function registerScript() {
+        wp_register_script('UKMVideresending_script_tilrettelegging', static::getPluginUrl() . 'javascript/tilrettelegging.js');
     }
 
     /**
