@@ -103,7 +103,7 @@
                                                 {% embed "Nominasjon/vurdering_konferansier.html.twig" %}{% endembed %}
                                             {% elseif nominasjon.harDeltakerSkjema() %}
                                                 <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
-                                                {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type ) ~".html.twig" %}{% endembed %}
+                                                {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
                                             {% else %}
                                                 <h4>{{ person.getFornavn() }} har ikke levert sin egenvurdering</h4>
                                                 <p>
