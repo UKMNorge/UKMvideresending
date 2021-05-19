@@ -10,7 +10,7 @@ $til = UKMVideresending::getValgtTil();
 $sum = 
     [
         'personer' => [],
-        'scene' => [
+        'alle_scenetyper' => [
             'innslag' 	=> 0,
             'personer'	=> 0,
             'titler'	=> 0,
@@ -37,7 +37,7 @@ foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag_sendt ) {
     $innslag = $til->getInnslag()->get($innslag_sendt->getId());
 
     // SET SORT-KEY FOR DETTE INNSLAGET (ALTSÅ HVOR LAGRES SUMMEN?)
-    $sort_key = $innslag->getType()->getKey() == 'scene' ? 'annet' : $innslag->getType()->getKey();
+    $sort_key = $innslag->getType()->getKey();// == 'scene' ? 'annet' : $innslag->getType()->getKey();
     
     // INITIER DATA-ARRAY
     if( !isset( $sum[ $sort_key ] ) ) {
@@ -79,10 +79,10 @@ foreach( $til->getArrangement()->getInnslagTyper()->getAll() as $tillatt_kategor
     if( !$tillatt_kategori->erScene() ) {
         continue;
     }
-    $sort_key = $tillatt_kategori->getKey() == 'scene' ? 'annet' : $tillatt_kategori->getKey();
+    $sort_key = $tillatt_kategori->getKey();// == 'scene' ? 'annet' : $tillatt_kategori->getKey();
     if( is_array( $sum[ $sort_key ] ) ) {
         foreach( $sum[ $sort_key ] as $key => $val ) {
-            $sum['scene'][ $key ] += $val;
+            $sum['alle_scenetyper'][ $key ] += $val;
         }
     }
 }
@@ -91,7 +91,7 @@ foreach( $til->getArrangement()->getInnslagTyper()->getAll() as $tillatt_kategor
 foreach( $sum as $kategori => $trash ) {
     // Hopper over grupperingene, som ikke skal brukes
     // til å beregne total-grunnlag
-    if( in_array( $kategori, ['scene','personer','total'] )) {
+    if( in_array( $kategori, ['alle_scenetyper','personer','total'] )) {
         continue;
     }
     if( isset( $sum[ $kategori ] ) ) {
