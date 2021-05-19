@@ -6,11 +6,11 @@
 			{# SCENE-INNSLAG OPPSUMMERT #}
 			<tr>
 				<th>Scene</th>
-				<th>{{ summering.scene.personer > 0 ? summering.scene.personer : 0 }}
+				<th>{{ summering.alle_scenetyper.personer > 0 ? summering.alle_scenetyper.personer : 0 }}
 					personer</th>
-				<th>{{ summering.scene.innslag > 0 ? summering.scene.innslag : 0 }}
+				<th>{{ summering.alle_scenetyper.innslag > 0 ? summering.alle_scenetyper.innslag : 0 }}
 					innslag</th>
-				<th>{{ summering.scene.varighet > 0 ? summering.scene.varighet|tid : 0 }}</th>
+				<th>{{ summering.alle_scenetyper.varighet > 0 ? summering.alle_scenetyper.varighet|tid : 0 }}</th>
 			</tr>
 			{% for innslag_type in til.getArrangement().getInnslagTyper().getAll()|filter( innslag_type => innslag_type.harTid() ) %}
 				{# GRUPPE-INNSLAG MED VARIGHET, SOM ER UNDERLAGT SCENE #}
