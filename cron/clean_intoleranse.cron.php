@@ -7,6 +7,12 @@ use UKMNorge\Database\SQL\Write;
 require_once('UKM/mail.class.php');
 require_once('UKM/Autoloader.php');
 
+$epost = new UKMmail();
+$epost->text( 'Det må lages nytt system for å slette allergier og intoleranser etter en viss periode.' )
+	->to('marius@ukm.no,support@ukm.no')
+	->subject('SKULLE VÆRT SLETTET: Allergier og intoleranser')
+	->ok();
+die('FUNKER IKKE SÅNN LENGRE');
 if( date('n') > 6 && date('n') < 8 ) {
 	$report = new Query(
 		"SELECT `liste` 
