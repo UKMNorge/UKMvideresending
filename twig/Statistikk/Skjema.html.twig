@@ -1,9 +1,17 @@
 <div class="row">
 	<form class="videresendt_kontroll_tittel" method="post" action="?page=UKMVideresending">
+		
 		<div class="form-group col-xs-12 col-lg-6">
-			<label for="publikum">Antall publikummere</label>
-			<input name="pl_public" id="publikum" type="number" class="form-control col-xs-2" value="{{ fra.getPublikum() }}">
-			<p class="text-muted">Hvor mange besøkende var innom arrangementet?</p>
+			<div class="col-xs-12 antall-publikummere row">
+				<label for="publikum">Antall publikummere</label>
+				<input name="pl_public" id="publikum" type="number" class="form-control col-xs-2" value="{{ fra.getPublikum() }}">
+				<p class="text-muted">Hvor mange besøkende var innom arrangementet?</p>
+			</div>
+			<div class="col-xs-12 row">
+					<label for="uten_publikum_checkbox">Uten publikum</label>
+					<input onclick="utenPublikum(event);"  name="pl_utenpublikum" id="uten_publikum_checkbox" type="checkbox" class="form-control col-xs-2" style="margin-top: 3px;">
+					<p class="text-muted">Dette var et digitalt arrangement uten publikum</p>
+			</div>
 		</div>
 
 		<div class="form-group col-xs-12 col-lg-6">
@@ -22,3 +30,11 @@
 		</diV>
 	</form>
 </div>
+
+<script>
+	function utenPublikum(e) {
+		var chkbox = jQuery(e.currentTarget);
+		console.log(chkbox.parent().parent().find('.antall-publikummere'));
+		chkbox.parent().parent().find('.antall-publikummere').addClass(chkbox.is(":checked") ? 'hide':'').removeClass(chkbox.is(":checked") ?'': 'hide');
+	}
+</script>
