@@ -5,7 +5,7 @@
 		var netter = [{% for natt in til.getArrangement().getNetter() %}'{{ natt|date("d_m") }}'{{ not loop.last ? ',' }}{% endfor %}];
 		var steder = [{% for key,sted in overnattingssteder %}{'{{ key }}': '{{ sted }}'}{{ not loop.last ? ',' }}{% endfor %}];
 		var deltakere = {{ fra.getMetaValue('antall_videresendte_personer_til_'~ til.getId()) }};
-		var pris_hotelldogn = {{ pris_hotelldogn }};
+		var pris_hotelldogn = {{ pris_hotelldogn ? pris_hotelldogn : 'null' }};
 	</script>
 
 	<div class="row">
