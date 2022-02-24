@@ -2,7 +2,7 @@
 
 {% block content %}
 <form method="POST" action="?page={{GET('page')}}&til={{GET('til')}}&action=infoskjema">
-	{% include "Skjema/innhold.html.twig" with {arrangement: til.getArrangement(), skjema: til.getArrangement().getSkjema(), svarsett: til.getArrangement().getSkjema().getSvarSettFor( fra.getId() )} %}
+	{% include "Skjema/innhold.html.twig" with {arrangement: til.getArrangement(), skjema: til.getArrangement().getSkjema()} %}
 
     <button type="submit" class="btn btn-ukm btn-success">Lagre</button>
 </form>
