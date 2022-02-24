@@ -16,9 +16,23 @@ Twig::addPath(UKMmonstring::getTwigPath());
 
 $fra = UKMVideresending::getFra();
 $til = UKMVideresending::getValgtTil()->getArrangement();
-$skjema = $til->getSkjema();
+$skjemaTil = $til->getSkjema();
 
-$svarsett = $skjema->getSvarSettFor( $fra->getId() );
+
+$skjemaFra = null;
+
+try{
+    $skjemaFra = $fra->getSkjema();
+}catch(Exception $e) {
+    // Opprett Skjema hvis det ikke er opprettet
+    if($e->getCode() == 151002) {
+        $skjemaFra = WriteSkjema::createForArrangement($fra);
+    }
+}
+
+
+// Henter Svarsett fra Svarsett klasse
+$svarsett = SvarSett::getPlaceholder('arrangement', $fra->getId(), $skjemaFra->getId());
 $svarsett->getAll();
 
 if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
@@ -46,5 +60,6 @@ UKMVideresending::addViewData(
     [
         'skjema'=> $skjema,
         'til' => $til,
+        'svarsett' => $svarsett
     ]
 );
