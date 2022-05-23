@@ -77,9 +77,9 @@
 							<th>{{ sted }}</th>
 							{% if netterAntall > 0 %}
 								{% for i in 0..netterAntall-1 %}
-									{% set natt = netterjs[2] %}
+									{% set natt = netterjs[i][2] %}
 									<td width="40">
-										<input type="radio" class="natt" data-dag="{{ dato|date('d') }}" data-mnd="{{ dato|date('m') }}" name="l{{ leder.ID }}_d{{ natt }}" value="{{ sted_key }}" {% if leder.netter[natt] is defined and leder.netter[natt].sted is defined and leder.netter[natt].sted == sted_key %} checked="checked" {% endif %}/>
+										<input type="radio" class="natt" data-dag="{{ natt|split('_')[0] }}" data-mnd="{{ natt|split('_')[1] }}" name="l{{ leder.ID }}_d{{ natt }}" value="{{ sted_key }}" {% if leder.netter[natt] is defined and leder.netter[natt].sted is defined and leder.netter[natt].sted == sted_key %} checked="checked" {% endif %}/>
 									</td>
 								{% endfor %}
 							{% else %}
