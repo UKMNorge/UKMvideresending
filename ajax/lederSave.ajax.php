@@ -17,6 +17,15 @@ $leder->setNavn( $_FORM['leder_navn']);
 $leder->setMobil( intval( str_replace(' ', '', $_FORM['leder_mobil'] ) ) );
 $leder->setEpost( $_FORM['leder_epost']);
 
+// Hvis type er endret til sykerom, fjern alle overnattinger som ikke er hotell
+if($_FORM['leder_type'] == 'sykerom') {
+	foreach($leder->getNetter()->getAll() as $natt) {
+		if($natt->getSted() != 'hotell') {
+			Write::deleteNatt($natt);
+		}
+	}
+}
+
 $leder = Write::save( $leder );
 
 UKMVideresending::addResponseData('success', true);
