@@ -72,7 +72,7 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 			self.setType( type );
 			self.showStatus();
 			
-			self.on('changeType', self.showStatus);
+			self.on('changeType', () => {self.showStatus; self.loadNetter()});
 			self.on('changeNavn', self.showStatus);
 			self.on('changeMobil', self.showStatus);
 			self.on('changeEpost', self.showStatus);
@@ -103,6 +103,8 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 					return type.capitalize() +'leder';
 				case 'turist':
 				case 'ledsager':
+					return type.capitalize();
+				case 'sykerom':
 					return type.capitalize();
 			}
 		},
@@ -135,14 +137,18 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 		},
 		
 		setNatt: function( dato, sted ) {
-			self.emit('valgtNatt', [dato, sted, self.getId()]);
+			self.emit('valgtNatt', [dato, sted, self]);
 			overnatting.set( dato, sted );
-			self.saveNatt( dato, sted );
+			self.saveNatt( dato, sted, self.getType() );
 			self.showStatus();
 		},
 		
 		showStatus: function() {
-			
+			if(self.getType() == 'sykerom') { 
+				$( self.getSelector() + ' .row.header .status').addClass('text-danger').html('');
+				return;
+			}
+
 			var mangler = [];
 
 			if( navn == null || navn == undefined || navn == '' ) {
@@ -193,6 +199,7 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 		},
 		
 		handleLederSave: function( response ){
+			self.loadNetter();
 			$( self.getSelector() +' button.leder_save' ).html('Lagret!').addClass('btn-success').removeClass('btn-primary');
 			setTimeout(
 				function(){
@@ -205,10 +212,11 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 		/**
 		 * LAGRE OVERNATTING
 		**/
-		saveNatt: function( dato, sted ) {
+		saveNatt: function( dato, sted, lederType ) {
 			self.ajax('lederSaveNatt', {
 				dato: dato, 
-				sted: sted
+				sted: sted,
+				leder_type: lederType,
 			});
 		},
 		

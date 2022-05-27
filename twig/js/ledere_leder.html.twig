@@ -22,6 +22,7 @@
 							<option value="reise" {{ leder.type=='reise' ? 'selected="selected"' : '' }}>Reiseleder</option>
 							<option value="ledsager" {{ leder.type=='ledsager' ? 'selected="selected"' : '' }}>Ledsager</option>
 							<option value="turist" {{ leder.type=='turist' ? 'selected="selected"' : '' }}>Turist</option>
+							<option value="sykerom" {{ leder.type=='sykerom' ? 'selected="selected"' : '' }}>Sykerom</option>
 						</select>
 						<div class="clearfix"></div>
 					{% endif %}
@@ -49,6 +50,7 @@
 				</div>
 			</form>
 		</div>
+		
 		<div class="col-xs-12 col-md-6">
 			<table class="overnattingssted table-condensed table-striped" style="width:99%">
 				<thead>
@@ -73,7 +75,7 @@
 				</thead>
 				<tbody>
 					{% for sted_key, sted in overnattingssteder %}
-						<tr>
+						<tr class="{{ sted_key == 'hotell' ? 'only-hotell' : '' }}" style="{{ leder.type == 'sykerom' and sted_key != 'hotell' ? 'display: none' : '' }}" >
 							<th>{{ sted }}</th>
 							{% if netterAntall > 0 %}
 								{% for i in 0..netterAntall-1 %}
