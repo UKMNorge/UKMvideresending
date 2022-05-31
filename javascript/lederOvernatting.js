@@ -98,7 +98,7 @@ var UKMVideresendOvernatting = function( _netter, _steder ) {
 			// fjern lederens overnatting for valgt dato
 			self.getSteder().forEach( function( sted, sted_key ) {
 				sted.remove( _dato, _leder_id );
-				if(leder.getType() == 'sykerom' && sted.getId() != 'hotell') {
+				if((leder.getType() == 'sykerom' || leder.getType() == 'turist') && sted.getId() != 'hotell') {
 					sted.removeAll(_leder_id);
 				}
 
