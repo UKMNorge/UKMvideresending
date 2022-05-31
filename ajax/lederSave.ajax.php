@@ -18,7 +18,7 @@ $leder->setMobil( intval( str_replace(' ', '', $_FORM['leder_mobil'] ) ) );
 $leder->setEpost( $_FORM['leder_epost']);
 
 // Hvis type er endret til sykerom, fjern alle overnattinger som ikke er hotell
-if($_FORM['leder_type'] == 'sykerom') {
+if($_FORM['leder_type'] == 'sykerom' || $_FORM['leder_type'] == 'turist') {
 	foreach($leder->getNetter()->getAll() as $natt) {
 		if($natt->getSted() != 'hotell') {
 			Write::deleteNatt($natt);

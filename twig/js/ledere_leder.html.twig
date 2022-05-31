@@ -29,7 +29,7 @@
 				</div>
 
 				<div class="form-group">
-					<input name="leder_navn" class="leder_navn form-control input-lg" type="text" placeholder="Skriv navn på leder" value="{{ leder.navn }}"/>
+					<input name="leder_navn" class="leder_navn form-control input-lg" type="text" placeholder="Skriv navn" value="{{ leder.navn }}"/>
 				</div>
 
 				<div class="form-group">
@@ -75,7 +75,7 @@
 				</thead>
 				<tbody>
 					{% for sted_key, sted in overnattingssteder %}
-						<tr class="{{ sted_key == 'hotell' ? 'only-hotell' : '' }}" style="{{ leder.type == 'sykerom' and sted_key != 'hotell' ? 'display: none' : '' }}" >
+						<tr class="{{ sted_key == 'hotell' ? 'only-hotell' : '' }}" style="{{ (leder.type == 'sykerom' or leder.type == 'turist') and sted_key != 'hotell' ? 'display: none' : '' }}" >
 							<th>{{ sted }}</th>
 							{% if netterAntall > 0 %}
 								{% for i in 0..netterAntall-1 %}

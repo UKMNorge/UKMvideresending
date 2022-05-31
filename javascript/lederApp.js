@@ -36,7 +36,7 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
                 var el = $(e.currentTarget);
                 var overnattingssted = $($(el).parent().parent().parent().parent()).find('.overnattingssted tbody');
                 // Hvis type er sykerom, så blir bare hotel tilgjengelig for overnatting
-                if(el.val() == 'sykerom') {
+                if(el.val() == 'sykerom' || el.val() == 'turist') {
                     overnattingssted.find('tr').hide();
                     overnattingssted.find('tr.only-hotell').show();
                 }
