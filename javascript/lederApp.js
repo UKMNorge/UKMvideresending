@@ -223,7 +223,7 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
             response.netterAntall = netterjs.length;
 
             $('#alle_ledere').append(twigJS_ledereleder.render(response));
-            $('button#leder_create').html('Legg til leder').addClass('btn-success').removeClass('btn-warning');
+            $('button#leder_create').html('Legg til person / rom').addClass('btn-success').removeClass('btn-warning');
 
             var leder = self.registerLeder($('#leder_' + response.leder.ID));
             self.addHovedLeder(leder);
