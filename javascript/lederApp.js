@@ -32,6 +32,19 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
                     );
             });
 
+            $(document).on('change', 'select.leder_type', function(e) {
+                var el = $(e.currentTarget);
+                var overnattingssted = $($(el).parent().parent().parent().parent()).find('.overnattingssted tbody');
+                // Hvis type er sykerom, så blir bare hotel tilgjengelig for overnatting
+                if(el.val() == 'sykerom' || el.val() == 'turist') {
+                    overnattingssted.find('tr').hide();
+                    overnattingssted.find('tr.only-hotell').show();
+                }
+                else {
+                    overnattingssted.find('tr').show();
+                }
+            });
+
             $(document).on('click', 'button.leder_save', function() {
                 self.findParent($(this)).save();
             });
@@ -59,8 +72,8 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
 
         bind: function(leder) {
             // Følg med antall netter totalt
-            leder.on('valgtNatt', function(dato, sted, leder_id) {
-                overnattingssteder.addOvernatting(dato, sted, leder_id);
+            leder.on('valgtNatt', function(dato, sted, leder) {
+                overnattingssteder.addOvernatting(dato, sted, leder);
             });
             leder.on('changeNavn', function() { self.updateHovedleder(leder) });
             leder.on('changeType', function() { self.updateHovedleder(leder) });
@@ -210,7 +223,7 @@ var UKMVideresendLeder = function($, overnattingssteder, antall_deltakere, pris_
             response.netterAntall = netterjs.length;
 
             $('#alle_ledere').append(twigJS_ledereleder.render(response));
-            $('button#leder_create').html('Legg til leder').addClass('btn-success').removeClass('btn-warning');
+            $('button#leder_create').html('Legg til person / rom').addClass('btn-success').removeClass('btn-warning');
 
             var leder = self.registerLeder($('#leder_' + response.leder.ID));
             self.addHovedLeder(leder);

@@ -47,6 +47,15 @@ var UKMVideresendOvernattingSted = function( key, navn ) {
 				}
 			}
 		},
+
+		// Fjern alle netter i et sted.
+		removeAll: function(_leder_id) {
+			netter.forEach(function(value, dato){
+				var x = netter.get(dato).delete(_leder_id);
+				self.emit('changeCount', [ self.getId(), dato, netter.get( dato ).size ]);
+
+			});
+		},
 		
 		removeLeder: function( leder ) {
 			self.getAlleNetter().forEach( function( natt, dato ) {
@@ -82,11 +91,17 @@ var UKMVideresendOvernatting = function( _netter, _steder ) {
 	var steder = new Map();
 	
 	var self = {
-		addOvernatting: function( _dato, _sted, _leder_id ) {
+		addOvernatting: function( _dato, _sted, leder ) {
+			var _leder_id = leder.getId();
+			
 			// Loop alle steder, og 
 			// fjern lederens overnatting for valgt dato
 			self.getSteder().forEach( function( sted, sted_key ) {
 				sted.remove( _dato, _leder_id );
+				if((leder.getType() == 'sykerom' || leder.getType() == 'turist') && sted.getId() != 'hotell') {
+					sted.removeAll(_leder_id);
+				}
+
 			});
 			// Legg til lederen på riktig stde
 			self.getSted( _sted ).add( _dato, _leder_id );
