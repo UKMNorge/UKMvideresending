@@ -122,13 +122,19 @@
 								{# VIDERESENDINGEN ER STENGT #}
 							{% else %}
 								{# VIS INFOTEKST #}
-								{% if mottaker.getArrangement().getInformasjonstekst() is not empty %}
+
+								{# VIKTIG !!!: getInformasjonstekst() - informasjon tekst er kommenter fra UKM Festivalen 2022 basert på et ønske å bruke PDF fil istedenfor. #}
+								{% if mottaker.getArrangement().getType() != 'land' and mottaker.getArrangement().getInformasjonstekst() is not empty %}
 									{{ mottaker.getInformasjonstekst()|raw|nl2br }}
 								{% endif %}
 
-
+								{# Festivalen får knapp for å endre informasjon om videresending #}
+								{% if mottaker.getArrangement().getType() == 'land' %}
+									<p style="margin-top: 10px">Videresendingen er stengt, men du kan fortsatt ajourføre informasjon:</p>
+									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Endre informasjon</a>
+							
 								{# FRISTEN HAR PASSERT, OG VI HAR PÅMELDTE HER - AJOURFØRE BØR VÆRE MULIG #}
-								{% if mottaker.getArrangement().erVideresendingOver() and fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
+								{% elseif mottaker.getArrangement().erVideresendingOver() and fra.getVideresendte(mottaker.getId()).getAntall() > 0 %}
 									<p>Videresendingen er stengt, men du kan fortsatt ajourføre informasjon:</p>
 									{# KNAPP TIL VIDERESENDTE #}
 									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=media" class="btn btn-ukm btn-primary btn-xs">Bilder, film og mediefiler</a>
