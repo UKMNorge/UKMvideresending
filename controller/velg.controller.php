@@ -1,10 +1,16 @@
 <?php
 
 use UKMNorge\Arrangement\UKMFestival;
+use UKMNorge\Arrangement\Videresending\Request\RequestVideresending;
+
+$fra = UKMVideresending::getFra();
+$UKMFestivalen = UKMFestival::getCurrentUKMFestival();
 
 UKMVideresending::addViewData(
     [
-        'UKMFestivalen' => UKMFestival::getCurrentUKMFestival(),
+        'UKMFestivalen' => $UKMFestivalen,
+        'requestSendt' => RequestVideresending::finnesKombinasjonen($fra->getId(), $UKMFestivalen->getId())
+
     ]
 );
 

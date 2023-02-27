@@ -3,7 +3,7 @@
 <form method="POST" action="?page={{GET('page')}}&action=sendVideresendingRequest">
     <input type="hidden" name="arrangement_fra" value="{{ fra.getId() }}" />
     <input type="hidden" name="arrangement_til" value="{{ UKMFestivalen.getId() }}" />
-    <h4 class="title-request-videresending">Du kan også sende førespørsel til arrangementene under</h4>
+    <h4 class="title-request-videresending">Du kan også sende forespørsel til arrangementene under</h4>
     <div class="col-12 col-sm-12 nop">
         <ol class="list-group">
             <li class="list-group-item">
@@ -11,7 +11,13 @@
                     <h5 class="kan-sendes">
                         {{ UKMFestivalen.getNavn() }}
                     </h5>
-                    <button type="submit" class="btn btn-primary btn-outline">Be om å åpne videresending</button>
+                    <div class="label-request">
+                        {% if requestSendt %}
+                            <span class="label label-success">Forespørsel sendt</span>
+                        {% else %}
+                            <button type="submit" {{ requestSendt ? 'disabled' : '' }} class="btn btn-primary btn-outline">Be om å åpne videresending</button>
+                        {% endif %}
+                    </div>
                 </div>
             </li>
         </ol>
@@ -28,6 +34,10 @@
             display: flex;
         }
         .kan-sendes-alle .btn {
+            margin: auto;
+            margin-right: 0;
+        }
+        .kan-sendes-alle .label-request {
             margin: auto;
             margin-right: 0;
         }
