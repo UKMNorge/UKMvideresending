@@ -1,0 +1,14 @@
+{% if success %}
+    <h1>Forespørsel er lagret!</h1>
+{% else %}
+    <h1>Forespørsel ble ikke lagret!</h1>
+{% endif %}
+
+
+{% block javascripts %}
+    <script>
+    setTimeout(() => {
+        window.history.back()
+    }, 2000);
+    </script>
+{% endblock %}
