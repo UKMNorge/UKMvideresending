@@ -139,11 +139,10 @@
         </div>
     </fieldset>
         <form action="?page=UKMSMS_gui" method="POST" id="nominasjon-reminder">
-        {% set nominasjonSkjemaDelta = 'https://delta.ukm.no/ukmid/nominasjon' %}
         {% if arrangement.getEierType() == 'land' %}
             <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert til UKM-festivalen må du fylle ut nominasjonsskjema på https://ukm-festivalen.no/nominasjon i løpet av kort tid, for fristen går straks ut." />
         {% else %}
-            <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert må du fylle ut nominasjonsskjema på {{ nominasjonSkjemaDelta }} i løpet av kort tid, for fristen går straks ut." />
+            <input type="hidden" name="UKMSMS_message" value="Hei! For å bli nominert må du fylle ut nominasjonsskjema på https://delta.{{ UKM_HOSTNAME }}/ukmid/nominasjon i løpet av kort tid, for fristen går straks ut." />
         {% endif %}
         <input type="hidden" name="UKMSMS_recipients" id="nominasjon-reminder-recipient" />
     </form>
