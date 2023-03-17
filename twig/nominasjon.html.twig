@@ -43,9 +43,9 @@
                                     <p>
                                         {{ innslag.getNavn() }}
                                     </p>
-                                    {% if type.getKey() == 'konferansier' %}
+                                    {% if type.getKey() == 'konferansier' or type.getKey() == 'datakulturarrangor' %}
                                         <div class="utfylt alert-success">
-                                            Konferansierer har ikke deltakerskjema
+                                            Type {{ type.getKey() == 'datakulturarrangor' ? 'datakultur' : type.getKey() }} har ikke deltakerskjema
                                         </div>
                                     {% else %}
                                         <div class="utfylt {{ nominasjon.harDeltakerskjema() ? 'alert-success' : 'alert-danger' }}">
