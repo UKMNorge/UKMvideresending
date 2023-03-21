@@ -7,6 +7,21 @@ $fra		= UKMVideresending::getFra();
 $innslag 	= $fra->getInnslag()->get( $_POST['innslag'] );
 $til        = UKMVideresending::getValgtTil('POST')->getArrangement();
 
+// Sjekk godkjenning...
+$innslagType = $innslag->getType();
+// Sjekk hvis innslaget har nominasjon for innslag type
+if($til->harNominasjonFor($innslagType)) {
+	try {
+		$nominasjon = $innslag->getNominasjoner()->getTil($til->getId());
+		if(!$nominasjon || !$nominasjon->erGodkjent()) {
+			throw new Exception("Du kan ikke videresende før godkjennelse");
+		}
+	}
+	catch(Exception $e) {
+		throw $e;
+	}
+}
+
 // Videresend innslaget
 try {
     Write::leggTilInnslag($til, $innslag, $fra);
