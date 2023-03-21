@@ -63,7 +63,9 @@
 				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
 				{# nominasjon for denne typen finnes og det er ikke nominert #}
 				{% elseif not nominasjon.erNominert() %}
-				<span class="label label-warning">Må nomineres</span>
+				<a href="?page={{GET('page')}}&til={{GET('til')}}&action=nominasjon#innslag_{{innslag.getId()}}">
+					<span class="label label-warning">Må nomineres</span>
+				</a>
 				{% else %}
 				{# Det er nominert men ikke besvart eller godkjent #}
 				<span class="label label-{{ not nominasjon.erAnswered() ? 'primary' : 'danger' }}">{{ not nominasjon.erAnswered() ? 'Venter på godkjenning' : 'Ikke godkjent' }} </span>
