@@ -67,6 +67,10 @@
                             <span class="dashicons dashicons-awards" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
                             nominert
                         </span>
+						{% set nominasjon = innslag.getNominasjoner().getTil(til.getId()) %}
+						<span class="label label-{{ nominasjon.erAnswered() ? (nominasjon.erGodkjent() ? 'success' : 'danger') : 'default' }}" style="margin-left: 1em;">
+							{{ nominasjon.erAnswered() ? (nominasjon.erGodkjent() ? 'godkjent' : 'ikke godkjent') : 'ikke besvart'  }}
+                        </span>
                         {% if innslag.getType().getKey() != 'konferansier' and innslag.getType().getKey() != 'datakulturarrangor' %}
                             {% if not innslag.getNominasjoner().getTil(til.getId()).harDeltakerskjema() %}
                                 <span class="label label-danger" style="margin-left: 1em;">
