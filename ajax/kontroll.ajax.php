@@ -17,6 +17,7 @@ $data = [
 	'innslag_navn' 			=> $innslag->getNavn(),
     'innslag_id' 			=> $innslag->getId(),
     'til_navn'              => $til->getNavn(),
+	'til_id' 				=> $til->getId(),
 ];
 
 
