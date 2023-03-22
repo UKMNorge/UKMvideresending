@@ -46,7 +46,7 @@
                                     {# Det blir ikke noe deltakerskjema for landsfestivalen #}
                                     {% if til.getArrangement().getEierType() == 'land' or (type.getKey() == 'konferansier' or type.getKey() == 'datakulturarrangor') %}
                                         <div class="utfylt alert-success">
-                                            Type {{ type.getKey() == 'datakulturarrangor' ? 'datakultur' : type.getKey() }} har ikke deltakerskjema
+                                            {{ type.getKey() == 'datakulturarrangor' ? 'Datakultur' : type.getNavn() }} har ikke deltakerskjema
                                         </div>
                                     {% else %}
                                         <div class="utfylt {{ nominasjon.harDeltakerskjema() ? 'alert-success' : 'alert-danger' }}">
