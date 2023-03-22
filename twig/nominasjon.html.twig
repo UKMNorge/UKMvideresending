@@ -63,7 +63,7 @@
                                         <div class="col-xs-12 col-lg-5">
                                         {#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
                                             <form action="?page={{GET('page')}}&til={{GET('til')}}&action={{GET('action')}}&id={{ innslag.getId() }}" method="POST">
-                                                <h4>Den voksnes vurdering</h4>
+                                                <h4>Din vurdering av {{ person.getFornavn() }}</h4>
                                                 <p class="text-muted">
                                                     Hvis {{ person.getFornavn() }} skal nomineres som 
                                                     {% if type.getKey() == 'nettredaksjon' %}
@@ -103,7 +103,7 @@
                                             {% if type.getKey() == 'konferansier' %}
                                                 {% embed "Nominasjon/vurdering_konferansier.html.twig" %}{% endembed %}
                                             {% elseif til.getArrangement().getEierType() == 'land' %}
-                                                <h4>Du skal sende til {{ til.getArrangement().getNavn() }} og trenger ikke levering av deltakerskjema</h4>
+                                                <h4>Du skal sende til {{ til.getArrangement().getNavn() }} og trenger ikke levere deltakerskjema</h4>
                                             {% elseif nominasjon.harDeltakerSkjema() %}
                                                 <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
                                                 {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
