@@ -15,26 +15,35 @@
 		</p>
 
 		<h2>Informasjon om kvoter</h2>
+		{% set count = 0 %}
 		<ol class="list-group">
 			{% for mottaker in fra.getVideresending().getMottakere() %}
-				{% embed "Informasjon/AvsenderInfo.html.twig" %}
-					{% block data %}
-						{% if mottaker.getInformasjonstekst() is empty %}
-							{{ mottaker.getNavn() }}
-							har ikke lagt inn informasjon om kvoter eller
-							                            andre regler for videresending.
-						{% else %}
-							{{ mottaker.getInformasjonstekst()|raw|nl2br }}
-						{% endif %}
-					{% endblock %}
-				{% endembed %}
-			{% else %}
-				<li class="list-group-item text-danger">
-					Kontakt
-					<a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
-						                    da noe er feil satt opp med videresendingen fra ditt arrangement.
-				</li>
-			{% endfor %}
+				{% set count = count+1 %}
+					{% embed "Informasjon/AvsenderInfo.html.twig" %}
+						{% block data %}
+							{% if mottaker.getInformasjonstekst() is empty %}
+								{{ mottaker.getNavn() }}
+								har ikke lagt inn informasjon om kvoter eller
+															andre regler for videresending.
+							{% else %}
+								<div id="collapseKvote{{ count }}" class="collapse">
+								{{ mottaker.getInformasjonstekst()|raw|nl2br }}
+								</div>
+								<div class="row">
+									<button style="width: 100%; border: none; background: #fff" class="collapse-kvoter collapsed" data-toggle="collapse" href="#collapseKvote{{ count }}" role="button" aria-expanded="false" aria-controls="collapseKvote{{ count }}">
+										<span class="dashicons dashicons-arrow-up-alt2"></span>
+									</button>
+								</div>
+							{% endif %}
+						{% endblock %}
+					{% endembed %}
+				{% else %}
+					<li class="list-group-item kvoter-item text-danger collapse">
+						Kontakt
+						<a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
+												da noe er feil satt opp med videresendingen fra ditt arrangement.
+					</li>
+				{% endfor %}
 		</ol>
 
 		{# AVSENDER-ARRANGEMENT HAR IKKE OPPGITT ANTALL PUBLIKUMMERE #}
@@ -157,7 +166,7 @@
 					{% endblock %}
 				{% endembed %}
 			{% else %}
-				<li class="list-group-item text-danger">
+				<li class="list-group-item kvoter-item text-danger">
 					Kontakt
 					<a href="mailto:support@ukm.no?subject=Feil i videresending">UKM Norge</a>,
 						                    da noe er feil satt opp med videresendingen fra ditt arrangement.
@@ -166,3 +175,11 @@
 		</ol>
 	{% endif %}
 </div>
+<style>
+	.collapse-kvoter.collapsed .dashicons{
+		transform: rotate(180deg);
+	}
+	.list-group-item.kvoter-item {
+		margin-top: 20px !important;
+	}
+</style>
