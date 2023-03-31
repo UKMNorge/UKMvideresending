@@ -1,5 +1,5 @@
 {# Støtter kun request videresending til UKM-festivalen #}
-{% if fra.getType == 'fylke' %}
+{% if fra.getType == 'fylke' and UKMFestivalen is defined %}
 <form method="POST" action="?page={{GET('page')}}&action=sendVideresendingRequest">
     <input type="hidden" name="arrangement_fra" value="{{ fra.getId() }}" />
     <input type="hidden" name="arrangement_til" value="{{ UKMFestivalen.getId() }}" />
