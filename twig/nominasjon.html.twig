@@ -70,13 +70,13 @@
                                                     Hvis {{ person.getFornavn() }} skal nomineres som 
                                                     {% for typeNominasjon in typerNominasjon %}
                                                         {% if typeNominasjon[0] != type.getKey() %}
-                                                            {{ typeNominasjon[1] }}{{ loop.index < loop.length ? ' /' : ','}}
+                                                            {{ typeNominasjon[1] }}{{ loop.index < loop.length-1 ? ' /' : ','}}
                                                         {% endif %}
                                                     {% endfor %}
-                                                    og ikke {{ type.getNavn()|lower }}, kan du ikke bruke dette skjemaet. Da må du fylle ut et 
+                                                    og ikke {{ type.getNavn()|lower }}, kan du ikke bruke dette skjemaet. Da må du fylle ut et skjema for
                                                     {% for typeNominasjon in typerNominasjon %}
                                                         {% if typeNominasjon[0] != type.getKey() %}
-                                                            {{ typeNominasjon[1] }}{{ loop.index < loop.length ? ' /' : '-skjema'}}
+                                                            {{ typeNominasjon[1] }}{{ loop.index < loop.length-1 ? ' /' : ''}}
                                                         {% endif %}
                                                     {% endfor %}
                                                     <br />
