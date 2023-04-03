@@ -57,7 +57,7 @@
                 Listen viser kun innslag fra de kategoriene {{ til.getArrangement().getNavn() }} tar i mot.
             </p>
             <div class="row">
-                {% for type_innslag in til.getArrangement().getInnslagTyper() %}
+                {% for type_innslag in til.getArrangement().getInnslagTyper(true) %}
                     <div class="innslagBlock col-xs-12">
                         <div class="innslagTypeHeader">
                             <img src="{{ type_innslag.getIcon() }}" height="45" />
