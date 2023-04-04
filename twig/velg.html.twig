@@ -173,8 +173,15 @@
 		</ol>
 	{% endif %}
 
-	{# kan kun sendes fra fylke til land #}
-	{% if fra.getType == 'fylke' %}
+	{% set harVideresendTilLand = false %}
+	{% for mottaker in fra.getVideresending().getMottakere() %}
+		{% if mottaker.arrangement.type == 'land' %}
+			{% set harVideresendTilLand = true %}
+		{% endif %}
+	{% endfor %}
+
+	{# kan kun sendes fra fylke til land og videresending er ikke åpnet #}
+	{% if fra.getType == 'fylke' and harVideresendTilLand == false %}
 		{% include "RequestVideresending/arrangementerTilgjengelig.html.twig" %}
 	{% endif %}
 
