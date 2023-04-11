@@ -304,6 +304,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         $data->ID = $person->getId();
         $data->navn = $person->getNavn();
         $data->mobil = $person->getMobil();
+        $data->is_leder = false;
         if (!is_null($allergi)) {
             $data->intoleranse_liste = $allergi->getListe();
             $data->intoleranse_human = $allergi->getListeHuman();
@@ -326,6 +327,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         $data->ID = $leder->getId();
         $data->navn = $leder->getNavn();
         $data->mobil = $leder->getMobil();
+        $data->is_leder = true;
         if (!is_null($allergi)) {
             $data->intoleranse_liste = $allergi->getListe();
             $data->intoleranse_human = $allergi->getListeHuman();
