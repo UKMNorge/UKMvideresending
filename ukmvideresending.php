@@ -325,7 +325,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
     {
         $data = new stdClass();
         $data->ID = $leder->getId();
-        $data->navn = $leder->getNavn();
+        $data->navn = $leder->getNavn() . ' (' . $leder->getTypeNavn() . ')';
         $data->mobil = $leder->getMobil();
         $data->is_leder = true;
         if (!is_null($allergi)) {
