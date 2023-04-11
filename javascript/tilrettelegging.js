@@ -29,6 +29,7 @@ jQuery(document).on('click', '.intoleranse_update', function(e) {
         action: 'UKMVideresending_ajax',
         subaction: 'tilrettelegging',
         id: person.attr('data-id'),
+        is_leder: person.attr('is-leder'),
         tekst: person.find('.intoleranse_tekst').val(),
         liste: allergener
     };
@@ -57,6 +58,8 @@ jQuery(document).on('click', '.intoleranse_update', function(e) {
 
 
 function handleTilretteleggUpdate(response) {
+    location.reload();
+    return;
     var person = jQuery('li.person#' + response.data.id);
 
     if (response.data.intoleranse_human.length == 0) {
@@ -86,11 +89,13 @@ jQuery(document).on('click', '#intoleranse_add', function(e) {
         alert('Velg en person fra listen før du trykker "legg til"');
         return false;
     }
+
     var data = {
         person: {
             ID: jQuery('#intoleranse_ny').val(),
             navn: jQuery('#intoleranse_ny option:selected').html(),
             mobil: jQuery('#intoleranse_ny option:selected').data('mobil'),
+            is_leder: jQuery('#intoleranse_ny option:selected').data('leder'),
             intoleranse_liste: [],
             intoleranse_tekst: ''
         },
