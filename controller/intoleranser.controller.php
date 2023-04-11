@@ -1,6 +1,7 @@
 <?php
 
 use UKMNorge\Allergener\Allergener;
+use UKMNorge\Arrangement\Videresending\Ledere\Ledere;
 
 $fra = UKMVideresending::getFra();
 $til = UKMVideresending::getValgtTil();
@@ -40,6 +41,31 @@ foreach( $fra->getVideresendte($til->getId())->getAll() as $innslag ) {
 ksort($data_intoleranse->med);
 ksort($data_intoleranse->uten);
 
+$ledere_intoleranse = new stdClass();
+$ledere_intoleranse->med = [];
+$ledere_intoleranse->uten = [];
+$ledere = new Ledere($fra->getId(), $til->getId());
+$ledere_list = [];
+foreach($ledere->getAll() as $leder){ 
+    if( in_array( $leder->getId(), $ledere_list ) ) {
+        continue;
+    }
+    $ledere_list[] = $leder->getId();
+    
+    $id = $leder->getNavn() .'-'. $leder->getId();
+    $allergi = $leder->getSensitivt( $requester )->getIntoleranse();
+    var_dump($leder->getNavn());
+    if($leder->getNavn() != null) {
+        if( $allergi->har() ) {
+            $ledere_intoleranse->med[ $id ] = UKMVideresending::getIntoleranseLederData( $leder, $allergi );
+        } else {
+            $ledere_intoleranse->uten[ $id ] = UKMVideresending::getIntoleranseLederData( $leder );
+        }
+    }
+}
+
+
 UKMVideresending::addViewData('personer', $data_intoleranse);
+UKMVideresending::addViewData('ledere', $ledere_intoleranse);
 UKMVideresending::addViewData('allergener_standard', Allergener::getStandard());
 UKMVideresending::addViewData('allergener_kulturelle', Allergener::getKulturelle());
