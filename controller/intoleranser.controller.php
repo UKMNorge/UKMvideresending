@@ -54,7 +54,6 @@ foreach($ledere->getAll() as $leder){
     
     $id = $leder->getNavn() .'-'. $leder->getId();
     $allergi = $leder->getSensitivt( $requester )->getIntoleranse();
-    var_dump($leder->getNavn());
     if($leder->getNavn() != null) {
         if( $allergi->har() ) {
             $ledere_intoleranse->med[ $id ] = UKMVideresending::getIntoleranseLederData( $leder, $allergi );
