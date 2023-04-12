@@ -77,13 +77,11 @@
 					Ta kontakt med administrator for det arrangementet du ønsker å videresende til.
 				</p>
 
-				{% include "RequestVideresending/arrangementerTilgjengelig.html.twig" %}
 
 			</div>
 		</div>
-
-		{# VELG HVILKET ARRANGEMENT Å VIDERESENDE TIL #}
 	{% else %}
+		{# VELG HVILKET ARRANGEMENT Å VIDERESENDE TIL #}
 		<p>
 			For å fullføre videresendingen må du innom alle faner (videresendte, media osv) og fylle ut alle felt.
 			<br/>
@@ -174,6 +172,19 @@
 			{% endfor %}
 		</ol>
 	{% endif %}
+
+	{% set harVideresendTilLand = false %}
+	{% for mottaker in fra.getVideresending().getMottakere() %}
+		{% if mottaker.arrangement.type == 'land' %}
+			{% set harVideresendTilLand = true %}
+		{% endif %}
+	{% endfor %}
+
+	{# kan kun sendes fra fylke til land og videresending er ikke åpnet #}
+	{% if fra.getType == 'fylke' and harVideresendTilLand == false %}
+		{% include "RequestVideresending/arrangementerTilgjengelig.html.twig" %}
+	{% endif %}
+
 </div>
 <style>
 	.collapse-kvoter.collapsed .dashicons{

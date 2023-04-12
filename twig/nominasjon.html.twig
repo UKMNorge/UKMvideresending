@@ -43,9 +43,10 @@
                                     <p>
                                         {{ innslag.getNavn() }}
                                     </p>
-                                    {% if type.getKey() == 'konferansier' %}
+                                    {# Det blir ikke noe deltakerskjema for landsfestivalen #}
+                                    {% if til.getArrangement().getEierType() == 'land' or (type.getKey() == 'konferansier' or type.getKey() == 'datakulturarrangor') %}
                                         <div class="utfylt alert-success">
-                                            Konferansierer har ikke deltakerskjema
+                                            {{ type.getKey() == 'datakulturarrangor' ? 'Datakultur' : type.getNavn() }} har ikke deltakerskjema
                                         </div>
                                     {% else %}
                                         <div class="utfylt {{ nominasjon.harDeltakerskjema() ? 'alert-success' : 'alert-danger' }}">
@@ -62,24 +63,22 @@
                                         <div class="col-xs-12 col-lg-5">
                                         {#<h3 class="alert alert-error">Skjema for voksne er midlertidig deaktivert pga en feil</h3>#}
                                             <form action="?page={{GET('page')}}&til={{GET('til')}}&action={{GET('action')}}&id={{ innslag.getId() }}" method="POST">
-                                                <h4>Den voksnes vurdering</h4>
-                                                <p class="text-muted">
+                                                <h4>Din vurdering av {{ person.getFornavn() }}</h4>
+                                                <p class="text-muted">     {# [key,      navn som vises] #}
+                                                    {% set typerNominasjon = [['nettredaksjon', 'media'], ['arrangor', 'arrangør'], ['konferansier', 'konferansier'], ['datakulturarrangor', 'datakultur']] %}
+                                                    
                                                     Hvis {{ person.getFornavn() }} skal nomineres som 
-                                                    {% if type.getKey() == 'nettredaksjon' %}
-                                                        arrangør/konferansier, og ikke media, 
-                                                    {% elseif type.getKey() == 'arrangor' %}
-                                                        media/konferansier, og ikke arrangør,
-                                                    {% elseif type.getKey() == 'konferansier' %}
-                                                        arrangør/media, og ikke konferansier,
-                                                    {% endif %}
-                                                    kan du ikke bruke dette skjemaet. Da må du fylle ut et 
-                                                    {% if type.getKey() == 'nettredaksjon' %}
-                                                        arrangør/konferansier-skjema.
-                                                    {% elseif type.getKey() == 'arrangor' %}
-                                                        media/konferansier-skjema.
-                                                    {% elseif type.getKey() == 'konferansier' %}
-                                                        arrangør/media-skjema.
-                                                    {% endif %}
+                                                    {% for typeNominasjon in typerNominasjon %}
+                                                        {% if typeNominasjon[0] != type.getKey() %}
+                                                            {{ typeNominasjon[1] }}{{ loop.index < loop.length-1 ? ' /' : ','}}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    og ikke {{ type.getNavn()|lower }}, kan du ikke bruke dette skjemaet. Da må du fylle ut et skjema for
+                                                    {% for typeNominasjon in typerNominasjon %}
+                                                        {% if typeNominasjon[0] != type.getKey() %}
+                                                            {{ typeNominasjon[1] }}{{ loop.index < loop.length-1 ? ' /' : ''}}
+                                                        {% endif %}
+                                                    {% endfor %}
                                                     <br />
                                                     Finner du ikke {{ person.getFornavn() }} der? 
                                                     Da må {{ person.getKjonnspronomen() }} <a href="?page=UKMdeltakere">meldes på</a> først.
@@ -101,6 +100,10 @@
                                         <div class="col-xs-12 col-lg-6 col-lg-offset-1">
                                             {% if type.getKey() == 'konferansier' %}
                                                 {% embed "Nominasjon/vurdering_konferansier.html.twig" %}{% endembed %}
+                                            {% elseif type.getKey() == 'datakulturarrangor' %}
+                                                {% embed "Nominasjon/vurdering_datakulturarrangor.html.twig" %}{% endembed %}
+                                            {% elseif til.getArrangement().getEierType() == 'land' %}
+                                                <h4>Du skal sende til {{ til.getArrangement().getNavn() }} og trenger ikke levere deltakerskjema</h4>
                                             {% elseif nominasjon.harDeltakerSkjema() %}
                                                 <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
                                                 {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
@@ -128,7 +131,7 @@
                             </li>
                         {% else %}
                             <li>
-                                Ingen deltakere er påmeldt som {{ navn }}
+                                Ingen deltakere påmeldt i kategorien
                             </li>
                         {% endfor %}
                     </ol>

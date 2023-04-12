@@ -33,6 +33,12 @@ try {
             $nominasjon->setVoksenSamarbeid( $_POST['voksen-samarbeid'] );
             $nominasjon->setVoksenAnnet( $_POST['voksen-annet'] );
             break;
+        
+        case 'datakulturarrangor':
+            $nominasjon->setVoksenErfaring( $_POST['voksen-erfaring'] );
+            $nominasjon->setVoksenSamarbeid( $_POST['voksen-samarbeid'] );
+            $nominasjon->setVoksenAnnet( $_POST['voksen-annet'] );
+            break;
     }
 
     Write::save( $nominasjon );

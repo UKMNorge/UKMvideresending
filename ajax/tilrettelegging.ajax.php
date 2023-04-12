@@ -3,6 +3,8 @@
 use UKMNorge\Sensitivt\Requester;
 use UKMNorge\Sensitivt\Sensitivt;
 use UKMNorge\Sensitivt\Write\Intoleranse;
+use UKMNorge\Sensitivt\Write\LederIntoleranse as WriteLederIntoleranse;
+
 
 Sensitivt::setRequester(
     new Requester(
@@ -12,10 +14,13 @@ Sensitivt::setRequester(
     )
 );
 
-
-// SET DATA
-require_once('UKM/Sensitivt/Write/Intoleranse.php');
-$intoleranse = new Intoleranse( $_POST['id'] );
+// Sjek hvis brukeren er leder
+if(isset($_POST['is_leder']) && $_POST['is_leder'] == 'true') {
+    $intoleranse = new WriteLederIntoleranse( $_POST['id'] );
+}
+else {
+    $intoleranse = new Intoleranse( $_POST['id'] );
+}
 
 if( !is_array( $_POST['liste'] ) ) {
 	$_POST['liste'] = [];

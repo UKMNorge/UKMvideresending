@@ -7,7 +7,7 @@
 </script>
 
 <fieldset>
-	<legend>Registrer dine videresendte deltakeres matallergi/-intoleranse <span class="badge badge-info">BETA</span></legend>
+	<legend>Registrer dine ledere og videresendte deltakeres matallergi/-intoleranse <span class="badge badge-info">BETA</span></legend>
 
 	<div class="row mt-3">
 		<div class="col-xs-6">
@@ -15,7 +15,10 @@
 				<select id="intoleranse_ny" class="form-control">
                     <option value="false" selected disabled>Velg person</option>
 					{% for person in personer.uten %}
-						<option value="{{ person.ID }}" data-mobil="{{person.mobil}}">{{ person.navn }}</option>
+						<option value="{{ person.ID }}" data-leder="false" data-mobil="{{person.mobil}}">{{ person.navn }}</option>
+					{% endfor %}
+					{% for leder in ledere.uten %}
+						<option value="{{ leder.ID }}" data-leder="true" data-mobil="{{leder.mobil}}">{{ leder.navn }}</option>
 					{% endfor %}
 				</select>
 				<span class="input-group-btn" style="padding-left: 1em;">
@@ -33,6 +36,9 @@
 			<ol class="list-group" id="intoleranser">
 				{% for person in personer.med %}
 					{% include "js/intoleranse_deltaker.html.twig" %}
+				{% endfor %}
+				{% for leder in ledere.med %}
+					{% include "js/intoleranse_deltaker.html.twig" with {'person': leder} %}
 				{% endfor %}
 			</ol>
 		</div>

@@ -9,6 +9,7 @@ Author URI: http://mariusmandal.no
 */
 
 use UKMNorge\Arrangement\Arrangement;
+use UKMNorge\Arrangement\Videresending\Ledere\Leder;
 use UKMNorge\Arrangement\Videresending\Mottaker;
 use UKMNorge\Innslag\Personer\Person;
 use UKMNorge\Meta\Write as WriteMeta;
@@ -303,6 +304,30 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         $data->ID = $person->getId();
         $data->navn = $person->getNavn();
         $data->mobil = $person->getMobil();
+        $data->is_leder = false;
+        if (!is_null($allergi)) {
+            $data->intoleranse_liste = $allergi->getListe();
+            $data->intoleranse_human = $allergi->getListeHuman();
+            $data->intoleranse_tekst = $allergi->getTekst();
+        }
+
+        return $data;
+    }
+
+    /**
+     * Hent et TwigJS-objekt av en leder og dens allergier
+     *
+     * @param Person $person
+     * @param Intoleranse $allergi
+     * @return stdClass
+     */
+    public static function getIntoleranseLederData(Leder $leder, Intoleranse $allergi = null)
+    {
+        $data = new stdClass();
+        $data->ID = $leder->getId();
+        $data->navn = $leder->getNavn() . ' (' . $leder->getTypeNavn() . ')';
+        $data->mobil = $leder->getMobil();
+        $data->is_leder = true;
         if (!is_null($allergi)) {
             $data->intoleranse_liste = $allergi->getListe();
             $data->intoleranse_human = $allergi->getListeHuman();

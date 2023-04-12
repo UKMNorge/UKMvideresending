@@ -1,9 +1,9 @@
 <div class="form-group">
-	<label>Den voksnes navn</label>
-	<input type="text" name="voksen-navn" value="{{ nominasjon.getVoksen().getNavn() }}" class="form-control" required />
+	<label>Ditt navn eller navn på referanseperson</label>
+	<input type="text" name="voksen-navn" value="{{ nominasjon.getVoksen().getNavn() ? nominasjon.getVoksen().getNavn() : wp_user_navn }}" class="form-control" required />
 </div>
 
 <div class="form-group">
-	<label>Den voksnes mobilnummer</label>
-	<input type="tel" name="voksen-mobil" maxlength="8" value="{{ nominasjon.getVoksen().getMobil() }}" class="form-control" required />
+	<label>Ditt mobilnummer eller mobilnummer til referanseperson</label>
+	<input type="tel" name="voksen-mobil" maxlength="8" value="{{ nominasjon.getVoksen().getMobil() ? nominasjon.getVoksen().getMobil() : wp_user_phone }}" class="form-control" required />
 </div>

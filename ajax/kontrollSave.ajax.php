@@ -1,5 +1,6 @@
 <?php
 
+use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\Innslag\Personer\Write as WritePerson;
 use UKMNorge\Innslag\Titler\Write as WriteTittel;
 use UKMNorge\Innslag\Write;
@@ -29,6 +30,21 @@ foreach( $_POST as $post_key => $post_val ) {
 	}
 }
 
+// Sjekk godkjenning...
+$til = Arrangement::getById($_FORM['til_id']);
+$innslagType = $innslag->getType();
+// Sjekk hvis innslaget har nominasjon for innslag type
+if($til->harNominasjonFor($innslagType)) {
+	try {
+		$nominasjon = $innslag->getNominasjoner()->getTil($_FORM['til_id']);
+		if(!$nominasjon || !$nominasjon->erGodkjent()) {
+			throw new Exception("Du kan ikke videresende før godkjennelse");
+		}
+	}
+	catch(Exception $e) {
+		throw $e;
+	}
+}
 
 /**
  * INFORMASJON OM INNSLAGET
