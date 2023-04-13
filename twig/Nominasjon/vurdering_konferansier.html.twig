@@ -4,11 +4,11 @@
 	og nomineres kun basert på den voksnes vurdering.
 </p>
 
-{% if innslag.getMediefiler().getAntall() == 0 %}
+{% if innslag.getPlayback().getAntall() == 0 %}
     <p class="mediefilerWarning text-danger" style="display:none;">
         <span class="dashicons dashicons-warning"></span>
         Det er ikke 
-        <a href="?page=UKMplayback&action=upload">lastet opp noen mediefiler</a>
+        <a href="?page=UKMplayback">lastet opp noen mediefiler</a>
          av {{ innslag.getNavn() }} enda!
     </p>
 {% endif %}
