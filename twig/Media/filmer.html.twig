@@ -1,5 +1,5 @@
-<div class="filmer text-{{ innslag.getFilmer()|length > 0 ? 'success' : 'danger' }}">
-	{% if innslag.getFilmer()|length > 0 %}
+<div class="filmer text-{{ innslag.getFilmer().getAntall() > 0 ? 'success' : 'danger' }}">
+	{% if innslag.getFilmer().getAntall() > 0 %}
 		<img src="https://ico.ukm.no/check-32.png" height="20" class="float-right pull-right" />
 		Har film i UKM-TV.
 		<br />
