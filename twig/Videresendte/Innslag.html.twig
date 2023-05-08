@@ -3,10 +3,10 @@
 	{% for tittel in innslag.getTitler().getAll() %}
 		<li class="videresend_item list-group-item {{ tittel.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
 			<div class="row header">
-				<div class="col-1 col-xs-1">
+				<div class="col-2 col-xs-2">
 					<input type="checkbox" class="videresend" value="true" {{ tittel.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
 				</div>
-				<div class="col-9 col-xs-9">
+				<div class="col-8 col-xs-8">
 					<span class="navn">
 						<strong>{{ innslag.getNavn() }}</strong>
 						-
@@ -26,12 +26,12 @@
 	{% else %}
 		<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="0" id="tittel-0-{{ tittel.getId() }}">
 			<div class="row header">
-				<div class="col-1 col-xs-1">
+				<div class="col-2 col-xs-2">
 					{% if innslag.erVideresendtTil( til.getId() ) %}
 						<input type="checkbox" class="videresend" value="true" checked="checked"/>
 					{% endif %}
 				</div>
-				<div class="col-9 col-xs-9">
+				<div class="col-8 col-xs-8">
 					<span class="navn">
 						<strong>{{ innslag.getNavn() }}</strong>
 						-
@@ -55,7 +55,7 @@
 	{% set erNominert = innslag.getType().kanHaNominasjon() and til.getArrangement().harNominasjonFor(innslag.getType()) and innslag.getNominasjoner().getTil(til.getId()).har() %}
 	<li class="videresend_item list-group-item {{ innslag.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
 		<div class="row header">
-			<div class="col-1 col-xs-1">
+			<div class="col-2 col-xs-2">
 				{% if nominasjon.erNominert() and nominasjon and nominasjon.erAnswered() and nominasjon.erGodkjent() %}
 				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
 				{# nominasjon for denne typen finnes ikke #}
@@ -71,7 +71,7 @@
 				<span class="label label-{{ not nominasjon.erAnswered() ? 'primary' : 'danger' }}">{{ not nominasjon.erAnswered() ? 'Venter på godkjenning' : 'Ikke godkjent' }} </span>
 				{% endif %}
 			</div>
-			<div class="col-9 col-xs-9">
+			<div class="col-8 col-xs-8">
 				<span class="navn">
 					<strong>{{ innslag.getNavn() }}</strong>
 				</span>
