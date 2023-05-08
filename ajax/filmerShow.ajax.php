@@ -4,7 +4,7 @@ $monstring = UKMVideresending::getFra();
 $innslag = $monstring->getInnslag()->get( $_POST['innslag'] );
 
 $filmer = [];
-foreach($innslag->getFilmer($monstring->getId())->getAll() as $film) {
+foreach($innslag->getFilmer()->getAll() as $film) {
     $f['embed_url'] = $film->getEmbedUrl();
     $filmer[] = $f;
 }
