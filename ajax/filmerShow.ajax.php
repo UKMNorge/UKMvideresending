@@ -12,6 +12,6 @@ foreach($innslag->getFilmer()->getAll() as $film) {
 // Antall filmer i innslag (kan være filmer fra andre arrangementer også)
 $antallFilmerArrang = $innslag->getFilmer($monstring->getId())->getAntall();
 
-UKMVideresending::addResponseData('antallFilmer', $antallFilmerArrang);
+UKMVideresending::addResponseData('antallFilmerArrang', $antallFilmerArrang);
 UKMVideresending::addResponseData('filmer', $filmer);
 UKMVideresending::addResponseData('success', true);
