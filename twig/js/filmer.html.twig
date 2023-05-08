@@ -6,8 +6,8 @@
 	<iframe src="{{ film.embed_url }}" frameborder="0" width="500" height="282"></iframe>
 {% endfor %}
 
-{% if antallFilmer != filmer|length %}
-	{% set diffFilmer = antallFilmer - filmer|length %}
+{% if antallFilmerArrang != filmer|length %}
+	{% set diffFilmer = filmer|length - antallFilmerArrang %}
 	<h5>
 		<img src="https://ico.ukm.no/error_utrop-32.png" height="20" class="float-left pull-left"> 
 		<span>OBS: Innslag har {{ diffFilmer }} film {{ diffFilmer > 1 ? 'er' : '' }} som er lastet opp fra andre arrangementer</span>
