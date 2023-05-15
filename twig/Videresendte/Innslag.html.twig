@@ -78,10 +78,13 @@
 				<span class="status"></span>
 				{% if nominasjon.erNominert() %}
 					<a href="?page={{GET('page')}}&til={{GET('til')}}&action=nominasjon#innslag_{{innslag.getId()}}">
-                        <span class="label label-success" style="margin-left: 1em;">
-                            <span class="dashicons dashicons-awards" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
-                            nominert
-                        </span>
+						{% if nominasjon.erGodkjent() %}
+							<span class="label label-success" style="margin-left: 1em;">
+								<span class="dashicons dashicons-yes" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+								godkjent
+							</span>
+                        {% endif %}
+						
                         {% if innslag.getType().getKey() != 'konferansier' and innslag.getType().getKey() != 'datakulturarrangor' %}
                             {% if til.getArrangement().getEierType() != 'land' and not innslag.getNominasjoner().getTil(til.getId()).harDeltakerskjema() %}
                                 <span class="label label-danger" style="margin-left: 1em;">
