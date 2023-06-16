@@ -29,7 +29,7 @@ $sum =
 foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag_sendt ) {
     
     // Hopp over videresendte innslag av en type som ikke lenger er støttet.
-    if( !$til->getArrangement()->getInnslagTyper()->har( $innslag_sendt->getType() ) ) {
+    if( !$til->getArrangement()->getInnslagTyper(true)->har( $innslag_sendt->getType() ) ) {
         continue;
     }
     
@@ -75,7 +75,7 @@ foreach( $fra->getVideresendte( $til->getId() )->getAll() as $innslag_sendt ) {
  * SUMMER OPP KATEGORIENE OG TOTALEN
 **/
 // SUMMER ALLE SCENE-KATEGORIER TIL EN SCENE-VARIABEL
-foreach( $til->getArrangement()->getInnslagTyper()->getAll() as $tillatt_kategori ) {
+foreach( $til->getArrangement()->getInnslagTyper(true)->getAll() as $tillatt_kategori ) {
     if( !$tillatt_kategori->erScene() ) {
         continue;
     }

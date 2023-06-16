@@ -39,7 +39,7 @@
 			{% endfor %}
 
 			{# GRUPPE-INNSLAG UTEN VARIGHET #}
-			{% for innslag_type in til.getArrangement().getInnslagTyper().getAll()|filter(innslag_type => not innslag_type.harTid() and innslag_type.erGruppe() )%}
+			{% for innslag_type in til.getArrangement().getInnslagTyper(all).getAll()|filter(innslag_type => not innslag_type.harTid() and innslag_type.erGruppe() )%}
 				<tr>
 					<th>{{innslag_type.getNavn()}}</th>
 					<th>{{ summering[innslag_type.getKey()].personer > 0 ? summering[innslag_type.getKey()].personer : 0 }}
@@ -58,7 +58,7 @@
 			{% endfor %}
 
 			{# ENKELTPERSON-INNSLAG #}
-			{% for innslag_type in til.getArrangement().getInnslagTyper().getAll()|filter(innslag_type => innslag_type.erEnkeltperson() )%}
+			{% for innslag_type in til.getArrangement().getInnslagTyper(all).getAll()|filter(innslag_type => innslag_type.erEnkeltperson() )%}
 				<tr>
 					<th>{{innslag_type.getNavn()}}</th>
 					<th>{{ summering[innslag_type.getKey()].personer > 0 ? summering[innslag_type.getKey()].personer : 0 }}
