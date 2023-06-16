@@ -12,7 +12,7 @@
 					innslag</th>
 				<th>{{ summering.alle_scenetyper.varighet > 0 ? summering.alle_scenetyper.varighet|tid : 0 }}</th>
 			</tr>
-			{% for innslag_type in til.getArrangement().getInnslagTyper().getAll()|filter( innslag_type => innslag_type.harTid() ) %}
+			{% for innslag_type in til.getArrangement().getInnslagTyper(true).getAll()|filter( innslag_type => innslag_type.harTid() ) %}
 				{# GRUPPE-INNSLAG MED VARIGHET, SOM ER UNDERLAGT SCENE #}
 				{% if innslag_type.erScene() %}
 					<tr>
