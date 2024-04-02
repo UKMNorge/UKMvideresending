@@ -107,7 +107,7 @@
                                             {% elseif nominasjon.harDeltakerSkjema() %}
                                                 <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
                                                 {% if type.getKey() == 'nettredaksjon' %}
-                                                    {% embed "Nominasjon/vurdering_nettredaksjon.html.twig" %}{% endembed %}
+                                                    {% embed "Nominasjon/vurdering_media.html.twig" %}{% endembed %}
                                                 {% else %}
                                                     {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
                                                 {% endif %}
