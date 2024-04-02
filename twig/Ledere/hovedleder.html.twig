@@ -1,30 +1,34 @@
-<h3 class="mt-5">
-	Ansvarlig leder i {{ overnattingssteder['deltakere']|lower }}.
-</h3>
+{% if til.getArrangement().getNetter()|length > 0 %}
+	<h3 class="mt-5">
+		Ansvarlig leder i {{ overnattingssteder['deltakere']|lower }}.
+	</h3>
 
-<p>
-	Velg én ansvarlig leder per natt i {{ overnattingssteder['deltakere']|lower }} som vil være kontaktperson for arrangøren, arrangørens nattevakter o.l.
-</p>
+	<p>
+		Velg én ansvarlig leder per natt i {{ overnattingssteder['deltakere']|lower }} som vil være kontaktperson for arrangøren, arrangørens nattevakter o.l.
+	</p>
 
-<form id="hovedledere">
-	<table class="table table-striped">
-		{% for natt in til.getArrangement().getNetter() %}
-			<tr>
-				<td>{{ natt|dato('l d.m') }}</td>
-				<td>
-					<select class="hovedleder" name="hovedleder-{{ natt|dato('d_m') }}">
-						{% for leder in ledere.getAll() %}
-							<option value="{{ leder.getId() }}" class="hovedleder-{{ leder.getId() }}" {{ hovedledere.get(natt|dato('d_m')).getLederId() == leder.getId() ? 'selected="selected"' : ''}}>
-								{{ leder.getNavn() }} ({{ leder.getTypeNavn() }})
-							</option>
-						{% endfor %}
-					</select>
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
-</form>
+	<form id="hovedledere">
+		<table class="table table-striped">
+			{% for natt in til.getArrangement().getNetter() %}
+				<tr>
+					<td>{{ natt|dato('l d.m') }}</td>
+					<td>
+						<select class="hovedleder" name="hovedleder-{{ natt|dato('d_m') }}">
+							{% for leder in ledere.getAll() %}
+								<option value="{{ leder.getId() }}" class="hovedleder-{{ leder.getId() }}" {{ hovedledere.get(natt|dato('d_m')).getLederId() == leder.getId() ? 'selected="selected"' : ''}}>
+									{{ leder.getNavn() }} ({{ leder.getTypeNavn() }})
+								</option>
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</form>
 
-<div class="form-group">
-	<button type="button" class="btn btn-success btn-sm" id="hovedleder_save">Lagre ansvarlig leder</button>
-</div>
+
+	<div class="form-group">
+		<button type="button" class="btn btn-success btn-sm" id="hovedleder_save">Lagre ansvarlig leder</button>
+	</div>
+{% endif %}
+
