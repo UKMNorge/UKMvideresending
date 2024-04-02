@@ -106,7 +106,11 @@
                                                 <h4>Du skal sende til {{ til.getArrangement().getNavn() }} og trenger ikke levere deltakerskjema</h4>
                                             {% elseif nominasjon.harDeltakerSkjema() %}
                                                 <h4>{{ person.getFornavn() }} sin egenvurdering</h4>
-                                                {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
+                                                {% if type.getKey() == 'nettredaksjon' %}
+                                                    {% embed "Nominasjon/vurdering_nettredaksjon.html.twig" %}{% endembed %}
+                                                {% else %}
+                                                    {% embed "Nominasjon/vurdering_"~ ( type == 'nettredaksjon' ? 'media' : type.getKey() ) ~".html.twig" %}{% endembed %}
+                                                {% endif %}
                                             {% else %}
                                                 <h4>{{ person.getFornavn() }} har ikke levert sin egenvurdering</h4>
                                                 <p>
