@@ -97,8 +97,9 @@ var UKMLederItem = function( $, id, type, navn, mobil, epost ) {
 		},
 		getTypeNice: function(){
 			switch( type ) {
-				case 'hoved':
 				case 'utstilling':
+					return 'Reiseleder 2';
+				case 'hoved':
 				case 'reise':
 					return type.capitalize() +'leder';
 				case 'turist':
