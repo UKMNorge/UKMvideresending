@@ -287,7 +287,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
         return [
             'deltakere'     => $deltakerovernatting,
             'hotell'        => 'Lederhotellet',
-            'privat'        => 'Privat/annet'
+            'privat'        => 'Privat/annet/ingen overnatting'
         ];
     }
 
