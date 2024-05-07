@@ -11,6 +11,7 @@ $innslag    = $fra->getInnslag()->get( intval($_POST['innslag']) );
 // Basis-data
 $data = [
     'har_titler'			=> $innslag->getType()->harTitler(),
+	'er_enkelperson'		=> $innslag->getType()->erEnkeltPerson(),
 	'har_tekniske'			=> $innslag->getType()->harTekniskeBehov(),
 	'type_id' 				=> $innslag->getType()->getId(),
 	'type_key' 				=> $innslag->getType()->getKey(),
@@ -37,6 +38,20 @@ if( $innslag->getType()->harTitler() ) {
 		$data['varighet']		= $tittel->getVarighet()->getSekunder();
 	}
 	
+	foreach( $innslag->getPersoner()->getAll() as $person ) {
+		$person = [
+			'id'			=> $person->getId(),
+			'navn'			=> $person->getNavn(),
+			'mobil'			=> $person->getMobil(),
+			'alder'			=> $person->getAlderTall(),
+			'instrument'	=> $person->getRolle(),
+			'videresendt'	=> $person->erPameldt( $til->getId() )
+		];
+		$data['personer'][]		= $person;
+	}
+}
+// Har tittelløs men har flere personer
+else if(!$innslag->getType()->erEnkeltPerson()) {
 	foreach( $innslag->getPersoner()->getAll() as $person ) {
 		$person = [
 			'id'			=> $person->getId(),

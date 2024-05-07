@@ -79,8 +79,9 @@
 			</div>
 		{% endif %}
 	{% endif %}
-	
-	{% if har_titler %}
+
+	{# Det er noen innslag type som ikke har titler men som ikke er enkelperson "type: gruppe" #}
+	{% if har_titler or er_enkelperson == false %}
         <p>
             <label>
                 Kryss av for hvem som skal være med til {{ til_navn }}!
