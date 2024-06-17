@@ -19,7 +19,14 @@ if( !$hovedleder->eksisterer() ) {
 }
 
 $utstillingleder = Leder::getByType( $fra->getId(), $til->getId(), 'utstilling');
-if( !$utstillingleder->eksisterer() ) {
+// Hvis arrangement ikke har utstillingsleder, slett den
+// Forklaring: Vannligvis alle arrangementer har utstillingsleder (leder 2) men der er noen få tilfeller hor arrangementet ikke har utstillingsleder
+if($fra->getMeta('har_utstillingleder')->getValue() == 'false') {
+    if( $utstillingleder->eksisterer() ) {
+        WriteLeder::delete($utstillingleder);
+    }
+}
+else if( !$utstillingleder->eksisterer() ) {
     WriteLeder::create($utstillingleder);
 }
 
