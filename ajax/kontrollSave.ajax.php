@@ -5,6 +5,9 @@ use UKMNorge\Innslag\Personer\Write as WritePerson;
 use UKMNorge\Innslag\Titler\Write as WriteTittel;
 use UKMNorge\Innslag\Write;
 
+use statistikk;
+require_once('UKM/statistikk.class.php');
+
 require_once('UKM/Autoloader.php');
 
 $monstring = UKMVideresending::getFra();
@@ -121,6 +124,9 @@ if( isset( $_FORM['personer'] ) ) {
 		
 	}
 }
+
+
+statistikk::oppdater_innslag($innslag, $til);
 
 
 UKMVideresending::addResponseData('success',true);
