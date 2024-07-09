@@ -126,7 +126,7 @@ if( isset( $_FORM['personer'] ) ) {
 }
 
 
-statistikk::oppdater_innslag($innslag, $til);
+// statistikk::oppdater_innslag($innslag, $til);
 
 
 UKMVideresending::addResponseData('success',true);
