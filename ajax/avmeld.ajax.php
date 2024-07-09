@@ -3,6 +3,9 @@
 use UKMNorge\Arrangement\Write as WriteArrangement;
 use UKMNorge\Innslag\Titler\Write;
 
+use statistikk;
+require_once('UKM/statistikk.class.php');
+
 $til        = UKMVideresending::getValgtTil();
 $innslag 	= $til->getArrangement()->getInnslag()->get( $_POST['innslag'] );
 
@@ -47,6 +50,10 @@ else {
     WriteArrangement::fjernInnslag( $innslag );
 }
 
+
 UKMVideresending::beregnAntallVideresendtePersoner();
+
+// Kall statistikk
+statistikk::avmeldVideresending($innslag, $til->getArrangement());
 
 UKMVideresending::addResponseData('success',true);
