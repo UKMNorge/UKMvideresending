@@ -54,6 +54,6 @@ else {
 UKMVideresending::beregnAntallVideresendtePersoner();
 
 // Kall statistikk
-statistikk::avmeldVideresending($til->getArrangement(), $innslag);
+statistikk::avmeldVideresending($innslag, $til->getArrangement());
 
 UKMVideresending::addResponseData('success',true);
