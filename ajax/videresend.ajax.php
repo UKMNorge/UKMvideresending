@@ -1,6 +1,7 @@
 <?php
 
 use UKMNorge\Arrangement\Write;
+use UKMNorge\Arrangement\Arrangement;
 use UKMNorge\Innslag\Titler\Write as WriteTittel;
 
 use statistikk;
@@ -44,9 +45,6 @@ try {
 	}
 }
 
-// Kall statistikk
-statistikk::oppdater_innslag($innslag, $til);
-
 // Videresend evntuell tittel
 if( $_POST['type'] == 'tittel' ) {
 	/**
@@ -62,6 +60,12 @@ if( $_POST['type'] == 'tittel' ) {
 }
 
 UKMVideresending::beregnAntallVideresendtePersoner();
+
+// Oppdater statistikk
+$til        = UKMVideresending::getValgtTil('POST')->getArrangement();
+$fra        = new Arrangement( intval(get_option('pl_id')) );
+$innslag    = $fra->getInnslag()->get( intval($_POST['innslag']) );
+statistikk::oppdater_innslag($innslag, $til);
 
 
 UKMVideresending::addResponseData('success',true);
