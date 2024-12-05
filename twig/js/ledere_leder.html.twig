@@ -39,11 +39,12 @@
 					<input name="leder_epost" class="leder_epost form-control input-sm" type="email" placeholder="E-postadresse" value="{{ leder.epost is empty ? '' : leder.epost }}"/>
 				</div>
 
-				<div class="form-group">
-					<textarea name="leder_beskrivelse" class="leder_beskrivelse form-control" placeholder="Ferdigheter og kompentanse">{{ leder.beskrivelse is empty ? '' : leder.beskrivelse }}</textarea>
-				</div>
+				{% if isLandsfestivalen == true or (til.arrangement and til.arrangement.type == 'land') %}
 
-				{% if til.arrangement and til.arrangement.type == 'land' %}
+					<div class="form-group">
+						<textarea name="leder_beskrivelse" class="leder_beskrivelse form-control" placeholder="Ferdigheter og kompetanse">{{ leder.beskrivelse is empty ? '' : leder.beskrivelse }}</textarea>
+					</div>
+
 					<hr>
 					<div>
 						<h5><b>Godkjenning: </b>{{ leder.godkjent == null ? 'Venter godkjenning' : (leder.godkjent == true ? 'Godkjent' : 'Ikke godkjent') }}</h5>
