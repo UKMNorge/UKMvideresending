@@ -16,6 +16,7 @@ $leder->setType( $_FORM['leder_type'] );
 $leder->setNavn( $_FORM['leder_navn']);
 $leder->setMobil( intval( str_replace(' ', '', $_FORM['leder_mobil'] ) ) );
 $leder->setEpost( $_FORM['leder_epost']);
+$leder->setBeskrivelse($_FORM['leder_beskrivelse']);
 
 // Hvis type er endret til sykerom, fjern alle overnattinger som ikke er hotell
 if($_FORM['leder_type'] == 'sykerom' || $_FORM['leder_type'] == 'turist') {

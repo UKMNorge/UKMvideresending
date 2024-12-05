@@ -27,7 +27,6 @@
 						<div class="clearfix"></div>
 					{% endif %}
 				</div>
-
 				<div class="form-group">
 					<input name="leder_navn" class="leder_navn form-control input-lg" type="text" placeholder="Skriv navn" value="{{ leder.navn }}"/>
 				</div>
@@ -40,6 +39,19 @@
 					<input name="leder_epost" class="leder_epost form-control input-sm" type="email" placeholder="E-postadresse" value="{{ leder.epost is empty ? '' : leder.epost }}"/>
 				</div>
 
+				<div class="form-group">
+					<textarea name="leder_beskrivelse" class="leder_beskrivelse form-control" placeholder="Ferdigheter og kompentanse">{{ leder.beskrivelse is empty ? '' : leder.beskrivelse }}</textarea>
+				</div>
+
+				{% if til.arrangement and til.arrangement.type == 'land' %}
+					<hr>
+					<div>
+						<h5><b>Godkjenning: </b>{{ leder.godkjent == null ? 'Venter godkjenning' : (leder.godkjent == true ? 'Godkjent' : 'Ikke godkjent') }}</h5>
+					</div>
+					<hr>
+				{% endif %}
+				
+				
 				<div class="clearfix"></div>
 
 				<div class="form-group">
