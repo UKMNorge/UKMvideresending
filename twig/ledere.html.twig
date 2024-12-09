@@ -11,7 +11,12 @@
 	<div class="row">
 		<div class="col-xs-12 col-lg-10">
 			<h3>Registrer dine ledere, og hvor de overnatter de ulike nettene</h3>
-			
+			{% if isLandsfestivalen == true or (til.arrangement and til.arrangement.type == 'land') %}
+				<h5>
+					UKM Norge ønsker å bruke reiselederne til små og store oppgaver under festivalen. Store ting som workshops vil bli honorert, mens småting som guiding vil være frivillig og ubetalt. Alle blir selvsagt kontaktet før de settes opp på noe. Skriv derfor litt om ledernes ferdigheter og  kapasietet, slik at de kan involveres mer i festivalen
+				</h5>
+			{% endif %}
+
 			<ol class="list-group" id="alle_ledere">
 				{% for leder in ledere.getAll() %}
 					{% include "js/ledere_leder.html.twig" with {leder: leder.getJsObject(), netter: til.getArrangement().getNetter() } %}
