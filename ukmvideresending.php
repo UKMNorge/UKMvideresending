@@ -217,20 +217,24 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
      **/
     public static function meny()
     {
-        add_action(
-            'admin_print_styles-' .
-                add_menu_page(
-
-                    'Send videre',
-                    'Send videre',
-                    'editor',
-                    'UKMVideresending',
-                    ['UKMVideresending', 'renderAdmin'],
-                    'dashicons-external', #'//ico.ukm.no/paper-airplane-20.png',
-                    90
-                ),
-            ['UKMVideresending', 'script']
-        );
+        $arrangement = new Arrangement(get_option('pl_id'));
+        // Landsfestivalen kan ikke sendes videre derfor deaktiverer meny funksjonen for LS(landsfestivalen)
+        if($arrangement->getEierType() != 'land') {
+            add_action(
+                'admin_print_styles-' .
+                    add_menu_page(
+    
+                        'Send videre',
+                        'Send videre',
+                        'editor',
+                        'UKMVideresending',
+                        ['UKMVideresending', 'renderAdmin'],
+                        'dashicons-external', #'//ico.ukm.no/paper-airplane-20.png',
+                        90
+                    ),
+                ['UKMVideresending', 'script']
+            );
+        }
     }
 
     /**
