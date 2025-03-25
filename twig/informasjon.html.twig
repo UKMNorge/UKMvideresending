@@ -6,6 +6,6 @@
 		har ikke lagt inn informasjon om kvoter eller
 									andre regler for videresending.
 	{% else %}
-		{{ til.getInformasjonstekst()|raw|nl2br }}
+		{{ til.getInformasjonstekst()|replace({'\\"':'"'})|raw|nl2br }}
 	{% endif %}
 {% endblock %}
