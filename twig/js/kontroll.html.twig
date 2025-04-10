@@ -45,12 +45,12 @@
 						<div class="clearfix"></div>
 						<select class="form-control" name="tittel_varighet_sek">
 							{% for s in range(0, 600, 5) %}
-								<option value="{{s}}" {% if s == varighet %}selected="selected"{% endif %}>
+								<option value="{{ s }}" {% if s == varighet %}selected="selected"{% endif %}>
 									{% if s == 0 %}
 										0 sek
 									{% endif %}
-									{% if (s / 60)|floor(0) > 0 %}
-										{{ (s / 60)|floor(0) }} min
+									{% if s >= 60 %}
+										{{ s // 60 }} min
 									{% endif %}
 									{% if s % 60 > 0 %}
 										{{ s % 60 }} sek
