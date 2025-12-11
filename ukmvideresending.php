@@ -223,9 +223,9 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
             add_action(
                 'admin_print_styles-' .
                     add_menu_page(
-    
-                        'Send videre',
-                        'Send videre',
+
+                        'Videresend arrangement',
+                        'Videresend arrangementet',
                         'editor',
                         'UKMVideresending',
                         ['UKMVideresending', 'renderAdmin'],
