@@ -224,8 +224,8 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 'admin_print_styles-' .
                     add_menu_page(
 
-                        'Videresend arrangement',
-                        'Videresend arrangementet',
+                        'Videresend',
+                        'Videresend deltakere',
                         'editor',
                         'UKMVideresending',
                         ['UKMVideresending', 'renderAdmin'],
