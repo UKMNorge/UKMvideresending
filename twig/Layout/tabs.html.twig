@@ -70,7 +70,7 @@
     </a>
 
     {# LEDERE #}
-    {% if til.getArrangement().getMetaValue('harLederskjema') %}
+    {# {% if til.getArrangement().getMetaValue('harLederskjema') %} #}
         <a href="{{ baseLink }}ledere" {{ tab == 'ledere' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
@@ -80,7 +80,7 @@
                 <span class="tab_description">Ledere og overnatting</span>
             </div>
         </a>
-    {% endif %}
+    {# {% endif %} #}
 
     {% if til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
         <a href="{{ baseLink }}infoskjema" {{ tab == 'infoskjema' ? 'class="active"' : ''}}>
