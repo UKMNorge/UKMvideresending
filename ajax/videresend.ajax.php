@@ -12,6 +12,12 @@ $fra		= UKMVideresending::getFra();
 $innslag 	= $fra->getInnslag()->get( $_POST['innslag'] );
 $til        = UKMVideresending::getValgtTil('POST')->getArrangement();
 
+// Hvis arrangementet har videresendingnominasjon, kjør videresend_nominasjon.ajax.php
+// Kun nominasjon fra fra_arrangementet kan videresendes til til_arrangementet
+if ($til->harVideresendingNominasjon()) {
+	require_once __DIR__ . '/videresend_nominasjon.ajax.php';
+	return;
+}
 
 // Sjekk godkjenning...
 $innslagType = $innslag->getType();
@@ -67,5 +73,8 @@ $fra        = new Arrangement( intval(get_option('pl_id')) );
 $innslag    = $fra->getInnslag()->get( intval($_POST['innslag']) );
 statistikk::oppdater_innslag($innslag, $til);
 
+if ($til->harVideresendingNominasjon()) {
+	require_once __DIR__ . '/videresend_nominasjon.ajax.php';
+}
 
-UKMVideresending::addResponseData('success',true);
+UKMVideresending::addResponseData('success', true);

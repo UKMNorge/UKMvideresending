@@ -7,6 +7,13 @@ use statistikk;
 require_once('UKM/statistikk.class.php');
 
 $til        = UKMVideresending::getValgtTil();
+
+// Først: fjern videresending_nominasjon (person/tittel/innslag) før innslag og titler meldes av
+if ($til->getArrangement()->harVideresendingNominasjon()) {
+	require_once __DIR__ . '/avmeldt_nominasjon.ajax.php';
+    return;
+}
+
 $innslag 	= $til->getArrangement()->getInnslag()->get( $_POST['innslag'] );
 
 /*
@@ -56,4 +63,4 @@ UKMVideresending::beregnAntallVideresendtePersoner();
 // Kall statistikk
 statistikk::avmeldVideresending($innslag, $til->getArrangement());
 
-UKMVideresending::addResponseData('success',true);
+UKMVideresending::addResponseData('success', true);

@@ -37,7 +37,6 @@ if( $innslag->getType()->harTitler() ) {
 		$data['har_varighet']	= true;
 		$data['varighet']		= $tittel->getVarighet()->getSekunder();
 	}
-	
 	foreach( $innslag->getPersoner()->getAll() as $person ) {
 		$person = [
 			'id'			=> $person->getId(),
@@ -45,7 +44,9 @@ if( $innslag->getType()->harTitler() ) {
 			'mobil'			=> $person->getMobil(),
 			'alder'			=> $person->getAlderTall(),
 			'instrument'	=> $person->getRolle(),
-			'videresendt'	=> $person->erPameldt( $til->getId() )
+			'videresendt'	=> $person->erPameldt( $til->getId() ),
+			'har_nominasjon'    => $person->erNominert( $til->getId() ),
+			'nominasjon_status' => $person->erNominert( $til->getId() ) ? $person->getVideresendingNominasjoner($til->getId())[0]->getStatus() : null,
 		];
 		$data['personer'][]		= $person;
 	}

@@ -1,0 +1,124 @@
+{% set nominasjon = innslag.getNominasjoner().getTil(til.getId()) %}
+
+{% set innslagNominasjon = innslag.getVideresendingNominasjonTil(til.getId()) %}
+{% set erNominert = innslagNominasjon|length > 0 %}
+{% set erAlleNominasjonerGodkjent = innslag.erAlleNominasjonerGodkjent(til.getId()) %}
+
+{# {{ dump(erAlleNominasjonerGodkjent) }}
+<pre>
+    {{ dump(innslagNominasjon) }}
+</pre> #}
+
+{# INNSLAG MED TITLER #}
+{% if innslag.getType().harTitler() %}
+	{% for tittel in innslag.getTitler().getAll() %}
+		<li class="videresend_item list-group-item {{ tittel.erNominert(til.getId()) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
+        {{ dump(tittel.erNominert(til.getId())) }}
+			<div class="row header">
+				<div class="col-2 col-xs-2">
+					<input type="checkbox" class="videresend" value="true" {{ tittel.erNominert(til.getId()) ? 'checked="checked"' : ''}}/>
+				</div>
+				<div class="col-8 col-xs-8">
+					<span class="navn">
+						<strong>{{ innslag.getNavn() }}</strong>
+						-
+						{{ tittel.getTittel() }}</span>
+					<span class="status"></span>
+				</div>
+				<div class="col-2 col-xs-2 text-muted muted small">
+					{{ innslag.getKommune().getNavn() }}
+				</div>
+			</div>
+			<div class="row data" style="display:none;">
+				<div class="col1 col-xs-1"></div>
+				<div class="col-11 col-xs-11 kontroll"></div>
+			</div>
+		</li>
+		{# MANGLER TITLER OG KAN KUN AVMELDES #}
+	{% else %}
+		<li class="videresend_item list-group-item {{ innslag.erVideresendtTil( til.getId() ) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="0" id="tittel-0-{{ tittel.getId() }}">
+			<div class="row header">
+				<div class="col-2 col-xs-2">
+					{% if innslag.erVideresendtTil( til.getId() ) %}
+						<input type="checkbox" class="videresend" value="true" checked="checked"/>
+					{% endif %}
+				</div>
+				<div class="col-8 col-xs-8">
+					<span class="navn">
+						<strong>{{ innslag.getNavn() }}</strong>
+						-
+						<span class="text-danger small">Har ingen titler påmeldt ditt arrangement og kan derfor ikke videresendes</span>
+					</span>
+					<span class="status"></span>
+				</div>
+				<div class="col-2 col-xs-2 text-muted muted small">
+					{{ innslag.getKommune().getNavn() }}
+				</div>
+			</div>
+			<div class="row data" style="display:none;">
+				<div class="col1 col-xs-1"></div>
+				<div class="col-11 col-xs-11 kontroll"></div>
+			</div>
+		</li>
+	{% endfor %}
+	{# INNSLAG UTEN TITLER #}
+{% else %}
+	<li class="videresend_item list-group-item {{ innslag.erPameldt( til.getId() ) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
+		<div class="row header">
+			<div class="col-2 col-xs-2">
+				{% if nominasjon.erNominert() and nominasjon and nominasjon.erAnswered() and nominasjon.erGodkjent() %}
+				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
+				{# nominasjon for denne typen finnes ikke #}
+				{% elseif not til.getArrangement().harNominasjonFor(innslag.getType()) %}
+				<input type="checkbox" class="videresend" value="true" {{ innslag.erPameldt( til.getId() ) ? 'checked="checked"' : ''}}/>
+				{# nominasjon for denne typen finnes og det er ikke nominert #}
+				{% elseif not nominasjon.erNominert() %}
+				<a href="?page={{GET('page')}}&til={{GET('til')}}&action=nominasjon#innslag_{{innslag.getId()}}">
+					<span class="label label-warning">Må nomineres</span>
+				</a>
+				{% else %}
+				{# Det er nominert men ikke besvart eller godkjent #}
+				<span class="label label-{{ not nominasjon.erAnswered() ? 'primary' : 'danger' }}">{{ not nominasjon.erAnswered() ? 'Venter på godkjenning' : 'Ikke godkjent' }} </span>
+				{% endif %}
+			</div>
+			<div class="col-8 col-xs-8">
+				<span class="navn">
+					<strong>{{ innslag.getNavn() }}</strong>
+				</span>
+				<span class="status"></span>
+				{% if nominasjon.erNominert() %}
+					<a href="?page={{GET('page')}}&til={{GET('til')}}&action=nominasjon#innslag_{{innslag.getId()}}">
+						{% if nominasjon.erGodkjent() %}
+							<span class="label label-success" style="margin-left: 1em;">
+								<span class="dashicons dashicons-yes" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+								godkjent
+							</span>
+                        {% endif %}
+						
+                        {% if innslag.getType().getKey() != 'konferansier' and innslag.getType().getKey() != 'datakulturarrangor' %}
+                            {% if til.getArrangement().getEierType() != 'land' and not innslag.getNominasjoner().getTil(til.getId()).harDeltakerskjema() %}
+                                <span class="label label-danger" style="margin-left: 1em;">
+                                    <span class="dashicons dashicons-warning" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+                                    mangler deltakerskjema
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                        {% if not innslag.getNominasjoner().getTil(til.getId()).harVoksenskjema() %}
+                            <span class="label label-danger" style="margin-left: 1em;">
+                                <span class="dashicons dashicons-warning" style="margin-top: .33em;font-size: 1.4em;margin-right: -.3em;margin-left: -.3em;"></span>
+                                mangler voksenskjema
+                            </span>
+                        {% endif %}
+                    </a>
+				{% endif %}
+			</div>
+			<div class="col-2 col-xs-2 text-muted muted small">
+				{{ innslag.getKommune().getNavn() }}
+			</div>
+		</div>
+		<div class="row data" style="display:none;">
+			<div class="col1 col-xs-1"></div>
+			<div class="col-11 col-xs-11 kontroll"></div>
+		</div>
+	</li>
+{% endif %}
