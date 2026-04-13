@@ -2,9 +2,15 @@
 	<input type="hidden" name="til_id" type="text" class="form-control" value="{{ til_id}}" />
 
 	<p>
+		{% if har_nominasjon %}
+		<strong>
+			{{ innslag_navn }} er nå nominert. Sjekk at riktig informasjon er oppgitt!
+		</strong>
+		{% else %}
 		<strong>
 			{{ innslag_navn }} er nå videresendt. Sjekk at riktig informasjon er oppgitt!
 		</strong>
+		{% endif %}
 		{% if har_titler %}
 			<br />
 			Om du endrer beskrivelser, kontaktinfo, alder o.l. må du trykke på knappen "lagre endringer"
@@ -92,6 +98,9 @@
 			<thead>
 				<tr>
 					<th class="col-xs-1"></th>
+					{% if har_nominasjon %}
+					<th class="col-xs-1">Nominasjon status</th>
+					{% endif %}
 					<th class="col-xs-3">Navn</th>
 					<th class="col-xs-2">Mobil</th>
 					<th class="col-xs-2">Alder</th>

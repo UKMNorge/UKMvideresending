@@ -7,8 +7,16 @@ use UKMNorge\Videresending\Write as VideresendingNominasjonWrite;
 /**
  * Oppretter rader i videresending_nominasjon ut fra videresend-POST (kjøres etter vellykket videresending).
  *
- * Forventer: $fra og $til (Arrangement), samt $_POST['type'], $_POST['innslag'].
+ * Forventer: $fra og $til (Arrangement) — settes fra videresend.ajax.php, eller hentes her ved inkludering fra videresendPerson.ajax.php.
+ * Samt $_POST['type'], $_POST['innslag']. For én person: $_POST['subaction'] === 'videresendPerson' og $_POST['person'].
  */
+
+if (!isset($fra)) {
+    $fra = UKMVideresending::getFra();
+}
+if (!isset($til)) {
+    $til = UKMVideresending::getValgtTil()->getArrangement();
+}
 
 $innslagFra = $fra->getInnslag()->get(intval($_POST['innslag']));
 $postType = isset($_POST['type']) ? (string) $_POST['type'] : '';
@@ -33,6 +41,44 @@ $finnesForPersonOgTittel = static function (int $personId, int $arrangementTil, 
 $harNominasjonForTittel = static function (int $tittelId, int $arrangementTil): bool {
     return count(VideresendingNominasjon::getAlleByTittelId($tittelId, $arrangementTil)->getAll()) > 0;
 };
+
+$subaction = isset($_POST['subaction']) ? (string) $_POST['subaction'] : '';
+$personIdFromPost = isset($_POST['person']) ? intval($_POST['person']) : 0;
+
+if ($subaction === 'videresendPerson' && $personIdFromPost > 0) {
+    $innslagFra->getPersoner()->get($personIdFromPost);
+
+    $tittelIdForNom = null;
+    if ($postType === 'tittel') {
+        $tittelIdForNom = intval($_POST['id']);
+        if ($tittelIdForNom < 1) {
+            UKMVideresending::addResponseData('videresend_nominasjon', ['opprettet_ids' => [], 'advarsel' => 'Ugyldig tittel-id']);
+            UKMVideresending::addResponseData('success', true);
+            return;
+        }
+    }
+
+    if (!$finnesForPersonOgTittel($personIdFromPost, $tilId, $tittelIdForNom)) {
+        $nom = VideresendingNominasjonWrite::create(
+            $season,
+            $typeKey,
+            $fraId,
+            $tilId,
+            $personIdFromPost,
+            $bId,
+            false,
+            null,
+            $tittelIdForNom
+        );
+        $opprettetIds[] = $nom->getId();
+    }
+
+    UKMVideresending::addResponseData('videresend_nominasjon', [
+        'opprettet_ids' => $opprettetIds,
+    ]);
+    UKMVideresending::addResponseData('success', true);
+    return;
+}
 
 if ($postType === 'tittel') {
     $tittelId = intval($_POST['id']);

@@ -8,7 +8,7 @@ $videresend_til = UKMVideresending::getValgtTil('POST');
 
 if ($videresend_til->getArrangement()->harVideresendingNominasjon()) {
 	require_once __DIR__ . '/avmeldt_nominasjon.ajax.php';
-    die;
+    return;
 }
 
 $innslag 		= $videresend_til->getInnslag()->get( $_POST['innslag'] );

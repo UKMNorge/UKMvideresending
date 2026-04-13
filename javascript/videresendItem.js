@@ -115,7 +115,7 @@ var UKMVideresendItem = function($, type, innslag, id) {
         /**
          * Send ajax-kall for å videresende person
          **/
-        videresendPerson: function(person) {
+        videresendPerson: async function(person) {
             self.setStatus('alert-warning', 'Vennligst vent, videresender person...');
 
             var options = {
@@ -123,7 +123,11 @@ var UKMVideresendItem = function($, type, innslag, id) {
                 person: person
             };
 
-            self.ajax('videresendPerson', options);
+            let response = await self.ajax('videresendPerson', options);
+            
+            if(response) {
+                self.loadKontroll();
+            }
             //console.warn('ajax:videresend('+ self.getId() +'):person('+ person +')');
         },
 
@@ -173,6 +177,7 @@ var UKMVideresendItem = function($, type, innslag, id) {
                 $(this).removeClass('alert-success');
             });
 
+            self.loadKontroll();
         },
 
 
@@ -250,7 +255,7 @@ var UKMVideresendItem = function($, type, innslag, id) {
                 }
             }
 
-            $.post(
+            return $.post(
                 ajaxurl,
                 data,
                 function(response) {

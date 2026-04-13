@@ -19,6 +19,7 @@ $data = [
     'innslag_id' 			=> $innslag->getId(),
     'til_navn'              => $til->getNavn(),
 	'til_id' 				=> $til->getId(),
+	'har_nominasjon'		=> count($innslag->getVideresendingNominasjonTil( $til->getId() )) > 0,
 ];
 
 
