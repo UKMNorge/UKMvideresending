@@ -1,10 +1,42 @@
 {% extends "Layout/base.html.twig" %}
 
 {% block content %}
+    {% if til.getArrangement().harVideresendingNominasjon() %}
+    <div class="videresendte-deltakerinfo nosh-impt as-card-2 as-margin-bottom-space-3 as-padding-space-2">
+        <h2 class="nom as-margin-bottom-space-2">Nominasjon påkrevd</h2>
+        <section class="deltakerinfo-innlegg">
+        <h4>Alle deltakere må nomineres før de kan videresendes til {{ til.getArrangement().getNavn() }}</h4>
+
+        <h5>Nominasjon/godkjenning går gjennom følgende faser:</h5>
+        <ul>
+            <li>1. Sendes til arrangørene på {{ til.getArrangement().getNavn() }}</li>
+            <li>2. Etter godkjenning, skjemaene sendes videre til deltakerne</li>
+            <li>3. Deltakerne fyller ut skjemaene og sender dem tilbake til arrangørene</li>
+            <li>4. Arrangørene på {{ til.getArrangement().getNavn() }} godkjenner nominasjonene og deltakerne sendes videres til {{ til.getArrangement().getNavn() }}</li>
+        </ul>
+
+        <h5><strong>⚠️ Viktig:</strong></h5>
+        <p>
+            Arrangørene på {{ til.getArrangement().getNavn() }} er selv ansvarlige for å informere deltakerne om at det finnes nye innlegg.
+        </p>
+        <p>
+            Ingen av deltakere er sendt videres til {{ til.getArrangement().getNavn() }} før de er godkjent.
+        </p>
+        </section>
+    </div>
+    {% endif %}
+
 	<fieldset>
+        {% if til.getArrangement().harVideresendingNominasjon() %}
+        <legend>
+            Nominer deltakere for videresending til {{ til.getArrangement().getNavn() }}
+        </legend>
+        {% else %}
         <legend>
             Videresend deltakere til {{ til.getArrangement().getNavn() }}
         </legend>
+        {% endif %}
+        
 
         {#	
             <div class="alert alert-warning">
@@ -63,12 +95,6 @@
                             <img src="{{ type_innslag.getIcon() }}" height="45" />
                             <h3>
                                 {{ type_innslag }}
-                                {% if type_innslag.kanHaNominasjon() and til.getArrangement().harNominasjonFor(type_innslag) %}
-                                    <small class="text-info" style="margin-left: 1em;">
-                                        <span class="dashicons dashicons-warning" style="margin-top:.3em;"></span>
-                                        Husk at {{ type_innslag.getNavn()|lower }}-deltakere skal nomineres og <b>godkjennes</b> før de kan videresendes.
-                                    </small>
-                                {% endif %}
                             </h3>
                             <div class="clearfix"></div>
                         </div>
@@ -91,4 +117,16 @@
             </div>
         {% endif %}
     </fieldset>
+
+    <style>
+        .videresendte-deltakerinfo {
+            width: fit-content;
+            background: var(--as-color-primary-warning-light);
+            border: 2px solid var(--as-color-primary-warning-medium);
+        }
+        .deltakerinfo-innlegg ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+    </style>
 {% endblock %}
