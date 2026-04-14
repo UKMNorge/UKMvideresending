@@ -28,7 +28,7 @@ $personPostSatt = isset($_POST['person'])
 if ($personPostSatt) {
     $personId = intval($_POST['person']);
     if ($personId > 0) {
-        foreach (VideresendingNominasjoner::getAlleByPersonId($personId, $tilId)->getAll() as $nom) {
+        foreach (VideresendingNominasjoner::getAlleByPersonIdOgInnslagId($personId, $bId, $tilId)->getAll() as $nom) {
             if ($postType === 'tittel') {
                 $tittelId = intval($_POST['id']);
                 if ($tittelId < 1 || $nom->getTId() !== $tittelId) {

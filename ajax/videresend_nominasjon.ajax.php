@@ -28,10 +28,10 @@ $bId = $innslagFra->getId();
 
 $opprettetIds = [];
 
-$finnesForPersonOgTittel = static function (int $personId, int $arrangementTil, ?int $tittelId): bool {
-    foreach (VideresendingNominasjoner::getAlleByPersonId($personId, $arrangementTil)->getAll() as $nom) {
-        $existingT = $nom->getTId();
-        if ($existingT === $tittelId) {
+$finnesAktivNominasjonForPersonOgTittel = static function (int $personId, int $arrangementTil, int $innslagId, ?int $tittelId = -1): bool {
+    foreach (VideresendingNominasjoner::getAlleByPersonIdOgInnslagId($personId, $innslagId, $arrangementTil)->getAll() as $nom) {
+        var_dump($nom->getId());
+        if ($nom->getTId() === $tittelId) {
             return true;
         }
     }
@@ -58,7 +58,7 @@ if ($subaction === 'videresendPerson' && $personIdFromPost > 0) {
         }
     }
 
-    if (!$finnesForPersonOgTittel($personIdFromPost, $tilId, $tittelIdForNom)) {
+    if (!$finnesAktivNominasjonForPersonOgTittel($personIdFromPost, $tilId, $innslagFra->getId(), $tittelIdForNom)) {
         $nom = VideresendingNominasjonWrite::create(
             $season,
             $typeKey,
@@ -106,7 +106,7 @@ if ($postType === 'tittel') {
     } else {
         foreach ($personer as $person) {
             $pId = $person->getId();
-            if ($finnesForPersonOgTittel($pId, $tilId, $tittelId)) {
+            if ($finnesAktivNominasjonForPersonOgTittel($pId, $tilId, $innslagFra->getId(), $tittelId)) {
                 continue;
             }
             $nom = VideresendingNominasjonWrite::create(
@@ -124,23 +124,43 @@ if ($postType === 'tittel') {
         }
     }
 } elseif ($postType === 'person') {
-    foreach ($innslagFra->getPersoner()->getAll() as $person) {
+    // Enkeltperson: videresend for innslag type enkeltperson
+    if ($innslagFra->getType()->erEnkeltPerson()) {
+        $person = $innslagFra->getPersoner()->getSingle();
         $pId = $person->getId();
-        if ($finnesForPersonOgTittel($pId, $tilId, null)) {
-            continue;
+        if (!$finnesAktivNominasjonForPersonOgTittel($pId, $tilId, $innslagFra->getId(), -1)) {
+            $nom = VideresendingNominasjonWrite::create(
+                $season,
+                $typeKey,
+                $fraId,
+                $tilId,
+                $pId,
+                $bId,
+                false,
+                null,
+                -1
+            );
+            $opprettetIds[] = $nom->getId();
         }
-        $nom = VideresendingNominasjonWrite::create(
-            $season,
-            $typeKey,
-            $fraId,
-            $tilId,
-            $pId,
-            $bId,
-            false,
-            null,
-            null
-        );
-        $opprettetIds[] = $nom->getId();
+    } else {
+        foreach ($innslagFra->getPersoner()->getAll() as $person) {
+            $pId = $person->getId();
+            if ($finnesAktivNominasjonForPersonOgTittel($pId, $tilId, $innslagFra->getId(), -1)) {
+                continue;
+            }
+            $nom = VideresendingNominasjonWrite::create(
+                $season,
+                $typeKey,
+                $fraId,
+                $tilId,
+                $pId,
+                $bId,
+                false,
+                null,
+                null
+            );
+            $opprettetIds[] = $nom->getId();
+        }
     }
 }
 

@@ -147,15 +147,27 @@
 				{% endfor %}
 			</tbody>
 		</table>
+	{# Har ikke titler #}
 	{% else %}
 		<div class="row">
+			<div class="col-xs-12 as-margin-bottom-space-1 as-margin-top-space-1 nop">
+				{% if har_nominasjon %}
+					{% if person.videresendt %}
+					<span class="label label-success">Videresendt</span>
+					{% else %}
+					<span class="label label-success">Nominert</span>
+					<span class="label label-warning">
+						{{ person.nominasjon_status == 'hos-bruker' ? 'Venter på bruker' : 'Venter på godkjenning av arrangør' }}
+					</span>
+					{% endif %}
+				{% endif %}
+			</div>
 			<div class="col-xs-6">
 				<div class="form-group">
 					<label>Mobil</label>
 					<input name="person[{{ person.id }}][mobil]" class="form-control" maxlength="8" type="tel" value="{{ person.mobil }}" />
 				</div>
 			</div>
-			
 			<div class="col-xs-6">
 				<div class="form-group">
 					<label>Alder</label>
@@ -165,6 +177,13 @@
 						{% endfor %}
 						<option value="0" {% if person.alder < 10 or person.alder>25 %}selected="selected"{% endif %}>Over 25</option>
 					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label>Informasjon om deltakeren som nomineres</label>
+					<textarea name="person[{{ person.id }}][videresending_beskrivelse]" class="form-control" rows="2">{{ person.videresending_beskrivelse }}</textarea>
 				</div>
 			</div>
 		</div>

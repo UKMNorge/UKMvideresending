@@ -39,6 +39,8 @@ if( $innslag->getType()->harTitler() ) {
 		$data['varighet']		= $tittel->getVarighet()->getSekunder();
 	}
 	foreach( $innslag->getPersoner()->getAll() as $person ) {
+		$personNominasjon = $innslag->getPersonNominasjon($person->getId(), $til->getId());
+
 		$person = [
 			'id'			=> $person->getId(),
 			'navn'			=> $person->getNavn(),
@@ -46,8 +48,8 @@ if( $innslag->getType()->harTitler() ) {
 			'alder'			=> $person->getAlderTall(),
 			'instrument'	=> $person->getRolle(),
 			'videresendt'	=> $person->erPameldt( $til->getId() ),
-			'har_nominasjon'    => $person->erNominert( $til->getId() ),
-			'nominasjon_status' => $person->erNominert( $til->getId() ) ? $person->getVideresendingNominasjoner($til->getId())[0]->getStatus() : null,
+			'har_nominasjon'    => $personNominasjon != null,
+			'nominasjon_status' => $personNominasjon != null ? $personNominasjon->getStatus() : null,
 		];
 		$data['personer'][]		= $person;
 	}
@@ -69,6 +71,7 @@ else if(!$innslag->getType()->erEnkeltPerson()) {
 // Tittelløse innslag
 else {
 	$person = $innslag->getPersoner()->getSingle();
+	$personNominasjon = $innslag->getPersonNominasjon($person->getId(), $til->getId());
 
 	$data['person'] = [
 		'id'			=> $person->getId(),
@@ -76,7 +79,10 @@ else {
 		'mobil'			=> $person->getMobil(),
 		'alder'			=> $person->getAlderTall(),
 		'instrument'	=> $person->getRolle(),
-		'videresendt'	=> $person->erPameldt( $til->getId() )
+		'videresendt'	=> $person->erPameldt( $til->getId() ),
+		'har_nominasjon'    => $personNominasjon != null,
+		'nominasjon_status' => $personNominasjon != null ? $personNominasjon->getStatus() : null,
+		'videresending_beskrivelse' => $personNominasjon != null ? $personNominasjon->getBeskrivelse() : '',
 	];
 }
 
