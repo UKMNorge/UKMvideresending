@@ -9,18 +9,16 @@
 
         <h5>Nominasjon/godkjenning går gjennom følgende faser:</h5>
         <ul>
-            <li>1. Sendes til arrangørene på {{ til.getArrangement().getNavn() }}</li>
-            <li>2. Etter godkjenning, skjemaene sendes videre til deltakerne</li>
-            <li>3. Deltakerne fyller ut skjemaene og sender dem tilbake til arrangørene</li>
-            <li>4. Arrangørene på {{ til.getArrangement().getNavn() }} godkjenner nominasjonene og deltakerne sendes videres til {{ til.getArrangement().getNavn() }}</li>
+            <li>1. Nominasjon sendes til {{ til.getArrangement().getNavn() }}</li>
+            <li>2. Når {{ til.getArrangement().getNavn() }} har godkjent at prosess med videresending kan starte, får de nominerte deltakerne tilsendt skjema og oppgaver som må besvares</li>
+            <li>3. Deltakerne fyller ut skjema og oppgaver (både du og festivalarrangøren får automatisk beskjed om status på dette)</li>
+            <li>4. Du bekrefter at alt er ferdig og riktig</li>
+            <li>5. {{ til.getArrangement().getNavn() }} godkjenner videresendingen</li>
         </ul>
 
         <h5><strong>⚠️ Viktig:</strong></h5>
         <p>
-            Arrangørene på {{ til.getArrangement().getNavn() }} er selv ansvarlige for å informere deltakerne om at det finnes nye innlegg.
-        </p>
-        <p>
-            Ingen av deltakere er sendt videres til {{ til.getArrangement().getNavn() }} før de er godkjent.
+            Ingen deltakere er sendt videre til {{ til.getArrangement().getNavn() }} før de er godkjent.
         </p>
         </section>
     </div>
