@@ -82,9 +82,37 @@ var UKMVideresendItem = function($, type, innslag, id) {
         /**
          * ResponsHandler ajax: innslaget er videresendt
          **/
-        setVideresendt: function() {
+        setVideresendt: function(data = null) {
+            let color = 'success';
+            console.log()
+            if(data && data.videresend_nominasjon && data.videresend_nominasjon.tittel_status) {
+                switch(data.videresend_nominasjon.tittel_status) {
+                    case 'godkjent':
+                        color = 'success';
+                        break;
+                    case 'hos-mottaker':
+                        color = 'info';
+                        break;
+                    case 'hos-deltaker':
+                        color = 'warning';
+                        break;
+                    case 'hos-avsender':
+                        color = 'danger';
+                        break;
+                    default:
+                        color = 'warning';
+                        break;
+                }
+            }
+            else {
+                color = false;
+            }
             $(self.getGUIId()).addClass('selected');
-            $(self.getGUIId() + ' .header').addClass('alert-success', 300);
+            if(color != false) {
+                $(self.getGUIId() + ' .header').addClass('alert-'+color, 300);
+                $(self.getGUIId() + ' .nominasjon-status-felt').html('<span>' + '' + ' ' + data.videresend_nominasjon.tittel_status ?? 'ingen' + '</span>');
+            }
+
             $(self.getGUIId() + ' .row.data .kontroll').html('Laster inn..');
             $(self.getGUIId() + ' .row.data').slideDown(500);
             self.loadKontroll();
@@ -96,6 +124,8 @@ var UKMVideresendItem = function($, type, innslag, id) {
         setAvmeldt: function() {
             $(self.getGUIId()).removeClass('selected');
             $(self.getGUIId() + ' .header').removeClass('alert-success');
+            $(self.getGUIId() + ' .nominasjon-status-felt').html('');
+
 
             $(self.getGUIId() + ' .row.data').slideUp();
         },
@@ -199,6 +229,19 @@ var UKMVideresendItem = function($, type, innslag, id) {
          **/
         renderKontroll: function(data) {
             $(self.getGUIId() + ' .row.data .kontroll').html(twigJS_kontroll.render(data));
+            
+            // if(data && data.personer) {
+            //     let allGodkjent = true;
+            //     for(let person of data.personer) {
+            //         if(person && person.nominasjon_status != 'godkjent') {
+            //             allGodkjent = false;
+            //             break;
+            //         }
+            //     }
+            //     if(allGodkjent) {
+            //         $('#sendVidereEtterNominasjonButton').removeClass('hidden');
+            //     }
+            // }
         },
 
         /**
@@ -210,6 +253,16 @@ var UKMVideresendItem = function($, type, innslag, id) {
             var form = $(self.getGUIId() + ' .row.data .kontroll form');
             var data = form.serializeArray();
             self.ajax('kontrollSave', data);
+        },
+
+        sendVidereEtterNominasjon: function() {
+            alert('sender videre...');
+
+            // $(self.getKontrollGUIId()).html('Lagrer...').addClass('btn-primary');
+            // self.setStatus('alert-warning', 'Vennligst vent, lagrer detaljer...');
+            var form = $(self.getGUIId() + ' .row.data .kontroll form');
+            var data = form.serializeArray();
+            self.ajax('sendVidereEtterNominasjon', data);
         },
 
         saveKontrollFeedback: function() {
@@ -309,7 +362,7 @@ var UKMVideresendItem = function($, type, innslag, id) {
             self.resetStatus();
             switch (action) {
                 case 'videresend':
-                    self.setVideresendt();
+                    self.setVideresendt(response);
                     break;
                 case 'avmeld':
                     self.setAvmeldt();
@@ -326,7 +379,9 @@ var UKMVideresendItem = function($, type, innslag, id) {
                 case 'kontrollSave':
                     self.saveKontrollFeedback();
                     break;
-
+                case 'sendVidereEtterNominasjon':
+                    self.sendVidereEtterNominasjonFeedback();
+                    break;
             }
         }
         /* FEIL I MOTTATT RESPONS */

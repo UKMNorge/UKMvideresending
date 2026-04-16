@@ -4,21 +4,31 @@
 {% set erNominert = innslagNominasjon|length > 0 %}
 {% set erAlleNominasjonerGodkjent = innslag.erAlleNominasjonerGodkjent(til.getId()) %}
 
-{# {{ dump(erAlleNominasjonerGodkjent) }}
-<pre>
-    {{ dump(innslagNominasjon) }}
-</pre> #}
 
 {# INNSLAG MED TITLER #}
 {% if innslag.getType().harTitler() %}
 	{% for tittel in innslag.getTitler().getAll() %}
-		<li class="videresend_item list-group-item {{ tittel.erNominert(til.getId()) ? 'success' : ''}}" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
-        {{ dump(tittel.erNominert(til.getId())) }}
-			<div class="row header">
+		{% set nominasjon_status = tittel.erNominert(til.getId()) ? tittel.getNominasjonStatus(til.getId()) : null %}
+		{% set statusColor =
+			nominasjon_status == 'godkjent' ? 'alert-success'
+			: nominasjon_status == 'hos-deltaker' ? 'alert-warning'
+			: nominasjon_status == 'hos-mottaker' ? 'alert-info'
+			: nominasjon_status == 'hos-avsender' ? 'alert-info'
+			: ''
+		%}
+        {% set nominasjon_text = 
+            nominasjon_status == 'godkjent' ? 'Godkjent'
+            : nominasjon_status == 'hos-deltaker' ? 'Venter på deltaker'
+            : nominasjon_status == 'hos-mottaker' ? 'Venter på mottaker'
+            : nominasjon_status == 'hos-avsender' ? 'Venter på avsender'
+            : 'Ukjent'
+        %}
+		<li class="videresend_item list-group-item" data-type="tittel" data-innslag="{{innslag.getId()}}" data-id="{{ tittel.getId() }}" id="tittel-{{ innslag.getId() }}-{{ tittel.getId() }}">
+			<div class="row header nominasjon {{ statusColor ? statusColor : '' }}">           
 				<div class="col-2 col-xs-2">
 					<input type="checkbox" class="videresend" value="true" {{ tittel.erNominert(til.getId()) ? 'checked="checked"' : ''}}/>
 				</div>
-				<div class="col-8 col-xs-8">
+				<div class="col-6 col-xs-6">
 					<span class="navn">
 						<strong>{{ innslag.getNavn() }}</strong>
 						-
@@ -27,6 +37,9 @@
 				</div>
 				<div class="col-2 col-xs-2 text-muted muted small">
 					{{ innslag.getKommune().getNavn() }}
+				</div>
+				<div class="col-2 col-xs-2 nominasjon-status-felt">
+					{{ nominasjon_text }}
 				</div>
 			</div>
 			<div class="row data" style="display:none;">
@@ -63,18 +76,38 @@
 	{% endfor %}
 	{# INNSLAG UTEN TITLER #}
 {% else %}
+    {% set nominasjon = innslag.getVideresendingNominasjonTil(til.getId())|length > 0 ? innslag.getVideresendingNominasjonTil(til.getId())[0] : null %}
+    {% set nominasjon_status = nominasjon ? nominasjon.getStatus() : 'ukjent' %}
+    
+    {% set statusColor =
+        nominasjon_status == 'godkjent' ? 'alert-success'
+        : nominasjon_status == 'hos-deltaker' ? 'alert-warning'
+        : nominasjon_status == 'hos-mottaker' ? 'alert-info'
+        : nominasjon_status == 'hos-avsender' ? 'alert-info'
+        : ''
+    %}
+    {% set nominasjon_text = 
+        nominasjon_status == 'godkjent' ? 'Godkjent'
+        : nominasjon_status == 'hos-deltaker' ? 'Venter på deltaker'
+        : nominasjon_status == 'hos-mottaker' ? 'Venter på mottaker'
+        : nominasjon_status == 'hos-avsender' ? 'Venter på avsender'
+        : 'Ukjent'
+    %}
 	<li class="videresend_item list-group-item {{ innslag.erNominertUtenTittel(til.getId()) ? 'success' : ''}}" data-type="person" data-innslag="{{innslag.getId()}}" data-id="false" id="person-{{ innslag.getId() }}-false">
-		<div class="row header">
+        <div class="row header nominasjon {{ statusColor ? statusColor : '' }}">
 			<div class="col-2 col-xs-2">
 				<input type="checkbox" class="videresend" value="true" {{ innslag.erNominertUtenTittel(til.getId()) ? 'checked="checked"' : ''}}/>
 			</div>
-			<div class="col-8 col-xs-8">
+			<div class="col-5 col-xs-6">
 				<span class="navn">
 					<strong>{{ innslag.getNavn() }}</strong>
 				</span>
 			</div>
 			<div class="col-2 col-xs-2 text-muted muted small">
 				{{ innslag.getKommune().getNavn() }}
+			</div>
+			<div class="col-2 col-xs-2 nominasjon-status-felt">
+                {{ nominasjon_text }}
 			</div>
 		</div>
 		<div class="row data" style="display:none;">

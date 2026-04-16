@@ -118,10 +118,18 @@
 								{% if person.videresendt %}
 								<span class="label label-success">Videresendt</span>
 								{% else %}
-								<span class="label label-success">Nominert</span>
-								<span class="label label-warning">
-									{{ person.nominasjon_status == 'hos-bruker' ? 'Venter på bruker' : 'Venter på godkjenning av arrangør' }}
-								</span>
+									<span class="label label-success">nominert</span>
+									{% if person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
+										<span class="label label-warning">Venter på deltaker</span>
+									{% elseif person.nominasjon_status == 'hos-mottaker' %}
+										<span class="label label-info">Venter på mottaker</span>
+									{% elseif person.nominasjon_status == 'hos-avsender' %}
+									<span class="label label-info">Venter på avsender</span>
+									{% elseif person.nominasjon_status == 'godkjent' %}
+										<span class="label label-success">kontrollert</span>
+									{% else %}
+										<span class="label label-warning">ukjent status</span>
+									{% endif %}
 								{% endif %}
 							</td>
 						{% endif %}
@@ -155,10 +163,18 @@
 					{% if person.videresendt %}
 					<span class="label label-success">Videresendt</span>
 					{% else %}
-					<span class="label label-success">Nominert</span>
-					<span class="label label-warning">
-						{{ person.nominasjon_status == 'hos-bruker' ? 'Venter på bruker' : 'Venter på godkjenning av arrangør' }}
-					</span>
+						<span class="label label-success">nominert</span>
+						{% if person.nominasjon_status == 'hos-avsender' %}
+						<span class="label label-info">Venter på avsender</span>
+						{% elseif person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
+							<span class="label label-warning">Venter på deltaker</span>
+						{% elseif person.nominasjon_status == 'hos-mottaker' %}
+							<span class="label label-info">Venter på mottaker</span>
+						{% elseif person.nominasjon_status == 'godkjent' %}
+							<span class="label label-success">kontrollert</span>
+						{% else %}
+							<span class="label label-warning">ukjent status</span>
+						{% endif %}
 					{% endif %}
 				{% endif %}
 			</div>
@@ -188,6 +204,9 @@
 			</div>
 		</div>
 	{% endif %}
+	{# <div id="sendVidereEtterNominasjonButton" class="float-right pull-right as-margin-left-space-1 hidden">
+		<button type="button" class="sendVidereEtterNominasjon btn btn-ukm btn-success">Send videre</button>
+	</div> #}
 	<div class="float-right pull-right">
 		<button type="button" class="submitKontroll btn btn-ukm btn-success">Lagre endringer</button>
 	</div>

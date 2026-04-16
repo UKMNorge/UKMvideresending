@@ -47,6 +47,17 @@ var UKMVideresending = function( $ ) {
 					item.attr('data-id')		// tittel-id | false
 				).saveKontroll();
 			});
+
+			/** ENDRING AV KONTROLL-DATA **/
+			$(document).on('click', '.sendVidereEtterNominasjon', function(){
+				//console.info('SAVE: kontrolldata');
+				var item = $(this).parents('li.videresend_item');
+				self.find(
+					item.attr('data-type'),		// type
+					item.attr('data-innslag'),	// innslag-id
+					item.attr('data-id')		// tittel-id | false
+				).sendVidereEtterNominasjon();
+			});
 		},
 		
 		on: function( event, callback ) {

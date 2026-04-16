@@ -30,12 +30,20 @@ $opprettetIds = [];
 
 $finnesAktivNominasjonForPersonOgTittel = static function (int $personId, int $arrangementTil, int $innslagId, ?int $tittelId = -1): bool {
     foreach (VideresendingNominasjoner::getAlleByPersonIdOgInnslagId($personId, $innslagId, $arrangementTil)->getAll() as $nom) {
-        var_dump($nom->getId());
         if ($nom->getTId() === $tittelId) {
             return true;
         }
     }
     return false;
+};
+
+$getNominasjonStatusForPersonOgTittel = static function (int $personId, int $arrangementTil, int $innslagId, ?int $tittelId = -1): VideresendingNominasjon|null {
+    foreach (VideresendingNominasjoner::getAlleByPersonIdOgInnslagId($personId, $innslagId, $arrangementTil)->getAll() as $nom) {
+        if ($nom->getTId() === $tittelId) {
+            return $nom;
+        }
+    }
+    return null;
 };
 
 $harNominasjonForTittel = static function (int $tittelId, int $arrangementTil): bool {
@@ -80,7 +88,9 @@ if ($subaction === 'videresendPerson' && $personIdFromPost > 0) {
     return;
 }
 
-if ($postType === 'tittel') {
+$nominasjonStatus = '';
+
+if ($postType === 'tittel') {    
     $tittelId = intval($_POST['id']);
     if ($tittelId < 1) {
         UKMVideresending::addResponseData('videresend_nominasjon', ['opprettet' => [], 'advarsel' => 'Ugyldig tittel-id']);
@@ -123,6 +133,8 @@ if ($postType === 'tittel') {
             $opprettetIds[] = $nom->getId();
         }
     }
+    $tittel = $innslagFra->getTitler()->get($tittelId);
+    $nominasjonStatus = $tittel->getNominasjonStatus($tilId);
 } elseif ($postType === 'person') {
     // Enkeltperson: videresend for innslag type enkeltperson
     if ($innslagFra->getType()->erEnkeltPerson()) {
@@ -141,7 +153,12 @@ if ($postType === 'tittel') {
                 -1
             );
             $opprettetIds[] = $nom->getId();
+            $nominasjonStatus = $nom->getStatus();
         }
+        else {
+            $nominasjon = $getNominasjonStatusForPersonOgTittel($pId, $tilId, $innslagFra->getId(), -1);
+        }
+        
     } else {
         foreach ($innslagFra->getPersoner()->getAll() as $person) {
             $pId = $person->getId();
@@ -164,7 +181,28 @@ if ($postType === 'tittel') {
     }
 }
 
+switch ($nominasjonStatus) {
+    case 'godkjent':
+        $nominasjonStatusTekst = 'Godkjent';
+        break;
+    case 'hos-deltaker':
+        $nominasjonStatusTekst = 'Venter på deltaker';
+        break;
+    case 'hos-mottaker':
+        $nominasjonStatusTekst = 'Venter på mottaker';
+        break;
+    case 'hos-avsender':
+        $nominasjonStatusTekst = 'Venter på avsender';
+        break;
+    default:
+        $nominasjonStatusTekst = 'Ukjent';
+        break;
+}
+$nominasjonStatus = $nominasjonStatusTekst;
+
+
 UKMVideresending::addResponseData('videresend_nominasjon', [
     'opprettet_ids' => $opprettetIds,
+    'tittel_status' => $nominasjonStatus,
 ]);
 UKMVideresending::addResponseData('success',true);

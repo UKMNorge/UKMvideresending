@@ -171,3 +171,14 @@ form.condensed .form-group {
 .mt-5 {
 	margin-top: 3em;
 }
+.videresend_item.list-group-item:not(.selected) .row.header {
+    color: inherit;
+    background: transparent;
+}
+.alert-warning.nominasjon {
+    background-color: #ffd88c !important;
+    border-color: #faebcc !important;
+}
+.alert-warning.nominasjon * {
+	color: #333 !important;
+}

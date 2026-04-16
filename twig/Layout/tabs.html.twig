@@ -21,7 +21,7 @@
 	
 
     {# NOMINASJONER #}
-    {% if til.getArrangement().harNominasjon() %}
+    {% if til.getArrangement().harNominasjon() and til.getArrangement().harVideresendingNominasjon() == false %}
         <a href="{{ baseLink }}nominasjon" {{ GET('page') == 'UKMnominasjon' or tab == 'nominasjon' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
@@ -39,7 +39,7 @@
         <div>
             <span class="tab_header">
                 <span class="dashicons dashicons-groups"></span>
-                Videresend{{ til.getArrangement().harVideresendingNominasjon() ? ' (nominasjon)' : '' }}
+                Videresend{{ til.getArrangement().harVideresendingNominasjon() ? ' (nominer)' : '' }}
             </span>
             <br />
             <span class="tab_description">Velg deltakere</span>
@@ -82,7 +82,7 @@
         </a>
     {# {% endif %} #}
 
-    {% if til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
+    {% if til.getArrangement().harVideresendingNominasjon() == false and til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
         <a href="{{ baseLink }}infoskjema" {{ tab == 'infoskjema' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
