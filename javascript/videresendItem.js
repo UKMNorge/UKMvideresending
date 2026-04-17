@@ -85,8 +85,8 @@ var UKMVideresendItem = function($, type, innslag, id) {
         setVideresendt: function(data = null) {
             let color = 'success';
             console.log()
-            if(data && data.videresend_nominasjon && data.videresend_nominasjon.tittel_status) {
-                switch(data.videresend_nominasjon.tittel_status) {
+            if(data && data.videresend_nominasjon && data.videresend_nominasjon.tittel_status_code) {
+                switch(data.videresend_nominasjon.tittel_status_code) {
                     case 'godkjent':
                         color = 'success';
                         break;
@@ -107,6 +107,7 @@ var UKMVideresendItem = function($, type, innslag, id) {
             else {
                 color = false;
             }
+
             $(self.getGUIId()).addClass('selected');
             if(color != false) {
                 $(self.getGUIId() + ' .header').addClass('alert-'+color, 300);

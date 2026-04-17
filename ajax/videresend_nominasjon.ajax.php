@@ -180,7 +180,7 @@ if ($postType === 'tittel') {
         }
     }
 }
-
+$nominasjonStatusTekst = '';
 switch ($nominasjonStatus) {
     case 'godkjent':
         $nominasjonStatusTekst = 'Godkjent';
@@ -198,11 +198,12 @@ switch ($nominasjonStatus) {
         $nominasjonStatusTekst = 'Ukjent';
         break;
 }
-$nominasjonStatus = $nominasjonStatusTekst;
+// $nominasjonStatus = $nominasjonStatusTekst;
 
 
 UKMVideresending::addResponseData('videresend_nominasjon', [
     'opprettet_ids' => $opprettetIds,
-    'tittel_status' => $nominasjonStatus,
+    'tittel_status' => $nominasjonStatusTekst,
+    'tittel_status_code' => $nominasjonStatus,
 ]);
 UKMVideresending::addResponseData('success',true);
