@@ -136,10 +136,11 @@ if ($postType === 'tittel') {
     $tittel = $innslagFra->getTitler()->get($tittelId);
     $nominasjonStatus = $tittel->getNominasjonStatus($tilId);
 } elseif ($postType === 'person') {
-    // Enkeltperson: videresend for innslag type enkeltperson
-    if ($innslagFra->getType()->erEnkeltPerson()) {
+    // uten titler
+    if (!$innslagFra->getType()->harTitler()) {
         $person = $innslagFra->getPersoner()->getSingle();
         $pId = $person->getId();
+        
         if (!$finnesAktivNominasjonForPersonOgTittel($pId, $tilId, $innslagFra->getId(), -1)) {
             $nom = VideresendingNominasjonWrite::create(
                 $season,

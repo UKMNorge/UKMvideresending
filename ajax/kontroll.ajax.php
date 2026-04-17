@@ -57,13 +57,18 @@ if( $innslag->getType()->harTitler() ) {
 // Har tittelløs men har flere personer
 else if(!$innslag->getType()->erEnkeltPerson()) {
 	foreach( $innslag->getPersoner()->getAll() as $person ) {
+		$personNominasjon = $innslag->getPersonNominasjon($person->getId(), $til->getId());
+
 		$person = [
 			'id'			=> $person->getId(),
 			'navn'			=> $person->getNavn(),
 			'mobil'			=> $person->getMobil(),
 			'alder'			=> $person->getAlderTall(),
 			'instrument'	=> $person->getRolle(),
-			'videresendt'	=> $person->erPameldt( $til->getId() )
+			'videresendt'	=> $person->erPameldt( $til->getId() ),
+			'har_nominasjon'    => $personNominasjon != null,
+			'nominasjon_status' => $personNominasjon != null ? $personNominasjon->getStatus() : null,
+
 		];
 		$data['personer'][]		= $person;
 	}
