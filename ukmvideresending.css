@@ -182,3 +182,6 @@ form.condensed .form-group {
 .alert-warning.nominasjon * {
 	color: #333 !important;
 }
+.videresend_item.list-group-item:not(.selected) .nominasjon {
+	background-color: #fff !important;
+}
