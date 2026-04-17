@@ -61,7 +61,7 @@ p.explain {
 	padding-left: 0px;
 }
 
-.videresend_item.list-group-item.selected .row.header{
+.videresend_item.list-group-item.selected .row.header:not(.nominasjon){
     color: #3c763d;
     background-color: #dff0d8;
     border-color: #d6e9c6;
