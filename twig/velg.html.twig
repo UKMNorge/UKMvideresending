@@ -119,7 +119,7 @@
 									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=informasjon" class="btn btn-ukm btn-primary btn-xs">Kvoter og informasjon</a>
 								{% endif %}
 								{# KNAPP TIL NOMINASJON #}
-								{% if mottaker.getArrangement().harNominasjon() %}
+								{% if mottaker.getArrangement().harNominasjon() and mottaker.getArrangement().harVideresendingNominasjon() == false %}
 									<a href="?page={{GET('page')}}&til={{mottaker.getId()}}&action=nominasjon" class="btn btn-ukm btn-primary btn-xs">Nominasjon</a>
 								{% endif %}
 								{# KNAPP TIL VIDERESENDTE #}

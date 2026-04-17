@@ -33,21 +33,16 @@ foreach( $_POST as $post_key => $post_val ) {
 	}
 }
 
-// Sjekk godkjenning...
 $til = Arrangement::getById($_FORM['til_id']);
+
+// Lagre informasjon om nominasjon kun på enkeltpersoner, trenger ikke å returneres her
+if ($innslag->getType()->erEnkeltPerson() && $til->harVideresendingNominasjon()) {
+	require_once __DIR__ . '/save_informasjon_nominasjon.ajax.php';
+}
+
+// Sjekk godkjenning...
 $innslagType = $innslag->getType();
 // Sjekk hvis innslaget har nominasjon for innslag type
-if($til->harNominasjonFor($innslagType)) {
-	try {
-		$nominasjon = $innslag->getNominasjoner()->getTil($_FORM['til_id']);
-		if(!$nominasjon || !$nominasjon->erGodkjent()) {
-			throw new Exception("Du kan ikke videresende før godkjennelse");
-		}
-	}
-	catch(Exception $e) {
-		throw $e;
-	}
-}
 
 /**
  * INFORMASJON OM INNSLAGET

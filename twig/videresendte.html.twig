@@ -1,10 +1,40 @@
 {% extends "Layout/base.html.twig" %}
 
 {% block content %}
+    {% if til.getArrangement().harVideresendingNominasjon() %}
+    <div class="videresendte-deltakerinfo nosh-impt as-card-2 as-margin-bottom-space-3 as-padding-space-2">
+        <h2 class="nom as-margin-bottom-space-2">Nominasjon påkrevd</h2>
+        <section class="deltakerinfo-innlegg">
+        <h4>Alle deltakere må nomineres før de kan videresendes til {{ til.getArrangement().getNavn() }}</h4>
+
+        <h5>Nominasjon/godkjenning går gjennom følgende faser:</h5>
+        <ul>
+            <li>1. Nominasjon sendes til {{ til.getArrangement().getNavn() }}</li>
+            <li>2. Når {{ til.getArrangement().getNavn() }} har godkjent at prosess med videresending kan starte, får de nominerte deltakerne tilsendt skjema og oppgaver som må besvares</li>
+            <li>3. Deltakerne fyller ut skjema og oppgaver (både du og festivalarrangøren får automatisk beskjed om status på dette)</li>
+            <li>4. Du bekrefter at alt er ferdig og riktig</li>
+            <li>5. {{ til.getArrangement().getNavn() }} godkjenner videresendingen</li>
+        </ul>
+
+        <h5><strong>⚠️ Viktig:</strong></h5>
+        <p>
+            Ingen deltakere er sendt videre til {{ til.getArrangement().getNavn() }} før de er godkjent.
+        </p>
+        </section>
+    </div>
+    {% endif %}
+
 	<fieldset>
+        {% if til.getArrangement().harVideresendingNominasjon() %}
+        <legend>
+            Nominer deltakere for videresending til {{ til.getArrangement().getNavn() }}
+        </legend>
+        {% else %}
         <legend>
             Videresend deltakere til {{ til.getArrangement().getNavn() }}
         </legend>
+        {% endif %}
+        
 
         {#	
             <div class="alert alert-warning">
@@ -63,12 +93,6 @@
                             <img src="{{ type_innslag.getIcon() }}" height="45" />
                             <h3>
                                 {{ type_innslag }}
-                                {% if type_innslag.kanHaNominasjon() and til.getArrangement().harNominasjonFor(type_innslag) %}
-                                    <small class="text-info" style="margin-left: 1em;">
-                                        <span class="dashicons dashicons-warning" style="margin-top:.3em;"></span>
-                                        Husk at {{ type_innslag.getNavn()|lower }}-deltakere skal nomineres og <b>godkjennes</b> før de kan videresendes.
-                                    </small>
-                                {% endif %}
                             </h3>
                             <div class="clearfix"></div>
                         </div>
@@ -76,7 +100,11 @@
                         <ol class="list-group innslag_lister" id="innslag_liste_{{ type_innslag.getKey() }}">
                             {# VIDERESENDING TIL FYLKE - GRUPPER PER FYLKE I TILFELLE LOKALMØNSTRING OVER FYLKESGRENSER #}
                             {% for innslag in fra.getInnslag().getAllByType( type_innslag ) %}
-                                {% embed "Videresendte/Innslag.html.twig" %}{% endembed %}
+                                {% if til.getArrangement().harVideresendingNominasjon() %}
+                                    {% embed "Videresendte/InnslagNominasjon.html.twig" %}{% endembed %}
+                                {% else %}
+                                    {% embed "Videresendte/Innslag.html.twig" %}{% endembed %}
+                                {% endif %}
                             {% else %}
                                 <li class="list-group-item ingen-pameldte text-muted">Du har ingen påmeldte i {{ type_innslag|lower }}</li>
                             {% endfor %}
@@ -87,4 +115,16 @@
             </div>
         {% endif %}
     </fieldset>
+
+    <style>
+        .videresendte-deltakerinfo {
+            width: fit-content;
+            background: var(--as-color-primary-warning-light);
+            border: 2px solid var(--as-color-primary-warning-medium);
+        }
+        .deltakerinfo-innlegg ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+    </style>
 {% endblock %}

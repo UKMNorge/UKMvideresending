@@ -61,6 +61,12 @@ p.explain {
 	padding-left: 0px;
 }
 
+.videresend_item.list-group-item.selected .row.header{
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
 
 .leder.selected,
 li.person.selected,
@@ -170,4 +176,18 @@ form.condensed .form-group {
 }
 .mt-5 {
 	margin-top: 3em;
+}
+.videresend_item.list-group-item:not(.selected) .row.header {
+    color: inherit;
+    background: transparent;
+}
+.alert-warning.nominasjon {
+    background-color: #ffd88c !important;
+    border-color: #faebcc !important;
+}
+.alert-warning.nominasjon * {
+	color: #333 !important;
+}
+.videresend_item.list-group-item:not(.selected) .nominasjon {
+	background-color: #fff !important;
 }

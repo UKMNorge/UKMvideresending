@@ -135,6 +135,7 @@ class UKMVideresending extends UKMNorge\Wordpress\Modul
                 'videresend',
                 'kontroll',
                 'kontrollSave',
+                'sendVidereEtterNominasjon',
                 'avmeldPerson',
                 'videresendPerson',
                 'bilderShow',

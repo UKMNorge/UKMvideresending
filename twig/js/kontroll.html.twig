@@ -2,9 +2,15 @@
 	<input type="hidden" name="til_id" type="text" class="form-control" value="{{ til_id}}" />
 
 	<p>
+		{% if har_nominasjon %}
+		<strong>
+			{{ innslag_navn }} er nå nominert. Sjekk at riktig informasjon er oppgitt!
+		</strong>
+		{% else %}
 		<strong>
 			{{ innslag_navn }} er nå videresendt. Sjekk at riktig informasjon er oppgitt!
 		</strong>
+		{% endif %}
 		{% if har_titler %}
 			<br />
 			Om du endrer beskrivelser, kontaktinfo, alder o.l. må du trykke på knappen "lagre endringer"
@@ -92,6 +98,9 @@
 			<thead>
 				<tr>
 					<th class="col-xs-1"></th>
+					{% if har_nominasjon %}
+					<th class="col-xs-1">Nominasjon status</th>
+					{% endif %}
 					<th class="col-xs-3">Navn</th>
 					<th class="col-xs-2">Mobil</th>
 					<th class="col-xs-2">Alder</th>
@@ -100,11 +109,34 @@
 			</thead>
 			<tbody>
 				{% for person in personer %}
-					<tr class="person person-{{ person.id }}-i-{{ innslag_id }} {{ person.videresendt ? 'alert-success' : '' }}">
-						
-                        <td>
-                            <input type="checkbox" {{ person.videresendt ? 'checked="checked"' : '' }} {{ videresendtil.mottakelig == false ? 'disabled="disabled"' : '' }} class="videresendPerson" data-person="{{ person.id }}" />
-                        </td>
+					<tr class="person person-{{ person.id }}-i-{{ innslag_id }} {{ person.videresendt ? 'alert-success' : '' }}">						
+						{% if person.har_nominasjon == false %}
+							<td>
+								<input type="checkbox" {{ person.videresendt ? 'checked="checked"' : '' }} {{ videresendtil.mottakelig == false ? 'disabled="disabled"' : '' }} class="videresendPerson" data-person="{{ person.id }}" />
+							</td>
+						{% else %}
+							<td>
+								<input type="checkbox" {{ person.har_nominasjon ? 'checked="checked"' : '' }} {{ videresendtil.mottakelig == false ? 'disabled="disabled"' : '' }} class="videresendPerson" data-person="{{ person.id }}" />
+							</td>
+							<td>
+								{% if person.videresendt %}
+								<span class="label label-success">Videresendt</span>
+								{% else %}
+									<span class="label label-success">nominert</span>
+									{% if person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
+										<span class="label label-warning">Venter på deltaker</span>
+									{% elseif person.nominasjon_status == 'hos-mottaker' %}
+										<span class="label label-info">Venter på mottaker</span>
+									{% elseif person.nominasjon_status == 'hos-avsender' %}
+									<span class="label label-info">Venter på avsender</span>
+									{% elseif person.nominasjon_status == 'godkjent' %}
+										<span class="label label-success">kontrollert</span>
+									{% else %}
+										<span class="label label-warning">ukjent status</span>
+									{% endif %}
+								{% endif %}
+							</td>
+						{% endif %}
 
 						<td class="person_navn" data-navn="{{person.navn}}">
 							{{person.navn}}
@@ -127,15 +159,35 @@
 				{% endfor %}
 			</tbody>
 		</table>
+	{# Har ikke titler #}
 	{% else %}
 		<div class="row">
+			<div class="col-xs-12 as-margin-bottom-space-1 as-margin-top-space-1 nop">
+				{% if har_nominasjon %}
+					{% if person.videresendt %}
+					<span class="label label-success">Videresendt</span>
+					{% else %}
+						<span class="label label-success">nominert</span>
+						{% if person.nominasjon_status == 'hos-avsender' %}
+						<span class="label label-info">Venter på avsender</span>
+						{% elseif person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
+							<span class="label label-warning">Venter på deltaker</span>
+						{% elseif person.nominasjon_status == 'hos-mottaker' %}
+							<span class="label label-info">Venter på mottaker</span>
+						{% elseif person.nominasjon_status == 'godkjent' %}
+							<span class="label label-success">kontrollert</span>
+						{% else %}
+							<span class="label label-warning">ukjent status</span>
+						{% endif %}
+					{% endif %}
+				{% endif %}
+			</div>
 			<div class="col-xs-6">
 				<div class="form-group">
 					<label>Mobil</label>
 					<input name="person[{{ person.id }}][mobil]" class="form-control" maxlength="8" type="tel" value="{{ person.mobil }}" />
 				</div>
 			</div>
-			
 			<div class="col-xs-6">
 				<div class="form-group">
 					<label>Alder</label>
@@ -147,8 +199,22 @@
 					</select>
 				</div>
 			</div>
+
+			{# Ekstra felt for nominasjon #}
+			{% if har_nominasjon %}
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label>Begrunnelse for at denne deltakeren nomineres</label>
+					<textarea name="person[{{ person.id }}][videresending_beskrivelse]" class="form-control" rows="2">{{ person.videresending_beskrivelse }}</textarea>
+				</div>
+			</div>
+			{% endif %}
+			
 		</div>
 	{% endif %}
+	{# <div id="sendVidereEtterNominasjonButton" class="float-right pull-right as-margin-left-space-1 hidden">
+		<button type="button" class="sendVidereEtterNominasjon btn btn-ukm btn-success">Send videre</button>
+	</div> #}
 	<div class="float-right pull-right">
 		<button type="button" class="submitKontroll btn btn-ukm btn-success">Lagre endringer</button>
 	</div>

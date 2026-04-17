@@ -12,11 +12,15 @@ $fra		= UKMVideresending::getFra();
 $innslag 	= $fra->getInnslag()->get( $_POST['innslag'] );
 $til        = UKMVideresending::getValgtTil('POST')->getArrangement();
 
-// Hvis arrangementet har videresendingnominasjon, kjør videresend_nominasjon.ajax.php
-// Kun nominasjon fra fra_arrangementet kan videresendes til til_arrangementet
-if ($til->harVideresendingNominasjon()) {
-	require_once __DIR__ . '/videresend_nominasjon.ajax.php';
-	return;
+
+// Send videre KUN hvis mottaker arrangement har videresendingnominasjon
+if(!$til->harVideresendingNominasjon()) {
+	throw new Exception('Mottaker arrangementet har ikke videresendingnominasjon');
+}
+
+// Send videre KUN hvis alle personer har godkjent nominasjon
+if(!$innslag->erAlleNominasjonerGodkjent($til->getId())) {
+	throw new Exception('Alle personer må ha godkjent nominasjon før videresending');
 }
 
 // Sjekk godkjenning...
