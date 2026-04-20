@@ -36,7 +36,7 @@ foreach( $_POST as $post_key => $post_val ) {
 $til = Arrangement::getById($_FORM['til_id']);
 
 // Lagre informasjon om nominasjon kun på enkeltpersoner, trenger ikke å returneres her
-if ($innslag->getType()->erEnkeltPerson() && $til->harVideresendingNominasjon()) {
+if ($til->harVideresendingNominasjon()) {
 	require_once __DIR__ . '/save_informasjon_nominasjon.ajax.php';
 }
 

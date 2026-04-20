@@ -216,7 +216,12 @@
 		<button type="button" class="sendVidereEtterNominasjon btn btn-ukm btn-success">Send videre</button>
 	</div> #}
 	{% if har_nominasjon %}
-	{% set firstPerson = personer[0] %}
+		{% if er_enkelperson %}
+			{% set firstPerson = person %}
+		{% else %}
+			{% set firstPerson = personer[0] %}
+		{% endif %}
+	
 		{% if firstPerson %}
 		<div class="nominasjon-sporsmal-svar videresendte-deltakerinfo as-margin-bottom-space-2">
 			<div class="row">
