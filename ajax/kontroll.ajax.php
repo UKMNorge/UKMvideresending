@@ -50,6 +50,8 @@ if( $innslag->getType()->harTitler() ) {
 			'videresendt'	=> $person->erPameldt( $til->getId() ),
 			'har_nominasjon'    => $personNominasjon != null,
 			'nominasjon_status' => $personNominasjon != null ? $personNominasjon->getStatus() : null,
+			'nominasjon_sporsmal'	=> $personNominasjon != null ? $personNominasjon->getSporsmal() : null,
+			'nominasjon_svar'		=> $personNominasjon != null ? $personNominasjon->getSvar() : null,
 		];
 		$data['personer'][]		= $person;
 	}
@@ -68,7 +70,8 @@ else if(!$innslag->getType()->erEnkeltPerson()) {
 			'videresendt'	=> $person->erPameldt( $til->getId() ),
 			'har_nominasjon'    => $personNominasjon != null,
 			'nominasjon_status' => $personNominasjon != null ? $personNominasjon->getStatus() : null,
-
+			'nominasjon_sporsmal'	=> $personNominasjon != null ? $personNominasjon->getSporsmal() : null,
+			'nominasjon_svar'		=> $personNominasjon != null ? $personNominasjon->getSvar() : null,
 		];
 		$data['personer'][]		= $person;
 	}
@@ -88,6 +91,9 @@ else {
 		'har_nominasjon'    => $personNominasjon != null,
 		'nominasjon_status' => $personNominasjon != null ? $personNominasjon->getStatus() : null,
 		'videresending_beskrivelse' => $personNominasjon != null ? $personNominasjon->getBeskrivelse() : '',
+		'nominasjon_sporsmal'	=> $personNominasjon != null ? $personNominasjon->getSporsmal() : null,
+		'nominasjon_svar'		=> $personNominasjon != null ? $personNominasjon->getSvar() : null,
+
 	];
 }
 

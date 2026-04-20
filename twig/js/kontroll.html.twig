@@ -215,7 +215,41 @@
 	{# <div id="sendVidereEtterNominasjonButton" class="float-right pull-right as-margin-left-space-1 hidden">
 		<button type="button" class="sendVidereEtterNominasjon btn btn-ukm btn-success">Send videre</button>
 	</div> #}
+	{% if har_nominasjon %}
+	<div class="nominasjon-sporsmal-svar videresendte-deltakerinfo as-margin-bottom-space-2">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label>Spørsmål til {{ til_navn }}</label>
+					<textarea name="person[{{ person.id }}][videresending_sporsmal]" class="form-control" rows="2">{{ person.nominasjon_sporsmal }}</textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label>Svar fra {{ til_navn }}</label>
+					<span disabled class="form-control" rows="2">{{ person.nominasjon_svar }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	
 	<div class="float-right pull-right">
 		<button type="button" class="submitKontroll btn btn-ukm btn-success">Lagre endringer</button>
 	</div>
 </form>
+
+<style>
+.nominasjon-sporsmal-svar {
+    width: 100% !important;
+    padding: 15px;
+    border-radius: 5px;
+	background: #fff !important;
+}
+.nominasjon-sporsmal-svar .row {
+	width: 100%;
+}
+
+</style>
