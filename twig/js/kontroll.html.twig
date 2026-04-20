@@ -216,24 +216,27 @@
 		<button type="button" class="sendVidereEtterNominasjon btn btn-ukm btn-success">Send videre</button>
 	</div> #}
 	{% if har_nominasjon %}
-	<div class="nominasjon-sporsmal-svar videresendte-deltakerinfo as-margin-bottom-space-2">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="form-group">
-					<label>Spørsmål til {{ til_navn }}</label>
-					<textarea name="person[{{ person.id }}][videresending_sporsmal]" class="form-control" rows="2">{{ person.nominasjon_sporsmal }}</textarea>
+	{% set firstPerson = personer[0] %}
+		{% if firstPerson %}
+		<div class="nominasjon-sporsmal-svar videresendte-deltakerinfo as-margin-bottom-space-2">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label>Spørsmål til {{ til_navn }}</label>
+						<textarea name="person[{{ firstPerson.id }}][videresending_sporsmal]" class="form-control" rows="2">{{ firstPerson.nominasjon_sporsmal }}</textarea>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label>Svar fra {{ til_navn }}</label>
+						<span disabled class="form-control" rows="2">{{ firstPerson.nominasjon_svar }}</span>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="form-group">
-					<label>Svar fra {{ til_navn }}</label>
-					<span disabled class="form-control" rows="2">{{ person.nominasjon_svar }}</span>
-				</div>
-			</div>
-		</div>
-	</div>
+		{% endif %}
 	{% endif %}
 	
 	<div class="float-right pull-right">
