@@ -234,10 +234,19 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="form-group">
-						<label>Svar fra {{ til_navn }}</label>
-						<span disabled class="form-control" rows="2">{{ firstPerson.nominasjon_svar }}</span>
-					</div>
+					{% if firstPerson.nominasjon_svar|length > 0 %}
+						<div class="form-group">
+							<label>Svar fra {{ til_navn }}</label>
+							<span class="form-control" rows="2">{{ firstPerson.nominasjon_svar }}</span>
+						</div>
+					{% elseif firstPerson.nominasjon_sporsmal|length > 0 %}
+						<div>
+							<div class="form-group">
+								<label>Ingen svar enda</label>
+							</div>
+						</div>
+					{% endif %}
+					
 				</div>
 			</div>
 		</div>
