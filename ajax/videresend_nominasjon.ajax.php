@@ -140,7 +140,7 @@ if ($postType === 'tittel') {
     if (!$innslagFra->getType()->harTitler()) {
         $person = $innslagFra->getPersoner()->getSingle();
         $pId = $person->getId();
-        
+
         if (!$finnesAktivNominasjonForPersonOgTittel($pId, $tilId, $innslagFra->getId(), -1)) {
             $nom = VideresendingNominasjonWrite::create(
                 $season,
@@ -187,7 +187,7 @@ switch ($nominasjonStatus) {
         $nominasjonStatusTekst = 'Godkjent';
         break;
     case 'hos-deltaker':
-        $nominasjonStatusTekst = 'Venter på deltaker';
+        $nominasjonStatusTekst = 'Nominasjon akseptert, venter på deltaker';
         break;
     case 'hos-mottaker':
         $nominasjonStatusTekst = 'Venter på mottaker';

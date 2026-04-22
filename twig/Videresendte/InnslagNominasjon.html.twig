@@ -18,7 +18,7 @@
 		%}
         {% set nominasjon_text = 
             nominasjon_status == 'godkjent' ? 'Godkjent'
-            : nominasjon_status == 'hos-deltaker' ? 'Venter på deltaker'
+            : nominasjon_status == 'hos-deltaker' ? 'Nominasjon akseptert, venter på deltaker'
             : nominasjon_status == 'hos-mottaker' ? 'Venter på mottaker'
             : nominasjon_status == 'hos-avsender' ? 'Venter på avsender'
             : 'Ukjent'
@@ -88,7 +88,7 @@
     %}
     {% set nominasjon_text = 
         nominasjon_status == 'godkjent' ? 'Godkjent'
-        : nominasjon_status == 'hos-deltaker' ? 'Venter på deltaker'
+        : nominasjon_status == 'hos-deltaker' ? 'Nominasjon akseptert, venter på deltaker'
         : nominasjon_status == 'hos-mottaker' ? 'Venter på mottaker'
         : nominasjon_status == 'hos-avsender' ? 'Venter på avsender'
         : 'Ukjent'

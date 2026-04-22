@@ -124,7 +124,7 @@
 								{% else %}
 									<span class="label label-success">nominert</span>
 									{% if person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
-										<span class="label label-warning">Venter på deltaker</span>
+										<span class="label label-warning">Nominasjon akseptert, venter på deltaker</span>
 									{% elseif person.nominasjon_status == 'hos-mottaker' %}
 										<span class="label label-info">Venter på mottaker</span>
 									{% elseif person.nominasjon_status == 'hos-avsender' %}
@@ -171,7 +171,7 @@
 						{% if person.nominasjon_status == 'hos-avsender' %}
 						<span class="label label-info">Venter på avsender</span>
 						{% elseif person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
-							<span class="label label-warning">Venter på deltaker</span>
+							<span class="label label-warning">Nominasjon akseptert, venter på deltaker</span>
 						{% elseif person.nominasjon_status == 'hos-mottaker' %}
 							<span class="label label-info">Venter på mottaker</span>
 						{% elseif person.nominasjon_status == 'godkjent' %}
