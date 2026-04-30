@@ -47,27 +47,17 @@
     </a>
 
 
-    {# MEDIA #}
-    <a href="{{ baseLink }}media" {{ tab == 'media' ? 'class="active"' : ''}}>
-        <div>
-            <span class="tab_header">
-                <span class="dashicons dashicons-admin-media"></span>
-                Media
+    {% if til.getArrangement().getType() != 'land' %}
+        <a href="{{ baseLink }}intoleranser" {{ tab == 'intoleranser' ? 'class="active"' : ''}}>
+            <div>
+                <span class="tab_header">
+                    <span class="dashicons dashicons-carrot" style="margin-right:0;"></span>
+                    Intoleranser
                 </span>
-            <br />
-            <span class="tab_description">Bilder, film og playback</span>
-        </div>
-    </a>
-
-    <a href="{{ baseLink }}intoleranser" {{ tab == 'intoleranser' ? 'class="active"' : ''}}>
-        <div>
-            <span class="tab_header">
-                <span class="dashicons dashicons-carrot" style="margin-right:0;"></span>
-                Intoleranser
-            </span>
-            <span class="tab_description">Matallergi/-intoleranse</span>
-        </div>
-    </a>
+                <span class="tab_description">Matallergi/-intoleranse</span>
+            </div>
+        </a>
+    {% endif %}
 
     {# LEDERE #}
     {# {% if til.getArrangement().getMetaValue('harLederskjema') %} #}
@@ -82,7 +72,7 @@
         </a>
     {# {% endif %} #}
 
-    {% if til.getArrangement().harVideresendingNominasjon() == false and til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
+    {% if til.getArrangement().harSkjema() and til.getArrangement().getSkjema().getSporsmal()|length > 0 %}
         <a href="{{ baseLink }}infoskjema" {{ tab == 'infoskjema' ? 'class="active"' : ''}}>
             <div>
                 <span class="tab_header">
@@ -93,6 +83,18 @@
             </div>
         </a>
     {% endif %}
+
+    {# MEDIA #}
+    <a href="{{ baseLink }}media" {{ tab == 'media' ? 'class="active"' : ''}}>
+        <div>
+            <span class="tab_header">
+                <span class="dashicons dashicons-admin-media"></span>
+                Media
+                </span>
+            <br />
+            <span class="tab_description">Bilder, film og playback</span>
+        </div>
+    </a>
 
     <a href="{{ baseLink }}oppsummering" {{ tab == 'oppsummering' ? 'class="active"' : ''}}>
         <div>
