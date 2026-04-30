@@ -9,7 +9,7 @@ $til = UKMVideresending::getValgtTil()->getArrangement();
 
 $nominerteInnslag = [];
 foreach (VideresendingNominasjon::getAlleTilArrangement($til->getId())->getAll() as $vNominasjon) {
-    if($vNominasjon->getPId() != $fra->getId()) {
+    if($vNominasjon->getArrangementFraId() != $fra->getId()) {
         continue;
     }
     $objNominasjon = $vNominasjon->getArrObj();
