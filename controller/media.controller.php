@@ -12,7 +12,7 @@ foreach (VideresendingNominasjon::getAlleTilArrangement($til->getId())->getAll()
     $objNominasjon = $vNominasjon->getArrObj();
 
     $innslag = Innslag::getById($objNominasjon['b_id']);
-    $nominerteInnslag[] = $innslag;
+    $nominerteInnslag[$innslag->getId()] = $innslag;
 }
 
 UKMVideresending::addViewData('nominerteInnslag', $nominerteInnslag);
