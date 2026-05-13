@@ -194,6 +194,20 @@
 						{% else %}
 							<span class="label label-warning">ukjent status</span>
 						{% endif %}
+						{# Oppgaveliste status #}
+						{% if person.videresending_oppgave_status is defined %}
+							<div style="margin-top: 10px;">
+							{% if person.videresending_oppgave_status == 1 %}
+								<span class="label label-danger">Oppgaven er ikke besvart</span>
+							{% elseif person.videresending_oppgave_status == 2 %}
+								<span class="label label-warning">Oppgaven er besvart, men ikke godkjent av foresatt</span>
+							{% elseif person.videresending_oppgave_status == 3 %}
+								<span class="label label-success">Oppgaven er besvart og godkjent av foresatt eller bruker er 18 år+</span>
+							{% else %}
+								<span class="label label-warning">Oppgaven har ukjent status</span>
+							{% endif %}
+							</div>
+						{% endif %}
 					{% endif %}
 				{% endif %}
 			</div>
