@@ -108,13 +108,13 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 			if($person['mobil'] && $person['id']) {
 				$deltaUserId = getDeltaUserIdByMobil($person['mobil']);
 				if(!$deltaUserId) {
-					$person['oppgave_besvart_status'] = -1;
+					$person['videresending_oppgave_status'] = -1;
 				}else {
-					$person['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $person['id']);
+					$person['videresending_oppgave_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $person['id']);
 				}
 			}
 			else {
-				$person['oppgave_besvart_status'] = 0;
+				$person['videresending_oppgave_status'] = 0;
 			}
 		}
 	}
@@ -122,13 +122,13 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 		if($data['person']['mobil'] && $data['person']['id']) {
 			$deltaUserId = getDeltaUserIdByMobil($data['person']['mobil']);
 			if(!$deltaUserId) {
-				$data['person']['oppgave_besvart_status'] = -1;
+				$data['person']['videresending_oppgave_status'] = -1;
 			}else {
-				$data['person']['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $data['person']['id']);
+				$data['person']['videresending_oppgave_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $data['person']['id']);
 			}
 		}
 		else {
-			$data['person']['oppgave_besvart_status'] = 0;
+			$data['person']['videresending_oppgave_status'] = 0;
 		}
 	}
 }
