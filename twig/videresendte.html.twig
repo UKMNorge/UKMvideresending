@@ -6,7 +6,7 @@
         <h2 class="nom as-margin-bottom-space-2">Nominasjon påkrevd</h2>
         <section class="deltakerinfo-innlegg">
         <h4>Alle deltakere må nomineres før de kan videresendes til {{ til.getArrangement().getNavn() }}</h4>
-
+        
         <h5>Nominasjon/godkjenning går gjennom følgende faser:</h5>
         <ul>
             <li>1. Nominasjon sendes til {{ til.getArrangement().getNavn() }}</li>
@@ -22,7 +22,18 @@
         </p>
         </section>
     </div>
+    
+        {% if not til.getArrangement().erVideresendingApen() %}
+            <p class="videresendte-deltakerinfo danger nosh-impt as-card-2 as-margin-bottom-space-3 as-padding-space-2">
+                <strong>
+                    Nominasjon og videresending er stengt. Det er ikke mulig endre nominasjoner eller nominere nye deltakere til {{ til.getArrangement().getNavn() }}.
+                </strong>
+            </p>
+        {% endif %}
+        
+    
     {% endif %}
+    
 
 	<fieldset>
         {% if til.getArrangement().harVideresendingNominasjon() %}
@@ -66,7 +77,7 @@
                 </strong>
 
         {# VIDERESENDINGEN ER STENGT #}
-        {% elseif not til.getArrangement().erVideresendingApen() %}
+        {% elseif not til.getArrangement().erVideresendingApen() and not til.getArrangement().harVideresendingNominasjon() %}
             <p class="alert alert-error alert-danger">
                 <strong>
                     Videresending er kun mulig fra
@@ -121,6 +132,12 @@
             width: fit-content;
             background: var(--as-color-primary-warning-light);
             border: 2px solid var(--as-color-primary-warning-medium);
+            width: 100%;
+        }
+        .videresendte-deltakerinfo.danger {
+            background: var(--as-color-primary-danger-light);
+            border: 2px solid var(--as-color-primary-danger-medium);
+            width: 100%;
         }
         .deltakerinfo-innlegg ul {
             list-style-type: disc;
