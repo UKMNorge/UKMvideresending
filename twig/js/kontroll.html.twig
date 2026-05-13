@@ -124,7 +124,9 @@
 								{% else %}
 									<span class="label label-success">nominert</span>
 									{% if person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
-										<span class="label label-warning">Nominasjon akseptert, venter på deltaker</span>
+										{% if person.videresending_oppgave_status != 3 %}
+											<span class="label label-warning">Nominasjon akseptert, venter på deltaker</span>
+										{% endif %}
 									{% elseif person.nominasjon_status == 'hos-mottaker' %}
 										<span class="label label-info">Venter på mottaker</span>
 									{% elseif person.nominasjon_status == 'hos-avsender' %}
@@ -185,8 +187,10 @@
 						<span class="label label-success">nominert</span>
 						{% if person.nominasjon_status == 'hos-avsender' %}
 						<span class="label label-info">Venter på avsender</span>
-						{% elseif person.nominasjon_status in ['hos-deltaker','hos-bruker']  %}
+						{% elseif person.nominasjon_status in ['hos-deltaker','hos-bruker'] %}
+							{% if person.videresending_oppgave_status != 3 %}
 							<span class="label label-warning">Nominasjon akseptert, venter på deltaker</span>
+							{% endif %}
 						{% elseif person.nominasjon_status == 'hos-mottaker' %}
 							<span class="label label-info">Venter på mottaker</span>
 						{% elseif person.nominasjon_status == 'godkjent' %}
