@@ -136,7 +136,7 @@
 									{% endif %}
 									{# Oppgaveliste status #}
 									{% if person.videresending_oppgave_status is defined %}
-										<br />
+										<div style="margin-top: 10px;">
 										{% if person.videresending_oppgave_status == 1 %}
 											<span class="label label-danger">Oppgaven er ikke besvart</span>
 										{% elseif person.videresending_oppgave_status == 2 %}
@@ -146,6 +146,7 @@
 										{% else %}
 											<span class="label label-warning">Oppgaven har ukjent status</span>
 										{% endif %}
+										</div>
 									{% endif %}
 									
 								{% endif %}
