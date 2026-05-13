@@ -122,8 +122,6 @@ function getDeltaUserIdByMobil($phone) {
 		);
 		
 		$res = $sql->run('array');
-		var_dump($res);
-		die;
 		return $res['id'];
 	}
 
