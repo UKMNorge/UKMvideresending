@@ -6,7 +6,11 @@ if( isset( $_POST['innslag'] ) && isset( $_POST['status'] ) ) {
 
     $til = UKMVideresending::getValgtTil();
     $fra = UKMVideresending::getFra();
-    
+
+    if(!$til->getArrangement()->erVideresendingApen()) {
+        throw new Exception('Videresending er ikke åpen');
+    }
+
     $innslag = $fra->getInnslag()->get(intval($_POST['innslag']));
 	$nominasjon = $innslag->getNominasjoner()->getTil( $til->getId() );
 

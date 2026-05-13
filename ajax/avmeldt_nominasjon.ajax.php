@@ -13,9 +13,15 @@ use UKMNorge\Videresending\Write as VideresendingNominasjonWrite;
 
 $fra = UKMVideresending::getFra();
 $til = UKMVideresending::getValgtTil();
+if(!$til->getArrangement()->erVideresendingApen()) {
+	throw new Exception('Videresending er ikke åpen');
+}
 $tilArrangement = $til->getArrangement();
 $tilId = $tilArrangement->getId();
 $postType = isset($_POST['type']) ? (string) $_POST['type'] : '';
+
+
+
 
 $innslagFra = $fra->getInnslag()->get(intval($_POST['innslag']));
 $bId = $innslagFra->getId();

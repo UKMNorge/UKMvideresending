@@ -6,6 +6,10 @@ require_once('UKM/Autoloader.php');
 
 $videresend_til = UKMVideresending::getValgtTil('POST');
 
+if(!$videresend_til->getArrangement()->erVideresendingApen()) {
+	throw new Exception('Videresending er ikke åpen');
+}
+
 if ($videresend_til->getArrangement()->harVideresendingNominasjon()) {
 	require_once __DIR__ . '/avmeldt_nominasjon.ajax.php';
     return;

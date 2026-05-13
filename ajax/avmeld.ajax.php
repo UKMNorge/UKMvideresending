@@ -8,6 +8,10 @@ require_once('UKM/statistikk.class.php');
 
 $til        = UKMVideresending::getValgtTil();
 
+if(!$til->getArrangement()->erVideresendingApen()) {
+	throw new Exception('Videresending er ikke åpen');
+}
+
 // Først: fjern videresending_nominasjon (person/tittel/innslag) før innslag og titler meldes av
 if ($til->getArrangement()->harVideresendingNominasjon()) {
 	require_once __DIR__ . '/avmeldt_nominasjon.ajax.php';
