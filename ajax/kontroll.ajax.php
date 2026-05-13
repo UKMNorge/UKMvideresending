@@ -105,11 +105,21 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 	
 	if($data['personer'] && count($data['personer']) > 0) {
 		foreach($data['personer'] as &$person) {
-			$person['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($person['mobil']), $person['id']);
+			if($person['mobil'] && $person['id']) {
+				$person['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($person['mobil']), $person['id']);
+			}
+			else {
+				$person['oppgave_besvart_status'] = 0;
+			}
 		}
 	}
 	else if($data['person']) {
-		$data['person']['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($data['person']['mobil']), $data['person']['id']);
+		if($data['person']['mobil'] && $data['person']['id']) {
+			$data['person']['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($data['person']['mobil']), $data['person']['id']);
+		}
+		else {
+			$data['person']['oppgave_besvart_status'] = 0;
+		}
 	}
 }
 
