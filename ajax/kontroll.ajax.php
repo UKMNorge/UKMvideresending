@@ -3,6 +3,8 @@
 // Mønstring det videresendes til
 
 use UKMNorge\Arrangement\Arrangement;
+use UKMNorge\Arrangement\Oppgave\Oppgave;
+use UKMNorge\Database\SQL\Query;
 
 $til        = UKMVideresending::getValgtTil('POST')->getArrangement();
 $fra        = new Arrangement( intval(get_option('pl_id')) );
@@ -97,6 +99,36 @@ else {
 	];
 }
 
+
+if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
+	$oppgave = Oppgave::getAllByArrangementVideresending($til->getId())[0];
+	
+	if($data['personer'] && count($data['personer']) > 0) {
+		foreach($data['personer'] as &$person) {
+			$person['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($person['mobil']), $person['id']);
+		}
+	}
+	else if($data['person']) {
+		$data['person']['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($data['person']['mobil']), $data['person']['id']);
+	}
+}
+
+function getDeltaUserIdByMobil($phone) {
+	if($phone) {	
+		$sql = new Query(
+			"SELECT id from ukm_user WHERE phone = '#phone'",
+			['phone' => $phone],
+			'ukmdelta'
+		);
+		
+		$res = $sql->run('array');
+		var_dump($res);
+		die;
+		return $res['id'];
+	}
+
+	return null;
+}
 
 	
 UKMVideresending::addResponseData('success', true);
