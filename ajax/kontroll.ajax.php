@@ -106,7 +106,12 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 	if($data['personer'] && count($data['personer']) > 0) {
 		foreach($data['personer'] as &$person) {
 			if($person['mobil'] && $person['id']) {
-				$person['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($person['mobil']), $person['id']);
+				$deltaUserId = getDeltaUserIdByMobil($person['mobil']);
+				if(!$deltaUserId) {
+					$person['oppgave_besvart_status'] = -1;
+				}else {
+					$person['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $person['id']);
+				}
 			}
 			else {
 				$person['oppgave_besvart_status'] = 0;
@@ -115,7 +120,12 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 	}
 	else if($data['person']) {
 		if($data['person']['mobil'] && $data['person']['id']) {
-			$data['person']['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus(getDeltaUserIdByMobil($data['person']['mobil']), $data['person']['id']);
+			$deltaUserId = getDeltaUserIdByMobil($data['person']['mobil']);
+			if(!$deltaUserId) {
+				$data['person']['oppgave_besvart_status'] = -1;
+			}else {
+				$data['person']['oppgave_besvart_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $data['person']['id']);
+			}
 		}
 		else {
 			$data['person']['oppgave_besvart_status'] = 0;
