@@ -110,7 +110,7 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 				if(!$deltaUserId) {
 					$person['videresending_oppgave_status'] = -1;
 				}else {
-					$person['videresending_oppgave_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $person['id']);
+					$person['videresending_oppgave_status'] = $oppgave->getOppgaveBesvartStatusByMobil($person['mobil']);
 				}
 			}
 			else {
@@ -124,7 +124,7 @@ if(Oppgave::getAllByArrangementVideresending($til->getId()) > 0) {
 			if(!$deltaUserId) {
 				$data['person']['videresending_oppgave_status'] = -1;
 			}else {
-				$data['person']['videresending_oppgave_status'] = $oppgave->getOppgaveBesvartStatus($deltaUserId, $data['person']['id']);
+				$data['person']['videresending_oppgave_status'] = $oppgave->getOppgaveBesvartStatusByMobil($data['person']['mobil']);
 			}
 		}
 		else {
